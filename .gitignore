@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Xcode / iOS build output
+build/
+DerivedData/
+*.xcresult
+*.xcuserstate
+xcuserdata/
+
+# Android / Gradle (the gradle/ wrapper dir IS committed; .gradle/ cache is not)
+.gradle/
+local.properties
+*.iml
+.idea/
+captures/
+Android/**/build/
+
+# Claude Code local settings
+.claude/settings.local.json

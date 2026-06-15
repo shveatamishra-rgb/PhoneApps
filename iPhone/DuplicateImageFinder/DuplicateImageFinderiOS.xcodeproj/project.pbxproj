@@ -1,0 +1,374 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A0000012D0B000100000001 /* DuplicateImageFinderiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */; };
+		0A0000012D0B000100000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000002 /* ContentView.swift */; };
+		0A0000012D0B000100000003 /* PhotoLibraryDuplicateScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */; };
+		0A0000012D0B000100000004 /* ImageFingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000004 /* ImageFingerprint.swift */; };
+		0A0000012D0B00010000000C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000005 /* Assets.xcassets */; };
+		0A0000012D0B000100000006 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000006 /* PrivacyInfo.xcprivacy */; };
+		0A0000012D0B000100000007 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000007 /* Photos.framework */; };
+		0A0000012D0B000100000008 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000008 /* CoreImage.framework */; };
+		0A0000012D0B000100000009 /* CryptoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000009 /* CryptoKit.framework */; };
+		0A0000012D0B00010000000A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000A /* ImageIO.framework */; };
+		0A0000012D0B00010000000B /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000D /* PhotosUI.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateImageFinderiOSApp.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryDuplicateScanner.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000004 /* ImageFingerprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFingerprint.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0A0000012D0B000000000006 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		0A0000012D0B000000000007 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		0A0000012D0B000000000008 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		0A0000012D0B000000000009 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = System/Library/Frameworks/CryptoKit.framework; sourceTree = SDKROOT; };
+		0A0000012D0B00000000000A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		0A0000012D0B00000000000B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuplicateImageFinderiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A0000012D0B00000000000D /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0A0000012D0B000200000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A0000012D0B000100000007 /* Photos.framework in Frameworks */,
+				0A0000012D0B00010000000B /* PhotosUI.framework in Frameworks */,
+				0A0000012D0B000100000008 /* CoreImage.framework in Frameworks */,
+				0A0000012D0B000100000009 /* CryptoKit.framework in Frameworks */,
+				0A0000012D0B00010000000A /* ImageIO.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0A0000012D0B000300000001 = {
+			isa = PBXGroup;
+			children = (
+				0A0000012D0B000300000002 /* DuplicateImageFinderiOS */,
+				0A0000012D0B000300000003 /* Frameworks */,
+				0A0000012D0B000300000004 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0A0000012D0B000300000002 /* DuplicateImageFinderiOS */ = {
+			isa = PBXGroup;
+			children = (
+				0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */,
+				0A0000012D0B000000000002 /* ContentView.swift */,
+				0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */,
+				0A0000012D0B000000000004 /* ImageFingerprint.swift */,
+				0A0000012D0B000000000005 /* Assets.xcassets */,
+				0A0000012D0B000000000006 /* PrivacyInfo.xcprivacy */,
+				0A0000012D0B00000000000B /* Info.plist */,
+			);
+			path = DuplicateImageFinderiOS;
+			sourceTree = "<group>";
+		};
+		0A0000012D0B000300000003 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0A0000012D0B000000000007 /* Photos.framework */,
+				0A0000012D0B00000000000D /* PhotosUI.framework */,
+				0A0000012D0B000000000008 /* CoreImage.framework */,
+				0A0000012D0B000000000009 /* CryptoKit.framework */,
+				0A0000012D0B00000000000A /* ImageIO.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0A0000012D0B000300000004 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0A0000012D0B000400000001 /* DuplicateImageFinderiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "DuplicateImageFinderiOS" */;
+			buildPhases = (
+				0A0000012D0B000500000001 /* Sources */,
+				0A0000012D0B000200000001 /* Frameworks */,
+				0A0000012D0B000600000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DuplicateImageFinderiOS;
+			productName = DuplicateImageFinderiOS;
+			productReference = 0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0A0000012D0B000700000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2650;
+				LastUpgradeCheck = 2650;
+				TargetAttributes = {
+					0A0000012D0B000400000001 = {
+						CreatedOnToolsVersion = 26.5;
+					};
+				};
+			};
+			buildConfigurationList = 0A0000012D0B000800000001 /* Build configuration list for PBXProject "DuplicateImageFinderiOS" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0A0000012D0B000300000001;
+			productRefGroup = 0A0000012D0B000300000004 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0A0000012D0B000400000001 /* DuplicateImageFinderiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0A0000012D0B000600000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A0000012D0B00010000000C /* Assets.xcassets in Resources */,
+				0A0000012D0B000100000006 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0A0000012D0B000500000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0A0000012D0B000100000001 /* DuplicateImageFinderiOSApp.swift in Sources */,
+				0A0000012D0B000100000002 /* ContentView.swift in Sources */,
+				0A0000012D0B000100000003 /* PhotoLibraryDuplicateScanner.swift in Sources */,
+				0A0000012D0B000100000004 /* ImageFingerprint.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0A0000012D0B000900000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+			};
+			name = Debug;
+		};
+		0A0000012D0B000900000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		0A0000012D0B000900000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DuplicateImageFinderiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.duplicateimagefinder.iphone;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		0A0000012D0B000900000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = DuplicateImageFinderiOS/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.duplicateimagefinder.iphone;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0A0000012D0B000800000001 /* Build configuration list for PBXProject "DuplicateImageFinderiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A0000012D0B000900000001 /* Debug */,
+				0A0000012D0B000900000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "DuplicateImageFinderiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0A0000012D0B000900000003 /* Debug */,
+				0A0000012D0B000900000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 0A0000012D0B000700000001 /* Project object */;
+}
