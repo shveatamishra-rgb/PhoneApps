@@ -1,6 +1,6 @@
-# Gallery Transfer for iPhone
+# Ferry - Media Transfer (iPhone)
 
-A simple SwiftUI iOS app for moving photo and video originals between Android and iPhone over local Wi-Fi.
+**Ferry** (subtitle: *Media Transfer*) is a SwiftUI iOS app for moving photo and video originals between Android and iPhone over local Wi-Fi. The home-screen name is "Ferry"; "Media Transfer" is the App Store subtitle / tagline.
 
 ## What it does
 

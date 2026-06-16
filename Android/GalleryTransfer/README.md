@@ -1,4 +1,6 @@
-# Ferry - Android companion
+# Ferry - Media Transfer (Android companion)
+
+> Home-screen name is **Ferry**; **Media Transfer** is the subtitle / Play short description.
 
 Native Android companion to the iPhone **Ferry** app. It exists for one reason the
 browser-based flow can't solve: **a web upload loses GPS location and the real
