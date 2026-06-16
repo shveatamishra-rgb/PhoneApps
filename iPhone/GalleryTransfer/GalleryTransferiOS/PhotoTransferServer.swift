@@ -10,18 +10,21 @@ actor PhotoTransferServer {
     private var listener: NWListener?
     private var outgoingFiles: [OutgoingPhotoFile]
     private let onUpload: @Sendable (ReceivedUpload) async throws -> SavedMediaMetadata
+    private let onUploadStarted: @Sendable (String) -> Void
     private let onUploadFinished: @Sendable (UploadResult) -> Void
 
     init(
         port: UInt16,
         outgoingFiles: [OutgoingPhotoFile],
         onUpload: @escaping @Sendable (ReceivedUpload) async throws -> SavedMediaMetadata,
+        onUploadStarted: @escaping @Sendable (String) -> Void,
         onUploadFinished: @escaping @Sendable (UploadResult) -> Void
     ) {
         self.port = port
         self.accessPIN = Self.makeAccessPIN()
         self.outgoingFiles = outgoingFiles
         self.onUpload = onUpload
+        self.onUploadStarted = onUploadStarted
         self.onUploadFinished = onUploadFinished
     }
 
@@ -128,6 +131,7 @@ actor PhotoTransferServer {
     ) async {
         let fallbackName = "android-media"
         let filename = uploadFilename(from: request, fallback: fallbackName)
+        onUploadStarted(filename)
 
         do {
             let uploadDirectory = FileManager.default.temporaryDirectory
@@ -531,7 +535,7 @@ actor PhotoTransferServer {
 
             <section id="installBanner" class="install" style="display:none">
               <h2>Get the Android app</h2>
-              <p>Install the companion app to keep photo <strong>location</strong> and original <strong>filenames</strong> — a browser upload loses both.</p>
+              <p>Install the companion app to keep photo <strong>location</strong> and original <strong>filenames</strong> - a browser upload loses both.</p>
               <a class="button" href="https://github.com/shveatamishra-rgb/PhoneApps/releases/latest/download/gallery-transfer.apk">Download Android app (.apk)</a>
             </section>
 
@@ -546,7 +550,7 @@ actor PhotoTransferServer {
             <div id="appSections" style="display:none">
               <section>
                 <h2>Send to iPhone</h2>
-                <p>Pick photos or videos on this Android phone, check the total, then upload — each one saves straight into iPhone Photos.</p>
+                <p>Pick photos or videos on this Android phone, check the total, then upload - each one saves straight into iPhone Photos.</p>
                 <input id="files" type="file" accept="image/*,video/*" multiple onchange="showSelection()">
                 <div id="selectionSummary" class="summary"></div>
                 <button onclick="uploadFiles()">Upload to iPhone Photos</button>

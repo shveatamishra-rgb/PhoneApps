@@ -41,6 +41,10 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         private set
     var isBusy by mutableStateOf(false)
         private set
+    var sentCount by mutableStateOf(0)
+        private set
+    var totalToSend by mutableStateOf(0)
+        private set
 
     val selectedItems: List<MediaItem> get() = selected.values.toList()
     val selectedBytes: Long get() = selectedItems.sumOf { it.sizeBytes }
@@ -116,6 +120,8 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
 
         viewModelScope.launch {
             isBusy = true
+            totalToSend = targets.size
+            sentCount = 0
             val client = TransferClient(normalizedHost(host), pin)
             var ok = 0
             var failed = 0
@@ -137,12 +143,13 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
                     failed++
                     lastError = outcome.message
                 }
+                sentCount = index + 1
             }
             status = buildString {
                 append("Done. $ok sent")
                 if (failed > 0) append(", $failed failed")
                 append(".")
-                if (failed > 0 && lastError != null) append(" — $lastError")
+                if (failed > 0 && lastError != null) append(" - $lastError")
             }
             selected = emptyMap()
             isBusy = false

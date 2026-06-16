@@ -64,6 +64,8 @@ final class TransferViewModel: ObservableObject {
     @Published var outgoingFiles: [OutgoingPhotoFile] = []
     @Published var recentImports: [RecentImport] = []
     @Published var receivedCount = 0
+    @Published var isReceiving = false
+    @Published var receivingName = ""
 
     private var server: PhotoTransferServer?
     private let photoBridge = PhotoLibraryBridge()
@@ -167,6 +169,13 @@ final class TransferViewModel: ObservableObject {
                 onUpload: { [photoBridge] upload in
                     try await photoBridge.saveReceivedMediaToPhotos(upload)
                 },
+                onUploadStarted: { [weak self] name in
+                    Task { @MainActor in
+                        self?.isReceiving = true
+                        self?.receivingName = name
+                        self?.status = "Receiving \(name)..."
+                    }
+                },
                 onUploadFinished: { [weak self] result in
                     Task { @MainActor in
                         self?.recordUploadResult(result)
@@ -205,6 +214,8 @@ final class TransferViewModel: ObservableObject {
         await server?.stop()
         server = nil
         isServerRunning = false
+        isReceiving = false
+        receivingName = ""
         transferURL = nil
         qrPayload = nil
         transferPIN = nil
@@ -216,6 +227,8 @@ final class TransferViewModel: ObservableObject {
     }
 
     private func recordUploadResult(_ result: UploadResult) {
+        isReceiving = false
+        receivingName = ""
         if result.didSave {
             receivedCount += 1
         }

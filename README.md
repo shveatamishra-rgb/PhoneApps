@@ -8,7 +8,7 @@ PhoneApps/
 │   ├── GalleryTransfer/       # Wi-Fi photo/video transfer between Android and iPhone (SwiftUI)
 │   └── DuplicateImageFinder/  # On-device duplicate-photo scanner (SwiftUI)
 └── Android/
-    └── GalleryTransfer/       # Companion app for GalleryTransfer (Kotlin) — in progress
+    └── GalleryTransfer/       # Companion app for GalleryTransfer (Kotlin) - in progress
 ```
 
 ## iPhone apps

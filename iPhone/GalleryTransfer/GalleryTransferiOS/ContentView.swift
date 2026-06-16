@@ -173,6 +173,19 @@ struct ContentView: View {
                 }
             }
 
+            if viewModel.isReceiving {
+                HStack(spacing: 10) {
+                    ProgressView()
+                    Text(viewModel.receivingName.isEmpty ? "Receiving..." : "Receiving \(viewModel.receivingName)...")
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+                ProgressView()
+                    .progressViewStyle(.linear)
+                    .tint(Color.brandPrimary)
+            }
+
             Text(viewModel.status)
                 .font(.callout)
                 .foregroundStyle(.secondary)

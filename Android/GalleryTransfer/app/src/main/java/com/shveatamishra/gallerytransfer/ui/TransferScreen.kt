@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -42,6 +43,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -280,7 +282,7 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
-                "Start the receiver in Ferry on the iPhone, then scan its QR code — or type the address and PIN it shows.",
+                "Start the receiver in Ferry on the iPhone, then scan its QR code - or type the address and PIN it shows.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -320,42 +322,53 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
 @Composable
 private fun SendBar(viewModel: TransferViewModel) {
     Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(Modifier.weight(1f)) {
-                if (viewModel.isBusy) {
-                    Text(
-                        viewModel.status.ifBlank { "Working…" },
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                } else {
-                    Text(
-                        "${viewModel.selected.size} selected",
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                    Text(
-                        formatBytes(viewModel.selectedBytes),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+        // navigationBarsPadding keeps the controls above the system gesture/nav bar,
+        // while the Surface colour still fills behind it.
+        Column(Modifier.navigationBarsPadding()) {
+            if (viewModel.isBusy && viewModel.totalToSend > 0) {
+                LinearProgressIndicator(
+                    progress = { viewModel.sentCount.toFloat() / viewModel.totalToSend },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                )
             }
-            Spacer(Modifier.width(12.dp))
-            Button(
-                onClick = { viewModel.sendSelected() },
-                enabled = !viewModel.isBusy && viewModel.selected.isNotEmpty(),
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
-                Spacer(Modifier.width(8.dp))
-                Text("Send")
+                Column(Modifier.weight(1f)) {
+                    if (viewModel.isBusy) {
+                        Text(
+                            viewModel.status.ifBlank { "Working..." },
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    } else {
+                        Text(
+                            "${viewModel.selected.size} selected",
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                        Text(
+                            formatBytes(viewModel.selectedBytes),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                Spacer(Modifier.width(12.dp))
+                Button(
+                    onClick = { viewModel.sendSelected() },
+                    enabled = !viewModel.isBusy && viewModel.selected.isNotEmpty(),
+                ) {
+                    Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Send")
+                }
             }
         }
     }
@@ -378,7 +391,7 @@ private fun PermissionGate(onGrant: () -> Unit) {
         )
         Spacer(Modifier.height(12.dp))
         Text(
-            "Ferry needs access to your photos and videos so it can send them — with location and filenames intact.",
+            "Ferry needs access to your photos and videos so it can send them - with location and filenames intact.",
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

@@ -1,4 +1,4 @@
-# Ferry — Android companion
+# Ferry - Android companion
 
 Native Android companion to the iPhone **Ferry** app. It exists for one reason the
 browser-based flow can't solve: **a web upload loses GPS location and the real
@@ -9,9 +9,9 @@ videos. This app reads the **true original** (`MediaStore.setRequireOriginal`, w
 existing PIN-protected `/upload` endpoint.
 
 > The display name is **Ferry**; the project folder and package id still read
-> `gallerytransfer` (internal only — safe to rename later).
+> `gallerytransfer` (internal only - safe to rename later).
 
-## Status — first cut (send only)
+## Status - first cut (send only)
 
 - ✅ Connect to the iPhone server (address + 6-digit PIN, remembered).
 - ✅ **Album/folder gallery** (MediaStore buckets) with cover + count, drilling into a
@@ -19,7 +19,7 @@ existing PIN-protected `/upload` endpoint.
 - ✅ Upload originals with GPS + real filename preserved, streamed (no full-file RAM load).
 - ✅ Adaptive **Ferry** launcher icon; Dark/Light/System theme (forest-green + gold,
   matching the iPhone app + web page).
-- ⬜ TODO: receive (download the iPhone's selected media into the gallery) — for now use the browser page.
+- ⬜ TODO: receive (download the iPhone's selected media into the gallery) - for now use the browser page.
 - ⬜ TODO: QR scan to fill address + PIN automatically.
 
 ## Build

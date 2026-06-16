@@ -3,7 +3,7 @@ import Foundation
 enum NetworkInterface {
     /// Best-guess LAN IPv4 for another phone to reach this device on the same Wi-Fi.
     /// Prefers en0 (Wi-Fi), then any private-range IPv4, skipping loopback, cellular,
-    /// and link-local — so we hand out a numeric address that actually resolves rather
+    /// and link-local - so we hand out a numeric address that actually resolves rather
     /// than falling back to `iphone.local`.
     static func wifiIPv4Address() -> String? {
         var interfaces: UnsafeMutablePointer<ifaddrs>?

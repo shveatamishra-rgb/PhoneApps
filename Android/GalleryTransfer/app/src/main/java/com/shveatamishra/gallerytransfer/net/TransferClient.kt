@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Talks to the iPhone app's local server. Uploads post the original bytes to
  * `/upload?filename=&pin=` with an `X-Original-Filename` header, matching what the
- * served web page does — so the same PIN-protected endpoint handles both.
+ * served web page does - so the same PIN-protected endpoint handles both.
  */
 class TransferClient(baseUrl: String, private val pin: String) {
 
@@ -72,7 +72,7 @@ class TransferClient(baseUrl: String, private val pin: String) {
         } catch (e: java.net.UnknownHostException) {
             UploadOutcome(false, "Couldn't find the iPhone on this network. Check both phones share the same Wi-Fi and the address matches what Ferry shows (a numeric address like 192.168.x.x, not iphone.local).")
         } catch (e: java.net.ConnectException) {
-            UploadOutcome(false, "Connection refused — make sure the receiver is started in Ferry on the iPhone.")
+            UploadOutcome(false, "Connection refused - make sure the receiver is started in Ferry on the iPhone.")
         } catch (e: java.net.SocketTimeoutException) {
             UploadOutcome(false, "Timed out reaching the iPhone. Try again, closer to the router.")
         } catch (e: Exception) {

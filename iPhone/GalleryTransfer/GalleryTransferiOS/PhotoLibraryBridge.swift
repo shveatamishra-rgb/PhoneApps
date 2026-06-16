@@ -417,7 +417,18 @@ private struct VideoMetadata {
 
     init(url: URL) async {
         let asset = AVURLAsset(url: url)
-        let items = (try? await asset.load(.metadata)) ?? []
+        var items: [AVMetadataItem] = (try? await asset.load(.metadata)) ?? []
+
+        // Android MP4s keep location/date in the QuickTime user-data atoms (©xyz / ©day),
+        // which are not part of the common metadata. Pull every available metadata format
+        // so those atoms are included.
+        if let formats = try? await asset.load(.availableMetadataFormats) {
+            for format in formats {
+                if let formatItems = try? await asset.loadMetadata(for: format) {
+                    items.append(contentsOf: formatItems)
+                }
+            }
+        }
 
         creationDate = await MetadataHelpers.videoCreationDate(from: items)
         locationResult = await MetadataHelpers.videoLocationResult(from: items)
@@ -462,6 +473,7 @@ private enum MetadataHelpers {
             in: items,
             identifiers: [
                 .quickTimeMetadataCreationDate,
+                .quickTimeUserDataCreationDate,
                 .commonIdentifierCreationDate
             ]
         ) else {
@@ -472,11 +484,29 @@ private enum MetadataHelpers {
     }
 
     static func videoLocationResult(from items: [AVMetadataItem]) async -> LocationResult {
-        guard let iso6709 = await metadataString(in: items, identifiers: [.quickTimeMetadataLocationISO6709]) else {
-            return .notFound
+        let identifiers: [AVMetadataIdentifier] = [
+            .quickTimeMetadataLocationISO6709,
+            .quickTimeUserDataLocationISO6709,
+            .commonIdentifierLocation
+        ]
+        if let iso6709 = await metadataString(in: items, identifiers: identifiers) {
+            return locationResult(fromISO6709: iso6709)
         }
 
-        return locationResult(fromISO6709: iso6709)
+        // Fallback: any metadata value that parses as an ISO 6709 location string,
+        // covering formats whose identifier we did not list explicitly.
+        for item in items {
+            if let value = try? await item.load(.stringValue),
+               let first = value.first,
+               first == "+" || first == "-" {
+                let result = locationResult(fromISO6709: value)
+                if case .valid = result {
+                    return result
+                }
+            }
+        }
+
+        return .notFound
     }
 
     static func metadataString(in items: [AVMetadataItem], identifiers: [AVMetadataIdentifier]) async -> String? {
