@@ -66,5 +66,9 @@ dependencies {
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
+    // Thumbnails for the gallery (images + a frame for videos).
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("io.coil-kt:coil-video:2.7.0")
+
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

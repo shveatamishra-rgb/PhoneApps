@@ -34,7 +34,7 @@ actor PhotoTransferServer {
         parameters.allowLocalEndpointReuse = true
 
         let listener = try NWListener(using: parameters, on: NWEndpoint.Port(rawValue: port)!)
-        listener.service = NWListener.Service(name: "Gallery Transfer", type: "_http._tcp")
+        listener.service = NWListener.Service(name: "Ferry", type: "_http._tcp")
         listener.newConnectionHandler = { [weak self] connection in
             guard let self else {
                 connection.cancel()
@@ -67,7 +67,7 @@ actor PhotoTransferServer {
             if requiresAuthorization(method: request.method, path: request.path),
                !isAuthorized(request) {
                 await send(
-                    .unauthorized("Enter the PIN shown in the Gallery Transfer app to continue."),
+                    .unauthorized("Enter the PIN shown in the Ferry app to continue."),
                     over: connection
                 )
                 return
@@ -457,7 +457,7 @@ actor PhotoTransferServer {
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta http-equiv="Cache-Control" content="no-store">
-          <title>Gallery Transfer</title>
+          <title>Ferry</title>
           <script>
             (function () {
               var saved = localStorage.getItem('gt-theme');
@@ -523,7 +523,7 @@ actor PhotoTransferServer {
             <div class="appbar">
               <div class="brand">
                 <div class="brand-mark"></div>
-                <h1>Gallery Transfer</h1>
+                <h1>Ferry</h1>
               </div>
               <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">Theme</button>
             </div>
@@ -537,7 +537,7 @@ actor PhotoTransferServer {
 
             <section id="pinSection" style="display:none">
               <h2>Enter PIN</h2>
-              <p>Type the 6-digit PIN shown in the Gallery Transfer app on the iPhone.</p>
+              <p>Type the 6-digit PIN shown in the Ferry app on the iPhone.</p>
               <input id="pinInput" class="pin-input" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="off">
               <button onclick="savePin()">Continue</button>
               <div id="pinError" class="pin-error"></div>

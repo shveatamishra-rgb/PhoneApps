@@ -12,3 +12,11 @@ data class MediaItem(
     val kind: MediaKind,
     val mimeType: String,
 )
+
+/** A device folder/album (a MediaStore bucket) with a cover and item count. */
+data class Album(
+    val bucketId: String,
+    val name: String,
+    val coverUri: Uri,
+    val count: Int,
+)

@@ -9,6 +9,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.shveatamishra.gallerytransfer.media.MediaRepository
+import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.net.TransferClient
 import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
@@ -28,17 +29,23 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     var themeMode by mutableStateOf(loadThemeMode())
         private set
 
-    var items by mutableStateOf<List<MediaItem>>(emptyList())
+    var albums by mutableStateOf<List<Album>>(emptyList())
         private set
-    var selected by mutableStateOf<Set<Uri>>(emptySet())
+    var currentAlbum by mutableStateOf<Album?>(null)
+        private set
+    var albumItems by mutableStateOf<List<MediaItem>>(emptyList())
+        private set
+    var selected by mutableStateOf<Map<Uri, MediaItem>>(emptyMap())
         private set
     var status by mutableStateOf("")
         private set
     var isBusy by mutableStateOf(false)
         private set
 
-    val selectedItems: List<MediaItem> get() = items.filter { selected.contains(it.uri) }
+    val selectedItems: List<MediaItem> get() = selected.values.toList()
     val selectedBytes: Long get() = selectedItems.sumOf { it.sizeBytes }
+
+    fun isSelected(uri: Uri): Boolean = selected.containsKey(uri)
 
     fun updateHost(value: String) {
         host = value
@@ -55,24 +62,43 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putString("theme", mode.name).apply()
     }
 
-    fun toggle(uri: Uri) {
-        selected = if (selected.contains(uri)) selected - uri else selected + uri
+    fun toggle(item: MediaItem) {
+        selected = if (selected.containsKey(item.uri)) {
+            selected - item.uri
+        } else {
+            selected + (item.uri to item)
+        }
     }
 
     fun clearSelection() {
-        selected = emptySet()
+        selected = emptyMap()
     }
 
-    fun loadMedia() {
+    fun loadAlbums() {
         viewModelScope.launch {
             isBusy = true
-            status = "Loading recent media…"
-            val loaded = withContext(Dispatchers.IO) { media.recentMedia() }
-            items = loaded
-            selected = emptySet()
-            status = if (loaded.isEmpty()) "No photos or videos found." else "${loaded.size} recent items."
+            status = "Loading folders…"
+            val loaded = withContext(Dispatchers.IO) { media.albums() }
+            albums = loaded
+            status = if (loaded.isEmpty()) "No photos or videos found." else ""
             isBusy = false
         }
+    }
+
+    fun openAlbum(album: Album) {
+        currentAlbum = album
+        albumItems = emptyList()
+        viewModelScope.launch {
+            isBusy = true
+            val loaded = withContext(Dispatchers.IO) { media.mediaInBucket(album.bucketId) }
+            albumItems = loaded
+            isBusy = false
+        }
+    }
+
+    fun closeAlbum() {
+        currentAlbum = null
+        albumItems = emptyList()
     }
 
     fun sendSelected() {
@@ -118,7 +144,7 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
                 append(".")
                 if (failed > 0 && lastError != null) append(" — $lastError")
             }
-            selected = emptySet()
+            selected = emptyMap()
             isBusy = false
         }
     }

@@ -24,7 +24,7 @@ struct ContentView: View {
             }
             .background(Color.brandBackground.ignoresSafeArea())
             .scrollContentBackground(.hidden)
-            .navigationTitle("Gallery Transfer")
+            .navigationTitle("Ferry")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     themeMenu

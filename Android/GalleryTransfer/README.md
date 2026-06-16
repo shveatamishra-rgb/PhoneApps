@@ -1,19 +1,24 @@
-# Gallery Transfer — Android companion
+# Ferry — Android companion
 
-Native Android companion to the iPhone **Gallery Transfer** app. It exists for one
-reason the browser-based flow can't solve: **a web upload loses GPS location and the
-real filename** because Android scoped storage redacts location from files handed to
-apps without `ACCESS_MEDIA_LOCATION`, and browsers expose a numeric MediaStore name
-for videos. This app reads the **true original** (`MediaStore.setRequireOriginal`,
-with `ACCESS_MEDIA_LOCATION`) and the real `DISPLAY_NAME`, then uploads to the iPhone's
+Native Android companion to the iPhone **Ferry** app. It exists for one reason the
+browser-based flow can't solve: **a web upload loses GPS location and the real
+filename** because Android scoped storage redacts location from files handed to apps
+without `ACCESS_MEDIA_LOCATION`, and browsers expose a numeric MediaStore name for
+videos. This app reads the **true original** (`MediaStore.setRequireOriginal`, with
+`ACCESS_MEDIA_LOCATION`) and the real `DISPLAY_NAME`, then uploads to the iPhone's
 existing PIN-protected `/upload` endpoint.
+
+> The display name is **Ferry**; the project folder and package id still read
+> `gallerytransfer` (internal only — safe to rename later).
 
 ## Status — first cut (send only)
 
 - ✅ Connect to the iPhone server (address + 6-digit PIN, remembered).
-- ✅ Browse recent photos/videos from MediaStore, multi-select, see total size.
+- ✅ **Album/folder gallery** (MediaStore buckets) with cover + count, drilling into a
+  thumbnail grid (Coil; video frames too), multi-select across folders, running total size.
 - ✅ Upload originals with GPS + real filename preserved, streamed (no full-file RAM load).
-- ✅ Dark/Light/System theme (forest-green + gold, matching the iPhone app + web page).
+- ✅ Adaptive **Ferry** launcher icon; Dark/Light/System theme (forest-green + gold,
+  matching the iPhone app + web page).
 - ⬜ TODO: receive (download the iPhone's selected media into the gallery) — for now use the browser page.
 - ⬜ TODO: QR scan to fill address + PIN automatically.
 

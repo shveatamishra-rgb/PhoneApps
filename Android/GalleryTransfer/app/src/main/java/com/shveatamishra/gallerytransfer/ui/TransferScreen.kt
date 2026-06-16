@@ -6,37 +6,46 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Brightness6
-import androidx.compose.material.icons.filled.Photo
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Videocam
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -48,12 +57,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import coil.compose.AsyncImage
 import com.shveatamishra.gallerytransfer.TransferViewModel
+import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
 import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
@@ -64,64 +79,182 @@ fun TransferScreen(viewModel: TransferViewModel) {
     val context = LocalContext.current
     val permissions = remember { requiredPermissions() }
     var hasPermissions by remember { mutableStateOf(hasAll(context, permissions)) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val permissionLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) {
         hasPermissions = hasAll(context, permissions)
-        if (hasPermissions) viewModel.loadMedia()
+        if (hasPermissions) viewModel.loadAlbums()
     }
 
     LaunchedEffect(Unit) {
-        if (hasPermissions && viewModel.items.isEmpty()) viewModel.loadMedia()
+        if (hasPermissions && viewModel.albums.isEmpty()) viewModel.loadAlbums()
     }
+
+    LaunchedEffect(viewModel.status) {
+        val message = viewModel.status
+        if (message.isNotBlank() && !message.startsWith("Loading") && !message.startsWith("Uploading")) {
+            snackbarHostState.showSnackbar(message)
+        }
+    }
+
+    val inAlbum = viewModel.currentAlbum != null
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Gallery Transfer") },
+                title = { Text(viewModel.currentAlbum?.name ?: "Ferry") },
+                navigationIcon = {
+                    if (inAlbum) {
+                        IconButton(onClick = { viewModel.closeAlbum() }) {
+                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        }
+                    }
+                },
                 actions = { ThemeMenu(viewModel) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.primary,
+                    navigationIconContentColor = MaterialTheme.colorScheme.primary,
                 ),
             )
         },
+        bottomBar = {
+            if (viewModel.selected.isNotEmpty() || viewModel.isBusy) {
+                SendBar(viewModel)
+            }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
+        Box(
+            Modifier
                 .padding(padding)
-                .fillMaxSize(),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+                .fillMaxSize()
         ) {
-            item { ConnectionCard(viewModel) }
-            item {
-                ActionsRow(
-                    viewModel = viewModel,
-                    hasPermissions = hasPermissions,
-                    onRequestPermissions = { permissionLauncher.launch(permissions) },
-                )
+            when {
+                !hasPermissions -> PermissionGate { permissionLauncher.launch(permissions) }
+                inAlbum -> PhotoGrid(viewModel)
+                else -> AlbumList(viewModel)
             }
-            if (viewModel.status.isNotBlank()) {
-                item {
-                    Text(
-                        text = viewModel.status,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            if (viewModel.items.isNotEmpty()) {
-                item { SelectionSummary(viewModel) }
-                items(viewModel.items, key = { it.uri.toString() }) { media ->
-                    MediaRow(
-                        media = media,
-                        selected = viewModel.selected.contains(media.uri),
-                        onToggle = { viewModel.toggle(media.uri) },
-                    )
-                }
-            }
+        }
+    }
+}
+
+@Composable
+private fun AlbumList(viewModel: TransferViewModel) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        item(span = { GridItemSpan(maxLineSpan) }) { ConnectionCard(viewModel) }
+        item(span = { GridItemSpan(maxLineSpan) }) {
+            Text(
+                "Your folders",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+        }
+        items(viewModel.albums, key = { it.bucketId }) { album ->
+            AlbumCard(album) { viewModel.openAlbum(album) }
+        }
+    }
+}
+
+@Composable
+private fun AlbumCard(album: Album, onClick: () -> Unit) {
+    Column(Modifier.clickable { onClick() }) {
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(14.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+        ) {
+            AsyncImage(
+                model = album.coverUri,
+                contentDescription = album.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+        Spacer(Modifier.height(6.dp))
+        Text(
+            album.name,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Text(
+            "${album.count} item${if (album.count == 1) "" else "s"}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+@Composable
+private fun PhotoGrid(viewModel: TransferViewModel) {
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(112.dp),
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(2.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        items(viewModel.albumItems, key = { it.uri.toString() }) { item ->
+            PhotoCell(
+                item = item,
+                selected = viewModel.isSelected(item.uri),
+                onToggle = { viewModel.toggle(item) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun PhotoCell(item: MediaItem, selected: Boolean, onToggle: () -> Unit) {
+    Box(
+        Modifier
+            .aspectRatio(1f)
+            .fillMaxWidth()
+            .clickable { onToggle() }
+    ) {
+        AsyncImage(
+            model = item.uri,
+            contentDescription = item.displayName,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize(),
+        )
+        if (item.kind == MediaKind.VIDEO) {
+            Icon(
+                Icons.Filled.PlayCircle,
+                contentDescription = "Video",
+                tint = Color.White.copy(alpha = 0.92f),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(30.dp),
+            )
+        }
+        if (selected) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.40f))
+            )
+            Icon(
+                Icons.Filled.CheckCircle,
+                contentDescription = "Selected",
+                tint = Color.White,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(4.dp)
+                    .size(22.dp),
+            )
         }
     }
 }
@@ -130,7 +263,7 @@ fun TransferScreen(viewModel: TransferViewModel) {
 private fun ConnectionCard(viewModel: TransferViewModel) {
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -141,7 +274,7 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
-                "Open Gallery Transfer on the iPhone, start the receiver, then enter the address and PIN it shows.",
+                "Open Ferry on the iPhone, start the receiver, then enter the address and PIN it shows. (QR scan is coming next.)",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -166,91 +299,72 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
 }
 
 @Composable
-private fun ActionsRow(
-    viewModel: TransferViewModel,
-    hasPermissions: Boolean,
-    onRequestPermissions: () -> Unit,
-) {
-    if (!hasPermissions) {
-        Button(onClick = onRequestPermissions, modifier = Modifier.fillMaxWidth()) {
-            Text("Grant photo & video access")
-        }
-        return
-    }
-
-    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        OutlinedButton(
-            onClick = { viewModel.loadMedia() },
-            enabled = !viewModel.isBusy,
-        ) {
-            Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text("Reload")
-        }
-        Button(
-            onClick = { viewModel.sendSelected() },
-            enabled = !viewModel.isBusy && viewModel.selected.isNotEmpty(),
-        ) {
-            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
-            Spacer(Modifier.width(8.dp))
-            Text("Send ${viewModel.selected.size}")
-        }
-    }
-}
-
-@Composable
-private fun SelectionSummary(viewModel: TransferViewModel) {
-    val count = viewModel.selected.size
-    val text = if (count == 0) {
-        "Tap items to select what to send."
-    } else {
-        "$count selected · ${formatBytes(viewModel.selectedBytes)} total"
-    }
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleSmall,
-        fontWeight = FontWeight.SemiBold,
-        color = if (count == 0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.secondary,
-    )
-}
-
-@Composable
-private fun MediaRow(media: MediaItem, selected: Boolean, onToggle: () -> Unit) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onToggle() },
-    ) {
+private fun SendBar(viewModel: TransferViewModel) {
+    Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
         Row(
-            modifier = Modifier
+            Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                imageVector = if (media.kind == MediaKind.VIDEO) Icons.Filled.Videocam else Icons.Filled.Photo,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.secondary,
-                modifier = Modifier.size(24.dp),
-            )
-            Spacer(Modifier.width(12.dp))
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = media.displayName,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    text = formatBytes(media.sizeBytes),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+            Column(Modifier.weight(1f)) {
+                if (viewModel.isBusy) {
+                    Text(
+                        viewModel.status.ifBlank { "Working…" },
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                } else {
+                    Text(
+                        "${viewModel.selected.size} selected",
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.secondary,
+                    )
+                    Text(
+                        formatBytes(viewModel.selectedBytes),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
-            Checkbox(checked = selected, onCheckedChange = { onToggle() })
+            Spacer(Modifier.width(12.dp))
+            Button(
+                onClick = { viewModel.sendSelected() },
+                enabled = !viewModel.isBusy && viewModel.selected.isNotEmpty(),
+            ) {
+                Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text("Send")
+            }
         }
+    }
+}
+
+@Composable
+private fun PermissionGate(onGrant: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(
+            Icons.Filled.PhotoLibrary,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(48.dp),
+        )
+        Spacer(Modifier.height(12.dp))
+        Text(
+            "Ferry needs access to your photos and videos so it can send them — with location and filenames intact.",
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = onGrant) { Text("Grant access") }
     }
 }
 

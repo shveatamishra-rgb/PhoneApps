@@ -12,6 +12,8 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Ferry</string>
 	<key>CFBundlePackageType</key>
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
@@ -25,11 +27,11 @@
 		<string>_http._tcp</string>
 	</array>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Gallery Transfer uses your local Wi-Fi network to move original image files between your phones.</string>
+	<string>Ferry uses your local Wi-Fi network to move original image files between your phones.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Gallery Transfer saves received photos and videos directly to the Photos app.</string>
+	<string>Ferry saves received photos and videos directly to the Photos app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Gallery Transfer reads selected photo and video originals so they can be sent to your other phone without recompression.</string>
+	<string>Ferry reads selected photo and video originals so they can be sent to your other phone without recompression.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

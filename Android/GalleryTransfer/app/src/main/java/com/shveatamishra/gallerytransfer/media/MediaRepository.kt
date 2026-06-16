@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.provider.MediaStore
+import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
 import java.io.IOException
@@ -23,7 +24,63 @@ class MediaRepository(private val context: Context) {
 
     private val resolver: ContentResolver get() = context.contentResolver
 
-    fun recentMedia(limit: Int = 200): List<MediaItem> {
+    /** Device folders (MediaStore buckets) that contain photos/videos, most-recently-active first. */
+    fun albums(): List<Album> {
+        val collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        val projection = arrayOf(
+            MediaStore.Files.FileColumns._ID,
+            MediaStore.Files.FileColumns.BUCKET_ID,
+            MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.Files.FileColumns.MEDIA_TYPE,
+        )
+        val selection = "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?, ?)"
+        val selectionArgs = arrayOf(
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(),
+        )
+        val sortOrder = "${MediaStore.Files.FileColumns.DATE_ADDED} DESC"
+
+        // Aggregate manually: insertion order (date desc) keeps the cover = newest item.
+        val covers = LinkedHashMap<String, Uri>()
+        val names = HashMap<String, String>()
+        val counts = HashMap<String, Int>()
+
+        resolver.query(collection, projection, selection, selectionArgs, sortOrder)?.use { cursor ->
+            val idCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val bucketCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_ID)
+            val nameCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
+            val typeCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
+
+            while (cursor.moveToNext()) {
+                val bucketId = cursor.getString(bucketCol) ?: continue
+                counts[bucketId] = (counts[bucketId] ?: 0) + 1
+                if (!covers.containsKey(bucketId)) {
+                    val id = cursor.getLong(idCol)
+                    val isVideo =
+                        cursor.getInt(typeCol) == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+                    val base = if (isVideo) {
+                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+                    } else {
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                    }
+                    covers[bucketId] = ContentUris.withAppendedId(base, id)
+                    names[bucketId] = cursor.getString(nameCol) ?: "Unknown"
+                }
+            }
+        }
+
+        return covers.map { (bucketId, cover) ->
+            Album(
+                bucketId = bucketId,
+                name = names[bucketId] ?: "Unknown",
+                coverUri = cover,
+                count = counts[bucketId] ?: 0,
+            )
+        }
+    }
+
+    /** Photos/videos inside one folder, newest first. */
+    fun mediaInBucket(bucketId: String, limit: Int = 5000): List<MediaItem> {
         val collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
         val projection = arrayOf(
             MediaStore.Files.FileColumns._ID,
@@ -32,8 +89,10 @@ class MediaRepository(private val context: Context) {
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
         )
-        val selection = "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?, ?)"
+        val selection = "${MediaStore.Files.FileColumns.BUCKET_ID} = ? AND " +
+            "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?, ?)"
         val selectionArgs = arrayOf(
+            bucketId,
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE.toString(),
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO.toString(),
         )
