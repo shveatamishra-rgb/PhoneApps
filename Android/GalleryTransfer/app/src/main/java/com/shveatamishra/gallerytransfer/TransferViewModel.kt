@@ -41,17 +41,17 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     val selectedItems: List<MediaItem> get() = items.filter { selected.contains(it.uri) }
     val selectedBytes: Long get() = selectedItems.sumOf { it.sizeBytes }
 
-    fun setHost(value: String) {
+    fun updateHost(value: String) {
         host = value
         prefs.edit().putString("host", value).apply()
     }
 
-    fun setPin(value: String) {
+    fun updatePin(value: String) {
         pin = value
         prefs.edit().putString("pin", value).apply()
     }
 
-    fun setThemeMode(mode: ThemeMode) {
+    fun updateThemeMode(mode: ThemeMode) {
         themeMode = mode
         prefs.edit().putString("theme", mode.name).apply()
     }

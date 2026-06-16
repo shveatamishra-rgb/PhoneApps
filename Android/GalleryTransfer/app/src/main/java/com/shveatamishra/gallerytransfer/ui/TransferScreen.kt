@@ -19,10 +19,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -147,7 +147,7 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
             )
             OutlinedTextField(
                 value = viewModel.host,
-                onValueChange = viewModel::setHost,
+                onValueChange = viewModel::updateHost,
                 label = { Text("Address") },
                 placeholder = { Text("192.168.1.20:8899") },
                 singleLine = true,
@@ -155,7 +155,7 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
             )
             OutlinedTextField(
                 value = viewModel.pin,
-                onValueChange = viewModel::setPin,
+                onValueChange = viewModel::updatePin,
                 label = { Text("PIN") },
                 placeholder = { Text("6-digit PIN") },
                 singleLine = true,
@@ -191,7 +191,7 @@ private fun ActionsRow(
             onClick = { viewModel.sendSelected() },
             enabled = !viewModel.isBusy && viewModel.selected.isNotEmpty(),
         ) {
-            Icon(Icons.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
+            Icon(Icons.AutoMirrored.Filled.Send, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
             Text("Send ${viewModel.selected.size}")
         }
@@ -269,7 +269,7 @@ private fun ThemeMenu(viewModel: TransferViewModel) {
             DropdownMenuItem(
                 text = { Text(mode.label()) },
                 onClick = {
-                    viewModel.setThemeMode(mode)
+                    viewModel.updateThemeMode(mode)
                     expanded = false
                 },
             )

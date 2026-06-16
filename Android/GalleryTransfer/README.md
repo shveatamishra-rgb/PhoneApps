@@ -19,20 +19,19 @@ existing PIN-protected `/upload` endpoint.
 
 ## Build
 
-There's no Android toolchain in this dev environment, so this was written but not yet
-compiled — expect to iterate on first build.
+Compiles to a debug APK (verified 2026-06-15 with the Gradle wrapper, Android Studio's
+JDK 21, and SDK platform 36).
 
-1. Install **Android Studio** (it bundles the SDK, a JDK 17, and Gradle).
-2. **Open** `Android/GalleryTransfer` in Android Studio and let it sync.
-   - The Gradle **wrapper jar** isn't committed. If AS doesn't generate it automatically,
-     run `gradle wrapper --gradle-version 8.7` once (with a system Gradle), or use
-     *File ▸ Sync Project with Gradle Files*.
+1. **Open** `Android/GalleryTransfer` in Android Studio and let it sync, **or** from a
+   terminal: `./gradlew :app:assembleDebug` (the wrapper is committed).
+   - Needs a `local.properties` with `sdk.dir=/path/to/Android/sdk` (Android Studio
+     writes this automatically; it's gitignored).
 3. Run on a device/emulator (min SDK 29 / Android 10).
 
 ```
 applicationId  com.shveatamishra.gallerytransfer
-minSdk 29   targetSdk 34   compileSdk 34
-Kotlin 1.9.24 · AGP 8.5.2 · Compose BOM 2024.09.00 · OkHttp 4.12
+minSdk 29   targetSdk 34   compileSdk 36 (only platform installed here; AGP warning suppressed)
+Kotlin 1.9.24 · AGP 8.5.2 · Gradle 8.7 · Compose BOM 2024.09.00 · OkHttp 4.12
 ```
 
 ## How it talks to the iPhone
