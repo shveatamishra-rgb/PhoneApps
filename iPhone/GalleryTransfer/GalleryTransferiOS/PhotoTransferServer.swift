@@ -514,6 +514,8 @@ actor PhotoTransferServer {
             .row.error .row-state { background: var(--error-pill); color: white; }
             .empty { color: var(--muted); margin-top: 12px; }
             .download-link { flex: 0 0 auto; padding: 8px 13px; }
+            .install { border-left: 4px solid var(--accent); }
+            .install .button { margin-top: 6px; }
           </style>
         </head>
         <body>
@@ -526,6 +528,12 @@ actor PhotoTransferServer {
               <button id="themeToggle" class="theme-toggle" onclick="toggleTheme()">Theme</button>
             </div>
             <p>Transfers use the original media file. Keep this iPhone app open until everything finishes.</p>
+
+            <section id="installBanner" class="install" style="display:none">
+              <h2>Get the Android app</h2>
+              <p>Install the companion app to keep photo <strong>location</strong> and original <strong>filenames</strong> — a browser upload loses both.</p>
+              <a class="button" href="https://github.com/shveatamishra-rgb/PhoneApps/releases/latest/download/gallery-transfer.apk">Download Android app (.apk)</a>
+            </section>
 
             <section id="pinSection" style="display:none">
               <h2>Enter PIN</h2>
@@ -725,6 +733,11 @@ actor PhotoTransferServer {
             }
 
             updateThemeButton();
+
+            // Only Android visitors can use the companion APK, so only they see the offer.
+            if (/Android/i.test(navigator.userAgent)) {
+              document.getElementById('installBanner').style.display = '';
+            }
 
             if (pin) {
               showApp();
