@@ -3,6 +3,7 @@ package com.shveatamishra.gallerytransfer.ui
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,7 @@ import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,6 +69,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.shveatamishra.gallerytransfer.TransferViewModel
 import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
@@ -261,6 +266,7 @@ private fun PhotoCell(item: MediaItem, selected: Boolean, onToggle: () -> Unit) 
 
 @Composable
 private fun ConnectionCard(viewModel: TransferViewModel) {
+    val context = LocalContext.current
     Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(
             Modifier
@@ -274,10 +280,23 @@ private fun ConnectionCard(viewModel: TransferViewModel) {
                 color = MaterialTheme.colorScheme.primary,
             )
             Text(
-                "Open Ferry on the iPhone, start the receiver, then enter the address and PIN it shows. (QR scan is coming next.)",
+                "Start the receiver in Ferry on the iPhone, then scan its QR code — or type the address and PIN it shows.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Button(
+                onClick = {
+                    scanConnection(context) { host, pin ->
+                        viewModel.updateHost(host)
+                        if (pin != null) viewModel.updatePin(pin)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Icon(Icons.Filled.QrCodeScanner, contentDescription = null, modifier = Modifier.size(18.dp))
+                Spacer(Modifier.width(8.dp))
+                Text("Scan QR code")
+            }
             OutlinedTextField(
                 value = viewModel.host,
                 onValueChange = viewModel::updateHost,
@@ -395,6 +414,20 @@ private fun ThemeMode.label(): String = when (this) {
     ThemeMode.SYSTEM -> "System"
     ThemeMode.LIGHT -> "Light"
     ThemeMode.DARK -> "Dark"
+}
+
+private fun scanConnection(context: Context, onResult: (String, String?) -> Unit) {
+    val options = GmsBarcodeScannerOptions.Builder()
+        .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+        .build()
+    GmsBarcodeScanning.getClient(context, options).startScan()
+        .addOnSuccessListener { barcode ->
+            val raw = barcode.rawValue ?: return@addOnSuccessListener
+            val uri = Uri.parse(raw)
+            val host = uri.host ?: return@addOnSuccessListener
+            val port = if (uri.port > 0) uri.port else 8899
+            onResult("$host:$port", uri.getQueryParameter("pin"))
+        }
 }
 
 private fun requiredPermissions(): Array<String> =

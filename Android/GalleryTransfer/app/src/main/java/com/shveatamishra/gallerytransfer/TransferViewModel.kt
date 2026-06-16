@@ -154,11 +154,11 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             .getOrDefault(ThemeMode.SYSTEM)
 
     private fun normalizedHost(value: String): String {
-        val trimmed = value.trim()
-        return if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
-            trimmed
-        } else {
-            "http://$trimmed"
-        }
+        // Tolerate a full URL being pasted (or scanned): keep only host:port.
+        val hostPort = value.trim()
+            .removePrefix("https://")
+            .removePrefix("http://")
+            .substringBefore("/")
+        return "http://$hostPort"
     }
 }
