@@ -3,11 +3,16 @@ package com.shveatamishra.gallerytransfer.media
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.net.Uri
 import android.provider.MediaStore
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
+import java.io.IOException
 import java.io.InputStream
+
+/** A reopenable source of an item's original bytes plus the exact length to send. */
+data class OriginalSource(val length: Long, val open: () -> InputStream)
 
 /**
  * Reads photos/videos from the device's shared media store. Unlike a browser upload,
@@ -65,18 +70,28 @@ class MediaRepository(private val context: Context) {
     }
 
     /**
-     * Opens the original file. Requires ACCESS_MEDIA_LOCATION for GPS to survive; if it
-     * isn't granted we fall back to the redacted copy so the transfer still works.
+     * Resolves the original file (GPS intact via setRequireOriginal when
+     * ACCESS_MEDIA_LOCATION is granted, else the redacted copy) together with its exact
+     * byte length, so the upload's Content-Length matches the bytes actually sent. A
+     * length of -1 tells the uploader to stream chunked instead of declaring a length.
      */
-    fun openOriginalStream(uri: Uri): InputStream? {
-        return try {
-            resolver.openInputStream(MediaStore.setRequireOriginal(uri))
+    fun originalSource(uri: Uri): OriginalSource {
+        val target = try {
+            MediaStore.setRequireOriginal(uri)
         } catch (_: Exception) {
-            try {
-                resolver.openInputStream(uri)
-            } catch (_: Exception) {
-                null
-            }
+            uri
+        }
+
+        val length = try {
+            resolver.openAssetFileDescriptor(target, "r")?.use { afd ->
+                if (afd.length == AssetFileDescriptor.UNKNOWN_LENGTH) -1L else afd.length
+            } ?: -1L
+        } catch (_: Exception) {
+            -1L
+        }
+
+        return OriginalSource(length) {
+            resolver.openInputStream(target) ?: throw IOException("Could not open media stream")
         }
     }
 }

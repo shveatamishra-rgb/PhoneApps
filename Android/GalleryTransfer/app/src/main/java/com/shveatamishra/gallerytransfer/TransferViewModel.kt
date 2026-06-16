@@ -15,7 +15,6 @@ import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 class TransferViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -94,26 +93,30 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             val client = TransferClient(normalizedHost(host), pin)
             var ok = 0
             var failed = 0
+            var lastError: String? = null
             for ((index, item) in targets.withIndex()) {
                 status = "Uploading ${index + 1} of ${targets.size}: ${item.displayName}"
                 val outcome = withContext(Dispatchers.IO) {
+                    val source = media.originalSource(item.uri)
                     client.upload(
                         filename = item.displayName,
                         mimeType = item.mimeType,
-                        contentLength = item.sizeBytes,
-                        openStream = {
-                            media.openOriginalStream(item.uri)
-                                ?: throw IOException("Could not read ${item.displayName}")
-                        },
+                        contentLength = source.length,
+                        openStream = source.open,
                     )
                 }
-                if (outcome.ok) ok++ else failed++
+                if (outcome.ok) {
+                    ok++
+                } else {
+                    failed++
+                    lastError = outcome.message
+                }
             }
             status = buildString {
-                append("Done. ")
-                append("$ok sent")
+                append("Done. $ok sent")
                 if (failed > 0) append(", $failed failed")
                 append(".")
+                if (failed > 0 && lastError != null) append(" — $lastError")
             }
             selected = emptySet()
             isBusy = false
