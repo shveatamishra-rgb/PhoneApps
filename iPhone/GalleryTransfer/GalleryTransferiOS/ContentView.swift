@@ -7,6 +7,7 @@ import UIKit
 struct ContentView: View {
     @StateObject private var viewModel = TransferViewModel()
     @State private var selectedPickerItems: [PhotosPickerItem] = []
+    @State private var previewItem: PreviewItem?
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -37,6 +38,9 @@ struct ContentView: View {
                 Task {
                     await viewModel.prepareOutgoingPhotos(from: newItems)
                 }
+            }
+            .sheet(item: $previewItem) { item in
+                AssetPreviewView(localIdentifier: item.id)
             }
         }
         .tint(.brandPrimary)
@@ -174,16 +178,18 @@ struct ContentView: View {
             }
 
             if viewModel.isReceiving {
-                HStack(spacing: 10) {
+                Text(viewModel.receivingName.isEmpty ? "Receiving..." : "Receiving \(viewModel.receivingName)...")
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                if viewModel.receiveProgress > 0 {
+                    ProgressView(value: min(max(viewModel.receiveProgress, 0), 1))
+                        .tint(Color.brandPrimary)
+                } else {
                     ProgressView()
-                    Text(viewModel.receivingName.isEmpty ? "Receiving..." : "Receiving \(viewModel.receivingName)...")
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+                        .progressViewStyle(.linear)
+                        .tint(Color.brandPrimary)
                 }
-                ProgressView()
-                    .progressViewStyle(.linear)
-                    .tint(Color.brandPrimary)
             }
 
             Text(viewModel.status)
@@ -266,6 +272,18 @@ struct ContentView: View {
                         }
 
                         Spacer()
+
+                        if item.didSave, let id = item.localIdentifier {
+                            Button {
+                                previewItem = PreviewItem(id: id)
+                            } label: {
+                                Label("View", systemImage: "eye")
+                                    .labelStyle(.titleAndIcon)
+                                    .font(.caption.weight(.semibold))
+                            }
+                            .buttonStyle(.bordered)
+                            .tint(Color.brandPrimary)
+                        }
                     }
                 }
             }
@@ -337,6 +355,68 @@ private func formatBytes(_ value: Int64) -> String {
     formatter.allowedUnits = [.useKB, .useMB, .useGB, .useTB]
     formatter.countStyle = .file
     return formatter.string(fromByteCount: value)
+}
+
+private struct PreviewItem: Identifiable {
+    let id: String
+}
+
+private struct AssetPreviewView: View {
+    let localIdentifier: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var image: UIImage?
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                if let image {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFit()
+                } else {
+                    ProgressView()
+                        .tint(.white)
+                }
+            }
+            .navigationTitle("Saved to Photos")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        if let url = URL(string: "photos-redirect://") {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        Label("Open Photos", systemImage: "photo.on.rectangle")
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .onAppear(perform: loadImage)
+        }
+    }
+
+    private func loadImage() {
+        guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [localIdentifier], options: nil).firstObject else {
+            return
+        }
+        let options = PHImageRequestOptions()
+        options.isNetworkAccessAllowed = true
+        options.deliveryMode = .highQualityFormat
+        PHImageManager.default().requestImage(
+            for: asset,
+            targetSize: CGSize(width: 1600, height: 1600),
+            contentMode: .aspectFit,
+            options: options
+        ) { result, _ in
+            if let result {
+                image = result
+            }
+        }
+    }
 }
 
 enum AppTheme: String, CaseIterable, Identifiable {

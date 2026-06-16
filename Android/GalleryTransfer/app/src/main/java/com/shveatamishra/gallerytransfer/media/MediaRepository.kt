@@ -4,16 +4,25 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.res.AssetFileDescriptor
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.exifinterface.media.ExifInterface
 import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
 import java.io.IOException
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 /** A reopenable source of an item's original bytes plus the exact length to send. */
 data class OriginalSource(val length: Long, val open: () -> InputStream)
+
+/** Location/date read from an item's original, to send alongside the upload so the
+ *  iPhone gets them even when the file's own metadata is awkward to parse there. */
+data class MediaMeta(val latitude: Double?, val longitude: Double?, val dateMillis: Long?)
 
 /**
  * Reads photos/videos from the device's shared media store. Unlike a browser upload,
@@ -152,5 +161,79 @@ class MediaRepository(private val context: Context) {
         return OriginalSource(length) {
             resolver.openInputStream(target) ?: throw IOException("Could not open media stream")
         }
+    }
+
+    /** Reads GPS + capture date from the unredacted original (needs ACCESS_MEDIA_LOCATION). */
+    fun extractMeta(uri: Uri, kind: MediaKind): MediaMeta {
+        val target = try {
+            MediaStore.setRequireOriginal(uri)
+        } catch (_: Exception) {
+            uri
+        }
+        return when (kind) {
+            MediaKind.IMAGE -> extractImageMeta(target)
+            MediaKind.VIDEO -> extractVideoMeta(target)
+        }
+    }
+
+    private fun extractImageMeta(uri: Uri): MediaMeta {
+        return try {
+            resolver.openInputStream(uri)?.use { stream ->
+                val exif = ExifInterface(stream)
+                val latLong = exif.latLong
+                MediaMeta(
+                    latitude = latLong?.getOrNull(0),
+                    longitude = latLong?.getOrNull(1),
+                    dateMillis = exif.dateTimeOriginal ?: exif.dateTime,
+                )
+            } ?: MediaMeta(null, null, null)
+        } catch (_: Exception) {
+            MediaMeta(null, null, null)
+        }
+    }
+
+    private fun extractVideoMeta(uri: Uri): MediaMeta {
+        val retriever = MediaMetadataRetriever()
+        return try {
+            retriever.setDataSource(context, uri)
+            val (lat, lng) = parseIso6709(
+                retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_LOCATION)
+            )
+            MediaMeta(
+                latitude = lat,
+                longitude = lng,
+                dateMillis = parseVideoDate(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE)),
+            )
+        } catch (_: Exception) {
+            MediaMeta(null, null, null)
+        } finally {
+            try {
+                retriever.release()
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    private fun parseIso6709(value: String?): Pair<Double?, Double?> {
+        if (value.isNullOrBlank()) return null to null
+        val numbers = Regex("[+-]\\d+(?:\\.\\d+)?")
+            .findAll(value)
+            .mapNotNull { it.value.toDoubleOrNull() }
+            .toList()
+        return if (numbers.size >= 2) numbers[0] to numbers[1] else null to null
+    }
+
+    private fun parseVideoDate(value: String?): Long? {
+        if (value.isNullOrBlank()) return null
+        val patterns = listOf("yyyyMMdd'T'HHmmss.SSS'Z'", "yyyyMMdd'T'HHmmss'Z'", "yyyy-MM-dd'T'HH:mm:ss'Z'")
+        for (pattern in patterns) {
+            try {
+                val formatter = SimpleDateFormat(pattern, Locale.US)
+                formatter.timeZone = TimeZone.getTimeZone("UTC")
+                return formatter.parse(value)?.time
+            } catch (_: Exception) {
+            }
+        }
+        return null
     }
 }

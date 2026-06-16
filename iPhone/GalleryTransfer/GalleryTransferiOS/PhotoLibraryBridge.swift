@@ -9,12 +9,32 @@ struct ReceivedUpload: Sendable {
     let filename: String
     let fileURL: URL
     let contentType: String?
+    var latitude: Double? = nil
+    var longitude: Double? = nil
+    var dateMillis: Double? = nil
+
+    /// Location the sender measured (sent as headers), authoritative over whatever we
+    /// can parse from the file itself.
+    var headerLocation: CLLocation? {
+        guard let latitude, let longitude,
+              (-90...90).contains(latitude), (-180...180).contains(longitude),
+              !(abs(latitude) < 0.000001 && abs(longitude) < 0.000001) else {
+            return nil
+        }
+        return CLLocation(latitude: latitude, longitude: longitude)
+    }
+
+    var headerDate: Date? {
+        guard let dateMillis else { return nil }
+        return Date(timeIntervalSince1970: dateMillis / 1000.0)
+    }
 }
 
 struct UploadResult: Sendable {
     let filename: String
     let message: String
     let didSave: Bool
+    var localIdentifier: String? = nil
 }
 
 struct SavedMediaMetadata: Sendable {
@@ -23,6 +43,13 @@ struct SavedMediaMetadata: Sendable {
     let hasLocation: Bool
     let locationMessage: String
     let hasCreationDate: Bool
+    var localIdentifier: String? = nil
+}
+
+/// Carries the created asset's identifier out of the PhotoKit change block, which runs
+/// synchronously, so a reference box is safe across the `@Sendable` boundary.
+private final class CreatedAssetIdentifierBox: @unchecked Sendable {
+    var value: String?
 }
 
 struct PhotoLibraryBridge {
@@ -128,6 +155,13 @@ struct PhotoLibraryBridge {
             metadata: metadata
         )
 
+        // Prefer the location/date the sender measured (HTTP headers): the Android app
+        // reads them from the unredacted original, which is more reliable than parsing
+        // the file here. Fall back to whatever is embedded in the file.
+        let finalLocation = upload.headerLocation ?? metadata.location
+        let finalDate = upload.headerDate ?? metadata.creationDate
+
+        let identifierBox = CreatedAssetIdentifierBox()
         try await PHPhotoLibrary.shared().performChanges {
             let request = PHAssetCreationRequest.forAsset()
             let options = PHAssetResourceCreationOptions()
@@ -137,8 +171,8 @@ struct PhotoLibraryBridge {
             // up if a move ever leaves the source behind or the save fails.
             options.shouldMoveFile = true
 
-            request.creationDate = metadata.creationDate
-            request.location = metadata.location
+            request.creationDate = finalDate
+            request.location = finalLocation
 
             switch mediaKind {
             case .image:
@@ -146,9 +180,31 @@ struct PhotoLibraryBridge {
             case .video:
                 request.addResource(with: .video, fileURL: upload.fileURL, options: options)
             }
+
+            identifierBox.value = request.placeholderForCreatedAsset?.localIdentifier
         }
 
-        return metadata.savedSummary(savedFilename: savedFilename)
+        let locationMessage: String
+        if let finalLocation {
+            locationMessage = String(
+                format: "GPS saved: %.5f, %.5f",
+                finalLocation.coordinate.latitude,
+                finalLocation.coordinate.longitude
+            )
+        } else if case .invalid(let reason) = metadata.locationResult {
+            locationMessage = reason
+        } else {
+            locationMessage = "No GPS location metadata arrived with the upload."
+        }
+
+        return SavedMediaMetadata(
+            savedFilename: savedFilename,
+            mediaKind: mediaKind,
+            hasLocation: finalLocation != nil,
+            locationMessage: locationMessage,
+            hasCreationDate: finalDate != nil,
+            localIdentifier: identifierBox.value
+        )
     }
 
     private func uploadedMediaKind(for url: URL, filename: String, contentType: String?) throws -> TransferMediaKind {

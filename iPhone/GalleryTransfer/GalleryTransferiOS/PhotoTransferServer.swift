@@ -11,6 +11,7 @@ actor PhotoTransferServer {
     private var outgoingFiles: [OutgoingPhotoFile]
     private let onUpload: @Sendable (ReceivedUpload) async throws -> SavedMediaMetadata
     private let onUploadStarted: @Sendable (String) -> Void
+    private let onUploadProgress: @Sendable (Double) -> Void
     private let onUploadFinished: @Sendable (UploadResult) -> Void
 
     init(
@@ -18,6 +19,7 @@ actor PhotoTransferServer {
         outgoingFiles: [OutgoingPhotoFile],
         onUpload: @escaping @Sendable (ReceivedUpload) async throws -> SavedMediaMetadata,
         onUploadStarted: @escaping @Sendable (String) -> Void,
+        onUploadProgress: @escaping @Sendable (Double) -> Void,
         onUploadFinished: @escaping @Sendable (UploadResult) -> Void
     ) {
         self.port = port
@@ -25,6 +27,7 @@ actor PhotoTransferServer {
         self.outgoingFiles = outgoingFiles
         self.onUpload = onUpload
         self.onUploadStarted = onUploadStarted
+        self.onUploadProgress = onUploadProgress
         self.onUploadFinished = onUploadFinished
     }
 
@@ -155,12 +158,16 @@ actor PhotoTransferServer {
             let metadata = try await onUpload(ReceivedUpload(
                 filename: filename,
                 fileURL: destination,
-                contentType: request.headers["content-type"]
+                contentType: request.headers["content-type"],
+                latitude: request.headers["x-media-latitude"].flatMap(Double.init),
+                longitude: request.headers["x-media-longitude"].flatMap(Double.init),
+                dateMillis: request.headers["x-media-date"].flatMap(Double.init)
             ))
             let result = UploadResult(
                 filename: metadata.savedFilename,
                 message: "Saved \(metadata.savedFilename) to Photos. \(metadata.locationMessage)",
-                didSave: true
+                didSave: true,
+                localIdentifier: metadata.localIdentifier
             )
             onUploadFinished(result)
             await send(.json(jsonString([
@@ -193,13 +200,21 @@ actor PhotoTransferServer {
 
         switch bodyTransfer {
         case .fixedLength(let remainingByteCount):
+            let total = initialBody.count + remainingByteCount
             try handle.write(contentsOf: initialBody)
+            if total > 0 {
+                onUploadProgress(Double(initialBody.count) / Double(total))
+            }
             try await writeFixedLengthUploadBody(
                 to: handle,
                 remainingByteCount: remainingByteCount,
+                alreadyWritten: initialBody.count,
+                totalBytes: total,
                 from: connection
             )
         case .chunked:
+            // Length is unknown for chunked uploads, so progress stays indeterminate.
+            onUploadProgress(0)
             try await writeChunkedUploadBody(
                 to: handle,
                 initialBody: initialBody,
@@ -213,9 +228,12 @@ actor PhotoTransferServer {
     private func writeFixedLengthUploadBody(
         to handle: FileHandle,
         remainingByteCount: Int,
+        alreadyWritten: Int,
+        totalBytes: Int,
         from connection: NWConnection
     ) async throws {
         var remaining = remainingByteCount
+        var written = alreadyWritten
         while remaining > 0 {
             let chunk = try await connection.receiveData(
                 minimumIncompleteLength: 1,
@@ -228,6 +246,10 @@ actor PhotoTransferServer {
 
             try handle.write(contentsOf: chunk)
             remaining -= chunk.count
+            written += chunk.count
+            if totalBytes > 0 {
+                onUploadProgress(Double(written) / Double(totalBytes))
+            }
         }
     }
 

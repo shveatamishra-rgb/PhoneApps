@@ -32,6 +32,9 @@ class TransferClient(baseUrl: String, private val pin: String) {
         filename: String,
         mimeType: String,
         contentLength: Long,
+        latitude: Double?,
+        longitude: Double?,
+        dateMillis: Long?,
         openStream: () -> InputStream,
     ): UploadOutcome {
         val root = base ?: return UploadOutcome(false, "Invalid iPhone address.")
@@ -52,11 +55,13 @@ class TransferClient(baseUrl: String, private val pin: String) {
             }
         }
 
-        val request = Request.Builder()
+        val requestBuilder = Request.Builder()
             .url(url)
             .header("X-Original-Filename", Uri.encode(filename))
-            .post(body)
-            .build()
+        latitude?.let { requestBuilder.header("X-Media-Latitude", it.toString()) }
+        longitude?.let { requestBuilder.header("X-Media-Longitude", it.toString()) }
+        dateMillis?.let { requestBuilder.header("X-Media-Date", it.toString()) }
+        val request = requestBuilder.post(body).build()
 
         return try {
             client.newCall(request).execute().use { response ->

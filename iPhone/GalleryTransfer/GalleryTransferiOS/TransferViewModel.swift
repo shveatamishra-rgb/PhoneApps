@@ -51,6 +51,7 @@ struct RecentImport: Identifiable {
     let filename: String
     let message: String
     let didSave: Bool
+    let localIdentifier: String?
 }
 
 @MainActor
@@ -66,6 +67,7 @@ final class TransferViewModel: ObservableObject {
     @Published var receivedCount = 0
     @Published var isReceiving = false
     @Published var receivingName = ""
+    @Published var receiveProgress: Double = 0
 
     private var server: PhotoTransferServer?
     private let photoBridge = PhotoLibraryBridge()
@@ -173,7 +175,13 @@ final class TransferViewModel: ObservableObject {
                     Task { @MainActor in
                         self?.isReceiving = true
                         self?.receivingName = name
+                        self?.receiveProgress = 0
                         self?.status = "Receiving \(name)..."
+                    }
+                },
+                onUploadProgress: { [weak self] fraction in
+                    Task { @MainActor in
+                        self?.receiveProgress = fraction
                     }
                 },
                 onUploadFinished: { [weak self] result in
@@ -216,6 +224,7 @@ final class TransferViewModel: ObservableObject {
         isServerRunning = false
         isReceiving = false
         receivingName = ""
+        receiveProgress = 0
         transferURL = nil
         qrPayload = nil
         transferPIN = nil
@@ -229,12 +238,18 @@ final class TransferViewModel: ObservableObject {
     private func recordUploadResult(_ result: UploadResult) {
         isReceiving = false
         receivingName = ""
+        receiveProgress = 0
         if result.didSave {
             receivedCount += 1
         }
 
         recentImports.insert(
-            RecentImport(filename: result.filename, message: result.message, didSave: result.didSave),
+            RecentImport(
+                filename: result.filename,
+                message: result.message,
+                didSave: result.didSave,
+                localIdentifier: result.localIdentifier
+            ),
             at: 0
         )
 

@@ -130,10 +130,14 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
                 status = "Uploading ${index + 1} of ${targets.size}: ${item.displayName}"
                 val outcome = withContext(Dispatchers.IO) {
                     val source = media.originalSource(item.uri)
+                    val meta = media.extractMeta(item.uri, item.kind)
                     client.upload(
                         filename = item.displayName,
                         mimeType = item.mimeType,
                         contentLength = source.length,
+                        latitude = meta.latitude,
+                        longitude = meta.longitude,
+                        dateMillis = meta.dateMillis,
                         openStream = source.open,
                     )
                 }
