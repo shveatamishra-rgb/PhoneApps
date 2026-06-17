@@ -253,8 +253,9 @@ final class TransferViewModel: ObservableObject {
             at: 0
         )
 
-        if recentImports.count > 8 {
-            recentImports = Array(recentImports.prefix(8))
+        // Keep a generous history (UI paginates); bound it so memory stays sane.
+        if recentImports.count > 300 {
+            recentImports = Array(recentImports.prefix(300))
         }
 
         status = result.message

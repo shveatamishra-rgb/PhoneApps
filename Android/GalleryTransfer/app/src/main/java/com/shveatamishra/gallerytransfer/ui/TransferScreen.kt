@@ -30,6 +30,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -51,6 +52,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -79,6 +81,10 @@ import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
 import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -160,7 +166,7 @@ private fun AlbumList(viewModel: TransferViewModel) {
         item(span = { GridItemSpan(maxLineSpan) }) { ConnectionCard(viewModel) }
         item(span = { GridItemSpan(maxLineSpan) }) {
             Text(
-                "Your folders",
+                "Gallery Folders",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
@@ -206,6 +212,9 @@ private fun AlbumCard(album: Album, onClick: () -> Unit) {
 
 @Composable
 private fun PhotoGrid(viewModel: TransferViewModel) {
+    val groups = remember(viewModel.albumItems) {
+        viewModel.albumItems.groupBy { dayLabel(it.dateTakenMillis) }.toList()
+    }
     LazyVerticalGrid(
         columns = GridCells.Adaptive(112.dp),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(2.dp),
@@ -213,13 +222,70 @@ private fun PhotoGrid(viewModel: TransferViewModel) {
         verticalArrangement = Arrangement.spacedBy(2.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
-        items(viewModel.albumItems, key = { it.uri.toString() }) { item ->
-            PhotoCell(
-                item = item,
-                selected = viewModel.isSelected(item.uri),
-                onToggle = { viewModel.toggle(item) },
+        groups.forEach { (label, items) ->
+            item(span = { GridItemSpan(maxLineSpan) }, key = "header-$label") {
+                DateHeader(
+                    label = label,
+                    count = items.size,
+                    allSelected = items.all { viewModel.isSelected(it.uri) },
+                    onToggle = { viewModel.toggleDateSelection(items) },
+                )
+            }
+            items(items, key = { it.uri.toString() }) { item ->
+                PhotoCell(
+                    item = item,
+                    selected = viewModel.isSelected(item.uri),
+                    onToggle = { viewModel.toggle(item) },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun DateHeader(label: String, count: Int, allSelected: Boolean, onToggle: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 6.dp, end = 4.dp, top = 12.dp, bottom = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f)) {
+            Text(
+                label,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            Text(
+                "$count item${if (count == 1) "" else "s"}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        TextButton(onClick = onToggle) {
+            Icon(
+                if (allSelected) Icons.Filled.CheckCircle else Icons.Filled.AddCircleOutline,
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+            )
+            Spacer(Modifier.width(6.dp))
+            Text(if (allSelected) "Clear" else "Select all")
+        }
+    }
+}
+
+private fun dayLabel(millis: Long): String {
+    if (millis <= 0) return "Unknown date"
+    val day = Calendar.getInstance().apply { timeInMillis = millis }
+    val today = Calendar.getInstance()
+    val yesterday = Calendar.getInstance().apply { add(Calendar.DAY_OF_YEAR, -1) }
+    fun sameDay(a: Calendar, b: Calendar) =
+        a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.DAY_OF_YEAR) == b.get(Calendar.DAY_OF_YEAR)
+    return when {
+        sameDay(day, today) -> "Today"
+        sameDay(day, yesterday) -> "Yesterday"
+        else -> SimpleDateFormat("MMMM d, yyyy", Locale.getDefault()).format(Date(millis))
     }
 }
 
@@ -327,7 +393,7 @@ private fun SendBar(viewModel: TransferViewModel) {
         Column(Modifier.navigationBarsPadding()) {
             if (viewModel.isBusy && viewModel.totalToSend > 0) {
                 LinearProgressIndicator(
-                    progress = { viewModel.sentCount.toFloat() / viewModel.totalToSend },
+                    progress = { viewModel.overallProgress },
                     modifier = Modifier.fillMaxWidth(),
                     color = MaterialTheme.colorScheme.primary,
                 )

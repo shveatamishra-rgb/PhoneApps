@@ -45,9 +45,15 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         private set
     var totalToSend by mutableStateOf(0)
         private set
+    var uploadFraction by mutableStateOf(0.0)
+        private set
 
     val selectedItems: List<MediaItem> get() = selected.values.toList()
     val selectedBytes: Long get() = selectedItems.sumOf { it.sizeBytes }
+
+    /** Overall send progress across files, including the current file's byte fraction. */
+    val overallProgress: Float
+        get() = if (totalToSend == 0) 0f else ((sentCount + uploadFraction) / totalToSend).toFloat()
 
     fun isSelected(uri: Uri): Boolean = selected.containsKey(uri)
 
@@ -67,10 +73,31 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun toggle(item: MediaItem) {
-        selected = if (selected.containsKey(item.uri)) {
-            selected - item.uri
+        if (selected.containsKey(item.uri)) {
+            selected = selected - item.uri
         } else {
-            selected + (item.uri to item)
+            if (selected.size >= MAX_SELECTION) {
+                status = "Up to $MAX_SELECTION files per transfer."
+                return
+            }
+            selected = selected + (item.uri to item)
+        }
+    }
+
+    /** Select (or clear) every item taken on one date, respecting the per-transfer cap. */
+    fun toggleDateSelection(items: List<MediaItem>) {
+        val allSelected = items.all { selected.containsKey(it.uri) }
+        if (allSelected) {
+            val uris = items.map { it.uri }.toSet()
+            selected = selected.filterKeys { it !in uris }
+        } else {
+            val notSelected = items.filter { !selected.containsKey(it.uri) }
+            val room = MAX_SELECTION - selected.size
+            val toAdd = notSelected.take(room)
+            selected = selected + toAdd.associateBy { it.uri }
+            if (toAdd.size < notSelected.size) {
+                status = "Reached the $MAX_SELECTION-file limit for one transfer."
+            }
         }
     }
 
@@ -128,6 +155,7 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             var lastError: String? = null
             for ((index, item) in targets.withIndex()) {
                 status = "Uploading ${index + 1} of ${targets.size}: ${item.displayName}"
+                uploadFraction = 0.0
                 val outcome = withContext(Dispatchers.IO) {
                     val source = media.originalSource(item.uri)
                     val meta = media.extractMeta(item.uri, item.kind)
@@ -138,6 +166,15 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
                         latitude = meta.latitude,
                         longitude = meta.longitude,
                         dateMillis = meta.dateMillis,
+                        onProgress = { sent, total ->
+                            if (total > 0) {
+                                val fraction = sent.toDouble() / total
+                                // throttle to ~1% steps to avoid recomposition spam
+                                if (fraction >= 1.0 || fraction - uploadFraction >= 0.01) {
+                                    uploadFraction = fraction
+                                }
+                            }
+                        },
                         openStream = source.open,
                     )
                 }
@@ -148,6 +185,7 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
                     lastError = outcome.message
                 }
                 sentCount = index + 1
+                uploadFraction = 0.0
             }
             status = buildString {
                 append("Done. $ok sent")
@@ -161,8 +199,8 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun loadThemeMode(): ThemeMode =
-        runCatching { ThemeMode.valueOf(prefs.getString("theme", ThemeMode.SYSTEM.name)!!) }
-            .getOrDefault(ThemeMode.SYSTEM)
+        runCatching { ThemeMode.valueOf(prefs.getString("theme", ThemeMode.DARK.name)!!) }
+            .getOrDefault(ThemeMode.DARK)
 
     private fun normalizedHost(value: String): String {
         // Tolerate a full URL being pasted (or scanned): keep only host:port.
@@ -171,5 +209,9 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             .removePrefix("http://")
             .substringBefore("/")
         return "http://$hostPort"
+    }
+
+    companion object {
+        const val MAX_SELECTION = 100
     }
 }

@@ -8,6 +8,7 @@ struct ContentView: View {
     @StateObject private var viewModel = TransferViewModel()
     @State private var selectedPickerItems: [PhotosPickerItem] = []
     @State private var previewItem: PreviewItem?
+    @State private var recentPage = 0
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -111,7 +112,7 @@ struct ContentView: View {
                     .accessibilityHidden(true)
             }
 
-            Text("Keep both phones on the same Wi-Fi, start the receiver, then open the address below on Android.")
+            Text("Keep both phones on the same Wi-Fi, start the receiver, then scan the code (or enter the address + PIN) in the Ferry app on Android.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -205,7 +206,7 @@ struct ContentView: View {
             Label("Send from iPhone", systemImage: "square.and.arrow.up")
                 .font(.headline)
 
-            Text("Choose iPhone photos or videos to make them available from the same Android browser page. Originals are exported as their current Photo Library resources.")
+            Text("Choose iPhone photos or videos to make them available to the Ferry app on Android (or any browser on the same Wi-Fi). Originals are exported as their current Photo Library resources.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
 
@@ -248,16 +249,31 @@ struct ContentView: View {
     }
 
     private var receivedCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label("Recent saves", systemImage: "checkmark.circle")
-                .font(.headline)
+        let pageSize = 8
+        let total = viewModel.recentImports.count
+        let pageCount = max(1, (total + pageSize - 1) / pageSize)
+        let page = min(recentPage, pageCount - 1)
+        let start = page * pageSize
+        let visible = total == 0 ? [] : Array(viewModel.recentImports[start ..< min(start + pageSize, total)])
+
+        return VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Label("Recent saves", systemImage: "checkmark.circle")
+                    .font(.headline)
+                Spacer()
+                if total > 0 {
+                    Text("\(total) total")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
 
             if viewModel.recentImports.isEmpty {
                 Text("Uploaded Android photos and videos will appear here after they are saved to Photos.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(viewModel.recentImports) { item in
+                ForEach(visible) { item in
                     HStack(spacing: 10) {
                         Image(systemName: item.didSave ? "checkmark.circle.fill" : "xmark.circle.fill")
                             .foregroundStyle(item.didSave ? Color.green : Color.red)
@@ -285,6 +301,35 @@ struct ContentView: View {
                             .tint(Color.brandPrimary)
                         }
                     }
+                }
+
+                if pageCount > 1 {
+                    HStack {
+                        Button {
+                            if page > 0 { recentPage = page - 1 }
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+                        .disabled(page == 0)
+
+                        Spacer()
+
+                        Text("Page \(page + 1) of \(pageCount)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        Spacer()
+
+                        Button {
+                            if page < pageCount - 1 { recentPage = page + 1 }
+                        } label: {
+                            Image(systemName: "chevron.right")
+                        }
+                        .disabled(page >= pageCount - 1)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Color.brandPrimary)
+                    .padding(.top, 4)
                 }
             }
         }

@@ -97,6 +97,8 @@ class MediaRepository(private val context: Context) {
             MediaStore.Files.FileColumns.SIZE,
             MediaStore.Files.FileColumns.MIME_TYPE,
             MediaStore.Files.FileColumns.MEDIA_TYPE,
+            MediaStore.Files.FileColumns.DATE_TAKEN,
+            MediaStore.Files.FileColumns.DATE_ADDED,
         )
         val selection = "${MediaStore.Files.FileColumns.BUCKET_ID} = ? AND " +
             "${MediaStore.Files.FileColumns.MEDIA_TYPE} IN (?, ?)"
@@ -114,6 +116,8 @@ class MediaRepository(private val context: Context) {
             val sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.SIZE)
             val mimeCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MIME_TYPE)
             val typeCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.MEDIA_TYPE)
+            val takenCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_TAKEN)
+            val addedCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATE_ADDED)
 
             while (cursor.moveToNext() && result.size < limit) {
                 val id = cursor.getLong(idCol)
@@ -124,6 +128,8 @@ class MediaRepository(private val context: Context) {
                 } else {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 }
+                val taken = cursor.getLong(takenCol)
+                val dateMillis = if (taken > 0) taken else cursor.getLong(addedCol) * 1000L
                 result += MediaItem(
                     uri = ContentUris.withAppendedId(base, id),
                     displayName = cursor.getString(nameCol) ?: "media_$id",
@@ -131,6 +137,7 @@ class MediaRepository(private val context: Context) {
                     kind = if (isVideo) MediaKind.VIDEO else MediaKind.IMAGE,
                     mimeType = cursor.getString(mimeCol)
                         ?: if (isVideo) "video/mp4" else "image/jpeg",
+                    dateTakenMillis = dateMillis,
                 )
             }
         }

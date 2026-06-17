@@ -6,7 +6,10 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
+import okio.Buffer
 import okio.BufferedSink
+import okio.ForwardingSink
+import okio.buffer
 import okio.source
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
@@ -35,6 +38,7 @@ class TransferClient(baseUrl: String, private val pin: String) {
         latitude: Double?,
         longitude: Double?,
         dateMillis: Long?,
+        onProgress: (sent: Long, total: Long) -> Unit,
         openStream: () -> InputStream,
     ): UploadOutcome {
         val root = base ?: return UploadOutcome(false, "Invalid iPhone address.")
@@ -51,7 +55,17 @@ class TransferClient(baseUrl: String, private val pin: String) {
             override fun contentLength() = contentLength
 
             override fun writeTo(sink: BufferedSink) {
-                openStream().source().use { sink.writeAll(it) }
+                var written = 0L
+                val counting = object : ForwardingSink(sink) {
+                    override fun write(source: Buffer, byteCount: Long) {
+                        super.write(source, byteCount)
+                        written += byteCount
+                        onProgress(written, contentLength)
+                    }
+                }
+                val buffered = counting.buffer()
+                openStream().source().use { buffered.writeAll(it) }
+                buffered.flush()
             }
         }
 
