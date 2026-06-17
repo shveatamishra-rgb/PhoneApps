@@ -28,6 +28,10 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         private set
     var themeMode by mutableStateOf(loadThemeMode())
         private set
+    var isPro by mutableStateOf(prefs.getBoolean("pro", false))
+        private set
+
+    private val selectionLimit: Int get() = if (isPro) Int.MAX_VALUE else FREE_LIMIT
 
     var albums by mutableStateOf<List<Album>>(emptyList())
         private set
@@ -72,19 +76,24 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putString("theme", mode.name).apply()
     }
 
+    fun updatePro(value: Boolean) {
+        isPro = value
+        prefs.edit().putBoolean("pro", value).apply()
+    }
+
     fun toggle(item: MediaItem) {
         if (selected.containsKey(item.uri)) {
             selected = selected - item.uri
         } else {
-            if (selected.size >= MAX_SELECTION) {
-                status = "Up to $MAX_SELECTION files per transfer."
+            if (selected.size >= selectionLimit) {
+                status = "Free limit is $FREE_LIMIT per transfer. Go Pro for unlimited."
                 return
             }
             selected = selected + (item.uri to item)
         }
     }
 
-    /** Select (or clear) every item taken on one date, respecting the per-transfer cap. */
+    /** Select (or clear) every item taken on one date (Pro is unlimited; Free is capped). */
     fun toggleDateSelection(items: List<MediaItem>) {
         val allSelected = items.all { selected.containsKey(it.uri) }
         if (allSelected) {
@@ -92,11 +101,11 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             selected = selected.filterKeys { it !in uris }
         } else {
             val notSelected = items.filter { !selected.containsKey(it.uri) }
-            val room = MAX_SELECTION - selected.size
-            val toAdd = notSelected.take(room)
+            val room = (selectionLimit - selected.size).coerceAtLeast(0)
+            val toAdd = if (room >= notSelected.size) notSelected else notSelected.take(room)
             selected = selected + toAdd.associateBy { it.uri }
             if (toAdd.size < notSelected.size) {
-                status = "Reached the $MAX_SELECTION-file limit for one transfer."
+                status = "Free limit is $FREE_LIMIT per transfer. Go Pro for unlimited."
             }
         }
     }
@@ -212,6 +221,6 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     companion object {
-        const val MAX_SELECTION = 100
+        const val FREE_LIMIT = 50
     }
 }

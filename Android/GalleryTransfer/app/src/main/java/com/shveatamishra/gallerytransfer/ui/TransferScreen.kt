@@ -36,6 +36,8 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.WorkspacePremium
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -92,6 +94,7 @@ fun TransferScreen(viewModel: TransferViewModel) {
     val context = LocalContext.current
     val permissions = remember { requiredPermissions() }
     var hasPermissions by remember { mutableStateOf(hasAll(context, permissions)) }
+    var showUpgrade by remember { mutableStateOf(false) }
     val snackbarHostState = remember { SnackbarHostState() }
 
     val permissionLauncher = rememberLauncherForActivityResult(
@@ -125,7 +128,10 @@ fun TransferScreen(viewModel: TransferViewModel) {
                         }
                     }
                 },
-                actions = { ThemeMenu(viewModel) },
+                actions = {
+                    ProAction(viewModel.isPro) { showUpgrade = true }
+                    ThemeMenu(viewModel)
+                },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -150,8 +156,87 @@ fun TransferScreen(viewModel: TransferViewModel) {
                 inAlbum -> PhotoGrid(viewModel)
                 else -> AlbumList(viewModel)
             }
+
+            if (showUpgrade) {
+                UpgradeDialog(
+                    isPro = viewModel.isPro,
+                    onUnlock = {
+                        viewModel.updatePro(true)
+                        showUpgrade = false
+                    },
+                    onDismiss = { showUpgrade = false },
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ProAction(isPro: Boolean, onClick: () -> Unit) {
+    if (isPro) {
+        Row(
+            modifier = Modifier.padding(end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                Icons.Filled.WorkspacePremium,
+                contentDescription = "Pro",
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(18.dp),
+            )
+            Spacer(Modifier.width(4.dp))
+            Text(
+                "PRO",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.secondary,
+            )
+        }
+    } else {
+        TextButton(onClick = onClick) {
+            Icon(Icons.Filled.WorkspacePremium, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(4.dp))
+            Text("Go Pro")
+        }
+    }
+}
+
+@Composable
+private fun UpgradeDialog(isPro: Boolean, onUnlock: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(Icons.Filled.WorkspacePremium, contentDescription = null, tint = MaterialTheme.colorScheme.secondary)
+        },
+        title = { Text("Ferry Pro") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text("Free includes up to ${TransferViewModel.FREE_LIMIT} files per transfer.")
+                Text("Pro unlocks:", fontWeight = FontWeight.SemiBold)
+                Text("- Unlimited files per transfer")
+                Text("- More premium features coming soon")
+                if (isPro) {
+                    Text(
+                        "You're on Pro. Thank you!",
+                        color = MaterialTheme.colorScheme.secondary,
+                        fontWeight = FontWeight.SemiBold,
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            if (isPro) {
+                TextButton(onClick = onDismiss) { Text("Done") }
+            } else {
+                TextButton(onClick = onUnlock) { Text("Unlock Pro") }
+            }
+        },
+        dismissButton = {
+            if (!isPro) {
+                TextButton(onClick = onDismiss) { Text("Not now") }
+            }
+        },
+    )
 }
 
 @Composable
