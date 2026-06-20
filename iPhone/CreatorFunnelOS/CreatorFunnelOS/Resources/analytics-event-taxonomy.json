@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "events": [
+    "account_connected",
+    "account_disconnected",
+    "post_assigned_to_funnel",
+    "funnel_created",
+    "funnel_activated",
+    "funnel_paused",
+    "comment_triggered",
+    "dm_attempted",
+    "dm_sent",
+    "dm_failed",
+    "link_clicked",
+    "lead_captured",
+    "lead_tagged",
+    "recommendation_generated",
+    "proposal_viewed",
+    "proposal_applied",
+    "subscription_started",
+    "subscription_renewed",
+    "subscription_canceled",
+    "account_deletion_requested"
+  ]
+}

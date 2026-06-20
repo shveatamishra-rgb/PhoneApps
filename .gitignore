@@ -7,6 +7,14 @@ DerivedData/
 *.xcresult
 *.xcuserstate
 xcuserdata/
+Secrets.xcconfig
+*.mobileprovision
+
+# Creator Funnel OS backend
+iPhone/CreatorFunnelOS/Backend/.env
+iPhone/CreatorFunnelOS/Backend/node_modules/
+iPhone/CreatorFunnelOS/Backend/dist/
+iPhone/CreatorFunnelOS/Backend/coverage/
 
 # Android / Gradle (the gradle/ wrapper dir IS committed; .gradle/ cache is not)
 .gradle/

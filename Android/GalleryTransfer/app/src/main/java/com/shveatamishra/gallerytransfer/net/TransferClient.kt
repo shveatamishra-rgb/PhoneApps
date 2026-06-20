@@ -1,6 +1,7 @@
 package com.shveatamishra.gallerytransfer.net
 
 import android.net.Uri
+import com.shveatamishra.gallerytransfer.model.RemoteFile
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -11,7 +12,9 @@ import okio.BufferedSink
 import okio.ForwardingSink
 import okio.buffer
 import okio.source
+import org.json.JSONObject
 import java.io.InputStream
+import java.io.OutputStream
 import java.util.concurrent.TimeUnit
 
 /**
@@ -97,5 +100,66 @@ class TransferClient(baseUrl: String, private val pin: String) {
         } catch (e: Exception) {
             UploadOutcome(false, e.message ?: "Upload failed.")
         }
+    }
+
+    /** Lists the files the iPhone is offering (its /manifest.json), with the PIN. */
+    fun fetchManifest(): List<RemoteFile> {
+        val root = base ?: return emptyList()
+        val url = root.newBuilder()
+            .addPathSegment("manifest.json")
+            .addQueryParameter("pin", pin)
+            .build()
+        return try {
+            client.newCall(Request.Builder().url(url).get().build()).execute().use { response ->
+                if (!response.isSuccessful) return emptyList()
+                val text = response.body?.string() ?: return emptyList()
+                val files = JSONObject(text).optJSONArray("files") ?: return emptyList()
+                (0 until files.length()).mapNotNull { index ->
+                    val obj = files.optJSONObject(index) ?: return@mapNotNull null
+                    val name = obj.optString("name").ifBlank { return@mapNotNull null }
+                    val path = obj.optString("url").ifBlank { return@mapNotNull null }
+                    val link = root.resolve(path) ?: return@mapNotNull null
+                    val withPin = link.newBuilder().addQueryParameter("pin", pin).build()
+                    RemoteFile(
+                        name = name,
+                        sizeBytes = obj.optLong("size"),
+                        url = withPin.toString(),
+                        isVideo = isVideoName(name),
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    /** Downloads one offered file into [output], reporting bytes received. */
+    fun download(url: String, output: OutputStream, onProgress: (sent: Long, total: Long) -> Unit): Boolean {
+        return try {
+            client.newCall(Request.Builder().url(url).get().build()).execute().use { response ->
+                if (!response.isSuccessful) return false
+                val body = response.body ?: return false
+                val total = body.contentLength()
+                var written = 0L
+                body.byteStream().use { input ->
+                    val buffer = ByteArray(64 * 1024)
+                    while (true) {
+                        val read = input.read(buffer)
+                        if (read < 0) break
+                        output.write(buffer, 0, read)
+                        written += read
+                        onProgress(written, total)
+                    }
+                }
+                true
+            }
+        } catch (e: Exception) {
+            false
+        }
+    }
+
+    private fun isVideoName(name: String): Boolean {
+        val ext = name.substringAfterLast('.', "").lowercase()
+        return ext in setOf("mp4", "mov", "m4v", "3gp", "3gpp", "webm", "mkv", "avi")
     }
 }

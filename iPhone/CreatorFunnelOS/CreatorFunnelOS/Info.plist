@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_BASE_URL</key>
+	<string>$(API_BASE_URL)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Creator Funnel OS</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>creatorfunnelos</string>
+			</array>
+		</dict>
+	</array>
+	<key>INSTAGRAM_CALLBACK_SCHEME</key>
+	<string>creatorfunnelos</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.business</string>
+	<key>STOREKIT_MONTHLY_PRODUCT_ID</key>
+	<string>com.shveatamishra.creatorfunnelos.pro.monthly</string>
+	<key>STOREKIT_YEARLY_PRODUCT_ID</key>
+	<string>com.shveatamishra.creatorfunnelos.pro.yearly</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>UILaunchScreen</key>
+	<dict/>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>USE_MOCK_SERVICES</key>
+	<string>$(USE_MOCK_SERVICES)</string>
+</dict>
+</plist>

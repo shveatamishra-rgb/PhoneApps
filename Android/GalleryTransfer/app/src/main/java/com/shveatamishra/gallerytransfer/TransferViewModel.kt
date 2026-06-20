@@ -11,11 +11,14 @@ import androidx.lifecycle.viewModelScope
 import com.shveatamishra.gallerytransfer.media.MediaRepository
 import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
+import com.shveatamishra.gallerytransfer.model.RemoteFile
 import com.shveatamishra.gallerytransfer.net.TransferClient
 import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
+enum class TransferMode { SEND, RECEIVE }
 
 class TransferViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -52,8 +55,27 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     var uploadFraction by mutableStateOf(0.0)
         private set
 
+    // Receive (iPhone -> Android) state
+    var mode by mutableStateOf(TransferMode.SEND)
+        private set
+    var remoteFiles by mutableStateOf<List<RemoteFile>>(emptyList())
+        private set
+    var selectedRemote by mutableStateOf<Set<String>>(emptySet())
+        private set
+    var downloadedCount by mutableStateOf(0)
+        private set
+    var totalToDownload by mutableStateOf(0)
+        private set
+    var downloadFraction by mutableStateOf(0.0)
+        private set
+
     val selectedItems: List<MediaItem> get() = selected.values.toList()
     val selectedBytes: Long get() = selectedItems.sumOf { it.sizeBytes }
+
+    val selectedRemoteFiles: List<RemoteFile> get() = remoteFiles.filter { selectedRemote.contains(it.url) }
+    val selectedRemoteBytes: Long get() = selectedRemoteFiles.sumOf { it.sizeBytes }
+    val overallDownloadProgress: Float
+        get() = if (totalToDownload == 0) 0f else ((downloadedCount + downloadFraction) / totalToDownload).toFloat()
 
     /** Overall send progress across files, including the current file's byte fraction. */
     val overallProgress: Float
@@ -139,6 +161,90 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     fun closeAlbum() {
         currentAlbum = null
         albumItems = emptyList()
+    }
+
+    fun updateMode(value: TransferMode) {
+        mode = value
+    }
+
+    fun isRemoteSelected(url: String): Boolean = selectedRemote.contains(url)
+
+    fun toggleRemote(file: RemoteFile) {
+        selectedRemote = if (selectedRemote.contains(file.url)) {
+            selectedRemote - file.url
+        } else {
+            selectedRemote + file.url
+        }
+    }
+
+    fun selectAllRemote() {
+        selectedRemote = remoteFiles.map { it.url }.toSet()
+    }
+
+    fun clearRemote() {
+        selectedRemote = emptySet()
+    }
+
+    fun loadManifest() {
+        if (host.isBlank() || pin.isBlank()) {
+            status = "Enter the iPhone address and PIN first."
+            return
+        }
+        viewModelScope.launch {
+            isBusy = true
+            status = "Looking for files on the iPhone..."
+            val files = withContext(Dispatchers.IO) {
+                TransferClient(normalizedHost(host), pin).fetchManifest()
+            }
+            remoteFiles = files
+            selectedRemote = emptySet()
+            status = if (files.isEmpty()) {
+                "Nothing offered yet. On the iPhone, choose photos/videos to send, then refresh."
+            } else {
+                "${files.size} file${if (files.size == 1) "" else "s"} available."
+            }
+            isBusy = false
+        }
+    }
+
+    fun downloadSelected() {
+        val targets = selectedRemoteFiles
+        if (targets.isEmpty()) {
+            status = "Select at least one file to download."
+            return
+        }
+        viewModelScope.launch {
+            isBusy = true
+            totalToDownload = targets.size
+            downloadedCount = 0
+            val client = TransferClient(normalizedHost(host), pin)
+            var ok = 0
+            var failed = 0
+            for ((index, file) in targets.withIndex()) {
+                status = "Downloading ${index + 1} of ${targets.size}: ${file.name}"
+                downloadFraction = 0.0
+                val saved = withContext(Dispatchers.IO) {
+                    media.saveIncoming(file, client) { sent, total ->
+                        if (total > 0) {
+                            val fraction = sent.toDouble() / total
+                            if (fraction >= 1.0 || fraction - downloadFraction >= 0.01) {
+                                downloadFraction = fraction
+                            }
+                        }
+                    }
+                }
+                if (saved) ok++ else failed++
+                downloadedCount = index + 1
+                downloadFraction = 0.0
+            }
+            status = buildString {
+                append("Done. $ok saved to the gallery")
+                if (failed > 0) append(", $failed failed")
+                append(".")
+            }
+            selectedRemote = emptySet()
+            isBusy = false
+        }
     }
 
     fun sendSelected() {

@@ -21,3 +21,11 @@ data class Album(
     val coverUri: Uri,
     val count: Int,
 )
+
+/** A file the iPhone is offering for download (from its /manifest.json). */
+data class RemoteFile(
+    val name: String,
+    val sizeBytes: Long,
+    val url: String,
+    val isVideo: Boolean,
+)

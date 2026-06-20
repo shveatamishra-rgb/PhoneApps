@@ -2,6 +2,7 @@ package com.shveatamishra.gallerytransfer.media
 
 import android.content.ContentResolver
 import android.content.ContentUris
+import android.content.ContentValues
 import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.media.MediaMetadataRetriever
@@ -11,6 +12,8 @@ import androidx.exifinterface.media.ExifInterface
 import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
+import com.shveatamishra.gallerytransfer.model.RemoteFile
+import com.shveatamishra.gallerytransfer.net.TransferClient
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat
@@ -242,5 +245,47 @@ class MediaRepository(private val context: Context) {
             }
         }
         return null
+    }
+
+    /** Downloads one offered file straight into the gallery (Pictures/Ferry or Movies/Ferry). */
+    fun saveIncoming(file: RemoteFile, client: TransferClient, onProgress: (Long, Long) -> Unit): Boolean {
+        val collection = if (file.isVideo) {
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+        } else {
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        }
+        val values = ContentValues().apply {
+            put(MediaStore.MediaColumns.DISPLAY_NAME, file.name)
+            put(MediaStore.MediaColumns.MIME_TYPE, mimeFor(file.name, file.isVideo))
+            put(MediaStore.MediaColumns.RELATIVE_PATH, if (file.isVideo) "Movies/Ferry" else "Pictures/Ferry")
+            put(MediaStore.MediaColumns.IS_PENDING, 1)
+        }
+        val uri = resolver.insert(collection, values) ?: return false
+        return try {
+            val ok = resolver.openOutputStream(uri)?.use { out ->
+                client.download(file.url, out, onProgress)
+            } ?: false
+            if (ok) {
+                resolver.update(
+                    uri,
+                    ContentValues().apply { put(MediaStore.MediaColumns.IS_PENDING, 0) },
+                    null,
+                    null,
+                )
+                true
+            } else {
+                resolver.delete(uri, null, null)
+                false
+            }
+        } catch (e: Exception) {
+            resolver.delete(uri, null, null)
+            false
+        }
+    }
+
+    private fun mimeFor(name: String, isVideo: Boolean): String {
+        val ext = name.substringAfterLast('.', "").lowercase()
+        return android.webkit.MimeTypeMap.getSingleton().getMimeTypeFromExtension(ext)
+            ?: if (isVideo) "video/mp4" else "image/jpeg"
     }
 }

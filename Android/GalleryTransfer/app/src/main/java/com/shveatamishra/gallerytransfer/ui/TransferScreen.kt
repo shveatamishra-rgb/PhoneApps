@@ -17,11 +17,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -33,6 +36,10 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.Brightness6
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.filled.Photo
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.QrCodeScanner
@@ -41,6 +48,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +61,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -78,10 +88,12 @@ import coil.compose.AsyncImage
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.shveatamishra.gallerytransfer.TransferMode
 import com.shveatamishra.gallerytransfer.TransferViewModel
 import com.shveatamishra.gallerytransfer.model.Album
 import com.shveatamishra.gallerytransfer.model.MediaItem
 import com.shveatamishra.gallerytransfer.model.MediaKind
+import com.shveatamishra.gallerytransfer.model.RemoteFile
 import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -110,19 +122,25 @@ fun TransferScreen(viewModel: TransferViewModel) {
 
     LaunchedEffect(viewModel.status) {
         val message = viewModel.status
-        if (message.isNotBlank() && !message.startsWith("Loading") && !message.startsWith("Uploading")) {
+        if (message.isNotBlank() &&
+            !message.startsWith("Loading") &&
+            !message.startsWith("Uploading") &&
+            !message.startsWith("Downloading") &&
+            !message.startsWith("Looking")
+        ) {
             snackbarHostState.showSnackbar(message)
         }
     }
 
     val inAlbum = viewModel.currentAlbum != null
+    val sending = viewModel.mode == TransferMode.SEND
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(viewModel.currentAlbum?.name ?: "Ferry") },
+                title = { Text(if (sending && inAlbum) viewModel.currentAlbum?.name ?: "Ferry" else "Ferry") },
                 navigationIcon = {
-                    if (inAlbum) {
+                    if (sending && inAlbum) {
                         IconButton(onClick = { viewModel.closeAlbum() }) {
                             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                         }
@@ -140,32 +158,181 @@ fun TransferScreen(viewModel: TransferViewModel) {
             )
         },
         bottomBar = {
-            if (viewModel.selected.isNotEmpty() || viewModel.isBusy) {
+            if (sending && (viewModel.selected.isNotEmpty() || viewModel.isBusy)) {
                 SendBar(viewModel)
+            } else if (!sending && (viewModel.selectedRemote.isNotEmpty() || viewModel.isBusy)) {
+                DownloadBar(viewModel)
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
-        Box(
+        Column(
             Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            when {
-                !hasPermissions -> PermissionGate { permissionLauncher.launch(permissions) }
-                inAlbum -> PhotoGrid(viewModel)
-                else -> AlbumList(viewModel)
+            TabRow(
+                selectedTabIndex = if (sending) 0 else 1,
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.primary,
+            ) {
+                Tab(selected = sending, onClick = { viewModel.updateMode(TransferMode.SEND) }, text = { Text("Send") })
+                Tab(selected = !sending, onClick = { viewModel.updateMode(TransferMode.RECEIVE) }, text = { Text("Receive") })
             }
+            Box(Modifier.weight(1f).fillMaxWidth()) {
+                if (sending) {
+                    when {
+                        !hasPermissions -> PermissionGate { permissionLauncher.launch(permissions) }
+                        inAlbum -> PhotoGrid(viewModel)
+                        else -> AlbumList(viewModel)
+                    }
+                } else {
+                    ReceiveScreen(viewModel)
+                }
+            }
+        }
 
-            if (showUpgrade) {
-                UpgradeDialog(
-                    isPro = viewModel.isPro,
-                    onUnlock = {
-                        viewModel.updatePro(true)
-                        showUpgrade = false
-                    },
-                    onDismiss = { showUpgrade = false },
+        if (showUpgrade) {
+            UpgradeDialog(
+                isPro = viewModel.isPro,
+                onUnlock = {
+                    viewModel.updatePro(true)
+                    showUpgrade = false
+                },
+                onDismiss = { showUpgrade = false },
+            )
+        }
+    }
+}
+
+@Composable
+private fun ReceiveScreen(viewModel: TransferViewModel) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(12.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        item { ConnectionCard(viewModel) }
+        item {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { viewModel.loadManifest() }, enabled = !viewModel.isBusy) {
+                    Icon(Icons.Filled.Refresh, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Load from iPhone")
+                }
+                Spacer(Modifier.weight(1f))
+                if (viewModel.remoteFiles.isNotEmpty()) {
+                    val allSelected = viewModel.selectedRemote.size == viewModel.remoteFiles.size
+                    TextButton(onClick = { if (allSelected) viewModel.clearRemote() else viewModel.selectAllRemote() }) {
+                        Text(if (allSelected) "Clear" else "Select all")
+                    }
+                }
+            }
+        }
+        if (viewModel.remoteFiles.isEmpty()) {
+            item {
+                Text(
+                    "On the iPhone, open Ferry, choose photos or videos to send, then tap Load. They download straight into your gallery.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            }
+        } else {
+            items(viewModel.remoteFiles, key = { it.url }) { file ->
+                RemoteFileRow(file, viewModel.isRemoteSelected(file.url)) { viewModel.toggleRemote(file) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun RemoteFileRow(file: RemoteFile, selected: Boolean, onToggle: () -> Unit) {
+    Card(
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onToggle() },
+    ) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                if (file.isVideo) Icons.Filled.Videocam else Icons.Filled.Photo,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.secondary,
+                modifier = Modifier.size(22.dp),
+            )
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(
+                    file.name,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    formatBytes(file.sizeBytes),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Checkbox(checked = selected, onCheckedChange = { onToggle() })
+        }
+    }
+}
+
+@Composable
+private fun DownloadBar(viewModel: TransferViewModel) {
+    Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
+        Column(Modifier.navigationBarsPadding()) {
+            if (viewModel.isBusy && viewModel.totalToDownload > 0) {
+                LinearProgressIndicator(
+                    progress = { viewModel.overallDownloadProgress },
+                    modifier = Modifier.fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f)) {
+                    if (viewModel.isBusy) {
+                        Text(
+                            viewModel.status.ifBlank { "Working..." },
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                        )
+                    } else {
+                        Text(
+                            "${viewModel.selectedRemote.size} selected",
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.secondary,
+                        )
+                        Text(
+                            formatBytes(viewModel.selectedRemoteBytes),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                Spacer(Modifier.width(12.dp))
+                Button(
+                    onClick = { viewModel.downloadSelected() },
+                    enabled = !viewModel.isBusy && viewModel.selectedRemote.isNotEmpty(),
+                ) {
+                    Icon(Icons.Filled.Download, contentDescription = null, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text("Download")
+                }
             }
         }
     }

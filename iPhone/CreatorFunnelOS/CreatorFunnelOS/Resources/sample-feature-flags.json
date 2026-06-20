@@ -1,0 +1,33 @@
+{
+  "flags": [
+    {
+      "key": "recommendations",
+      "isEnabled": true,
+      "rolloutPercentage": 100,
+      "variant": "proposal_cards"
+    },
+    {
+      "key": "team_workspaces",
+      "isEnabled": false,
+      "rolloutPercentage": 0
+    },
+    {
+      "key": "csv_export",
+      "isEnabled": false,
+      "rolloutPercentage": 0,
+      "variant": "coming_soon"
+    },
+    {
+      "key": "hook_generator",
+      "isEnabled": false,
+      "rolloutPercentage": 0,
+      "variant": "placeholder"
+    },
+    {
+      "key": "onboarding_experiment",
+      "isEnabled": false,
+      "rolloutPercentage": 0,
+      "variant": "control"
+    }
+  ]
+}
