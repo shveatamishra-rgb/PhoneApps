@@ -26,7 +26,7 @@ struct PaywallView: View {
                     }
 
                     VStack(spacing: 14) {
-                        feature("photo.stack.fill", "All 60 darshan images")
+                        feature("photo.stack.fill", "The complete darshan library")
                         feature("arrow.down.to.line", "Unlimited wallpaper saves")
                         feature("circle.grid.3x3.fill", "All deity mantras for japa")
                         feature("bell.badge.fill", "Custom daily reminders")

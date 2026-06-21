@@ -3,9 +3,16 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var store: StoreManager
+    @EnvironmentObject private var audio: AudioManager
+    @Environment(\.scenePhase) private var scenePhase
+    @AppStorage("appearancePreference") private var appearanceRaw = AppearanceMode.system.rawValue
     @State private var showLaunchPaywall = ProcessInfo.processInfo.arguments
         .contains("--show-paywall")
     @State private var showWelcomePaywall = false
+
+    private var appearance: AppearanceMode {
+        AppearanceMode(rawValue: appearanceRaw) ?? .system
+    }
 
     var body: some View {
         Group {
@@ -16,13 +23,16 @@ struct RootView: View {
             }
         }
         .tint(AppTheme.vermilion)
-        .preferredColorScheme(.light)
+        .preferredColorScheme(appearance.colorScheme)
         .onChange(of: appState.hasCompletedOnboarding) { _, completed in
             // The moment onboarding finishes is the highest-intent point to
             // introduce Pro. Show it once, and never to an existing subscriber.
             if completed && !store.hasPro {
                 showWelcomePaywall = true
             }
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active { audio.play() } else { audio.pause() }
         }
         .sheet(isPresented: $showLaunchPaywall) {
             PaywallView()

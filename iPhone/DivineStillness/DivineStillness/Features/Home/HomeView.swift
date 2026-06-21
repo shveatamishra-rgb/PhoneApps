@@ -236,7 +236,7 @@ struct HomeView: View {
                         .font(.title2)
                         .foregroundStyle(AppTheme.marigold)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Unlock all 60 darshans")
+                        Text("Unlock the full darshan library")
                             .font(.headline)
                         Text("Full library, every mantra, and unlimited wallpaper saves.")
                             .font(.subheadline)

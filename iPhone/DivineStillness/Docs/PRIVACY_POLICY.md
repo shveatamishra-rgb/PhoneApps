@@ -40,5 +40,8 @@ advertising, or any other data collection.
 
 ## Contact
 
-Replace this section with the final support email and website before
-publication.
+Questions about this policy can be sent to **divine.stillness.om@gmail.com**.
+
+Divine Stillness Om
+Instagram: https://www.instagram.com/divine.stillness.om/
+YouTube: https://www.youtube.com/@divinestillnessom

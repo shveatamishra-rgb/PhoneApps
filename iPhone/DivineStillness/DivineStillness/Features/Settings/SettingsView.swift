@@ -4,6 +4,8 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var store: StoreManager
+    @EnvironmentObject private var audio: AudioManager
+    @AppStorage("appearancePreference") private var appearanceRaw = AppearanceMode.system.rawValue
     @AppStorage("dailyReminderEnabled") private var reminderEnabled = false
     @AppStorage("dailyReminderHour") private var reminderHour = 7
     @AppStorage("dailyReminderMinute") private var reminderMinute = 0
@@ -15,7 +17,9 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 proSection
+                appearanceSection
                 practiceSection
+                connectSection
                 supportSection
 
 #if DEBUG
@@ -90,6 +94,65 @@ struct SettingsView: View {
         }
     }
 
+    private var appearanceSection: some View {
+        Section {
+            Picker("Appearance", selection: Binding(
+                get: { AppearanceMode(rawValue: appearanceRaw) ?? .system },
+                set: { appearanceRaw = $0.rawValue }
+            )) {
+                ForEach(AppearanceMode.allCases) { mode in
+                    Text(mode.label).tag(mode)
+                }
+            }
+
+            if audio.isAvailable {
+                Toggle("Background music", isOn: $audio.isEnabled)
+            }
+        } header: {
+            Text("Appearance & Sound")
+        }
+    }
+
+    private var connectSection: some View {
+        Section {
+            socialLink(
+                "Instagram",
+                systemImage: "camera.fill",
+                url: "https://www.instagram.com/divine.stillness.om/"
+            )
+            socialLink(
+                "YouTube",
+                systemImage: "play.rectangle.fill",
+                url: "https://www.youtube.com/@divinestillnessom"
+            )
+            socialLink(
+                "Facebook",
+                systemImage: "hand.thumbsup.fill",
+                url: "https://www.facebook.com/profile.php?id=61591060441988"
+            )
+            socialLink(
+                "Email us",
+                systemImage: "envelope.fill",
+                url: "mailto:divine.stillness.om@gmail.com"
+            )
+        } header: {
+            Text("Connect")
+        } footer: {
+            Text("Follow Divine Stillness Om for new darshans, mantras, and festival collections.")
+        }
+    }
+
+    private func socialLink(
+        _ title: String,
+        systemImage: String,
+        url: String
+    ) -> some View {
+        Link(destination: URL(string: url)!) {
+            Label(title, systemImage: systemImage)
+                .foregroundStyle(AppTheme.ink)
+        }
+    }
+
     private var practiceSection: some View {
         Section {
             Toggle("Daily darshan reminder", isOn: $reminderEnabled)
@@ -151,12 +214,20 @@ struct SettingsView: View {
             HStack {
                 Text("Version")
                 Spacer()
-                Text("1.0 (1)")
+                Text(appVersionString)
                     .foregroundStyle(AppTheme.muted)
             }
         } header: {
             Text("About")
         }
+    }
+
+    private var appVersionString: String {
+        let version = Bundle.main
+            .object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
+        let build = Bundle.main
+            .object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+        return "\(version) (\(build))"
     }
 
     private func updateReminder(enabled: Bool) {

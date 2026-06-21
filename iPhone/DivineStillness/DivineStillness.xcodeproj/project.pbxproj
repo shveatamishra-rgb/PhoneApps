@@ -16,6 +16,7 @@
 		DS1000000000000000000007 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000007 /* StoreManager.swift */; };
 		DS1000000000000000000008 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000008 /* NotificationManager.swift */; };
 		DS1000000000000000000009 /* WallpaperLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000009 /* WallpaperLibrary.swift */; };
+		DS1000000000000000000015 /* AudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000019 /* AudioManager.swift */; };
 		DS100000000000000000000A /* SharedComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS000000000000000000000A /* SharedComponents.swift */; };
 		DS100000000000000000000B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS000000000000000000000B /* OnboardingView.swift */; };
 		DS100000000000000000000C /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS000000000000000000000C /* HomeView.swift */; };
@@ -39,6 +40,7 @@
 		DS0000000000000000000007 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/StoreManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000008 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/NotificationManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000009 /* WallpaperLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/WallpaperLibrary.swift; sourceTree = "<group>"; };
+		DS0000000000000000000019 /* AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioManager.swift; sourceTree = "<group>"; };
 		DS000000000000000000000A /* SharedComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components/SharedComponents.swift; sourceTree = "<group>"; };
 		DS000000000000000000000B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Onboarding/OnboardingView.swift; sourceTree = "<group>"; };
 		DS000000000000000000000C /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Home/HomeView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				DS0000000000000000000007 /* StoreManager.swift */,
 				DS0000000000000000000008 /* NotificationManager.swift */,
 				DS0000000000000000000009 /* WallpaperLibrary.swift */,
+				DS0000000000000000000019 /* AudioManager.swift */,
 				DS000000000000000000000A /* SharedComponents.swift */,
 				DS000000000000000000000B /* OnboardingView.swift */,
 				DS000000000000000000000C /* HomeView.swift */,
@@ -247,6 +250,7 @@
 				DS1000000000000000000007 /* StoreManager.swift in Sources */,
 				DS1000000000000000000008 /* NotificationManager.swift in Sources */,
 				DS1000000000000000000009 /* WallpaperLibrary.swift in Sources */,
+				DS1000000000000000000015 /* AudioManager.swift in Sources */,
 				DS100000000000000000000A /* SharedComponents.swift in Sources */,
 				DS100000000000000000000B /* OnboardingView.swift in Sources */,
 				DS100000000000000000000C /* HomeView.swift in Sources */,

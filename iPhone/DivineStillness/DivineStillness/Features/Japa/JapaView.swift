@@ -13,17 +13,20 @@ struct JapaView: View {
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 22) {
-                mantraSelector
+            ScrollView {
+                VStack(spacing: 22) {
+                    mantraSelector
 
-                JapaPracticeView(choice: selectedChoice)
-
-                Spacer(minLength: 0)
+                    JapaPracticeView(choice: selectedChoice)
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
+                .padding(.bottom, 16)
             }
-            .padding(.horizontal, 20)
-            .padding(.top, 10)
+            .scrollIndicators(.hidden)
             .devotionalBackground()
             .navigationTitle("Japa")
+            .navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $showPaywall) {
                 PaywallView()
             }
@@ -89,6 +92,7 @@ struct JapaPracticeView: View {
                     .font(.subheadline)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(AppTheme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             ZStack {
