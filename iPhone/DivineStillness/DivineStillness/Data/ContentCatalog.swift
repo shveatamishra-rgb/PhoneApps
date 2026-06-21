@@ -162,26 +162,28 @@ enum ContentCatalog {
         "ganesh", "shiv_parivar"
     ]
 
+    /// Images pulled from the catalog after iconography review — anatomy
+    /// defects or deity-correctness concerns. Add an imageName here to remove
+    /// it everywhere without breaking other entries. See Docs/IMAGE_REVIEW.md.
+    static let removedImageNames: Set<String> = [
+        "day12_venkateshwar_swami" // reported: badly twisted left hand
+    ]
+
     static let items: [DevotionalItem] = slugs.enumerated().compactMap { index, slug in
         guard let template = templates[slug] else { return nil }
         let day = index + 1
-        let collection: String
-        switch day {
-        case 1...19: collection = "Morning Darshan"
-        case 20...38: collection = "Aarti Glow"
-        case 39...57: collection = "Meditation Darshan"
-        default: collection = "Temple Blessing"
-        }
+        let imageName = "day\(day)_\(slug)"
+        guard !removedImageNames.contains(imageName) else { return nil }
 
         return DevotionalItem(
             day: day,
-            imageName: "day\(day)_\(slug)",
+            imageName: imageName,
             deity: template.deity,
             category: template.category,
             mantra: template.mantra,
             meaning: template.meaning,
             blessing: template.blessing,
-            collection: collection,
+            collection: template.category.rawValue,
             isPremium: day > 12
         )
     }

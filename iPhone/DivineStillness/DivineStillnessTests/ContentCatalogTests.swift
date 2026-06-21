@@ -2,15 +2,36 @@ import XCTest
 @testable import DivineStillness
 
 final class ContentCatalogTests: XCTestCase {
-    func testCatalogContainsSixtyUniqueImages() {
-        XCTAssertEqual(ContentCatalog.items.count, 60)
-        XCTAssertEqual(Set(ContentCatalog.items.map(\.imageName)).count, 60)
+    func testCatalogImagesAreUniqueAndExcludeRemoved() {
+        XCTAssertEqual(
+            ContentCatalog.items.count,
+            Set(ContentCatalog.items.map(\.imageName)).count,
+            "image names must be unique"
+        )
+        for removed in ContentCatalog.removedImageNames {
+            XCTAssertFalse(
+                ContentCatalog.items.contains { $0.imageName == removed },
+                "\(removed) should be excluded from the catalog"
+            )
+        }
     }
 
-    func testFreeTierContainsExactlyFirstTwelveImages() {
-        let freeItems = ContentCatalog.items.filter { !$0.isPremium }
-        XCTAssertEqual(freeItems.count, 12)
-        XCTAssertEqual(freeItems.map(\.day), Array(1...12))
+    func testFreeTierIsLeadingDarshansAndExcludesRemoved() {
+        let freeDays = ContentCatalog.items.filter { !$0.isPremium }.map(\.day)
+        // Free = days 1–12 by rule, minus any pulled image (day 12 venkateshwar).
+        XCTAssertTrue(freeDays.allSatisfy { $0 <= 12 })
+        XCTAssertFalse(freeDays.contains(12), "a pulled image must not be free")
+        XCTAssertEqual(freeDays, Array(1...11))
+    }
+
+    func testCategoryLabelReplacesArbitraryCollections() {
+        // The "collection" shown to users must be the meaningful deity category,
+        // never the old arbitrary day-bucket labels.
+        let stale = ["Morning Darshan", "Aarti Glow", "Meditation Darshan", "Temple Blessing"]
+        for item in ContentCatalog.items {
+            XCTAssertFalse(stale.contains(item.collection), "stale collection label leaked")
+            XCTAssertEqual(item.collection, item.category.rawValue)
+        }
     }
 
     func testEveryItemHasDevotionalCopy() {
