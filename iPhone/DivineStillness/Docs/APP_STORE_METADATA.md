@@ -74,14 +74,15 @@ Payment is charged to your Apple account. Subscriptions renew automatically
 unless cancelled at least 24 hours before the period ends; manage or cancel any
 time in your Apple account settings.
 
-Terms of Use: https://shveatamishra-rgb.github.io/PhoneApps/divine-stillness/terms
-Privacy Policy: https://shveatamishra-rgb.github.io/PhoneApps/divine-stillness/privacy
+Terms of Use: https://shveatamishra-rgb.github.io/divine-stillness/terms/
+Privacy Policy: https://shveatamishra-rgb.github.io/divine-stillness/privacy/
 
 Made with devotion. Jai Shri Mahadev 🙏
 ```
 
-> The Terms/Privacy URLs above assume GitHub Pages hosting from the repo (see
-> `Docs/POST_LAUNCH_PLAYBOOK.md`). Swap them if you host elsewhere.
+> These pages are live in the separate public `shveatamishra-rgb.github.io` repo
+> (this code repo stays private). Use the Privacy URL in App Store Connect's App
+> Privacy section and the app's Privacy Policy field.
 
 ## What's New (version 1.0)
 
