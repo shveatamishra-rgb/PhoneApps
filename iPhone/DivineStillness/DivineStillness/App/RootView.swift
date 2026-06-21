@@ -32,7 +32,12 @@ struct RootView: View {
             }
         }
         .onChange(of: scenePhase) { _, phase in
-            if phase == .active { audio.play() } else { audio.pause() }
+            if phase == .active {
+                audio.play()
+                appState.refreshJapaForToday()
+            } else {
+                audio.pause()
+            }
         }
         .sheet(isPresented: $showLaunchPaywall) {
             PaywallView()

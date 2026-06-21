@@ -18,6 +18,10 @@ final class AppState: ObservableObject {
     private let bestStreakKey = "bestStreak"
     private let lastVisitDayKey = "lastVisitDay"
 
+    /// The day string the in-memory `dailyJapaCount` belongs to, so the counter
+    /// can auto-reset when the day rolls over.
+    private var japaDay: String
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         favorites = Set(defaults.stringArray(forKey: favoritesKey) ?? [])
@@ -36,8 +40,8 @@ final class AppState: ObservableObject {
             selectedTab = .settings
         }
 
-        let japaKey = Self.japaKey(for: Date())
-        dailyJapaCount = defaults.integer(forKey: japaKey)
+        japaDay = Self.dayString(for: Date())
+        dailyJapaCount = defaults.integer(forKey: Self.japaKey(for: Date()))
         currentStreak = defaults.integer(forKey: currentStreakKey)
         bestStreak = defaults.integer(forKey: bestStreakKey)
     }
@@ -68,6 +72,7 @@ final class AppState: ObservableObject {
     }
 
     func incrementJapa() {
+        refreshJapaForToday()
         dailyJapaCount += 1
         defaults.set(dailyJapaCount, forKey: Self.japaKey(for: Date()))
     }
@@ -75,6 +80,16 @@ final class AppState: ObservableObject {
     func resetJapa() {
         dailyJapaCount = 0
         defaults.set(0, forKey: Self.japaKey(for: Date()))
+    }
+
+    /// Rolls the japa counter over to a fresh count when a new day has begun,
+    /// so it resets at the end of the day even if the app stayed open. Safe to
+    /// call often (on foreground, on Japa appear); a no-op within the same day.
+    func refreshJapaForToday(now: Date = Date()) {
+        let today = Self.dayString(for: now)
+        guard today != japaDay else { return }
+        japaDay = today
+        dailyJapaCount = defaults.integer(forKey: Self.japaKey(for: now))
     }
 
     /// Records that the devotee opened the app today and keeps the daily

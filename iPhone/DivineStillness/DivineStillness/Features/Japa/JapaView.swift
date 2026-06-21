@@ -27,6 +27,7 @@ struct JapaView: View {
             .devotionalBackground()
             .navigationTitle("Japa")
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear { appState.refreshJapaForToday() }
             .sheet(isPresented: $showPaywall) {
                 PaywallView()
             }
@@ -79,6 +80,8 @@ struct JapaPracticeView: View {
 
     let choice: MantraChoice
 
+    static let goalPresets = [27, 54, 108, 1008, 10000]
+
     private var isComplete: Bool { appState.dailyJapaCount >= goal }
 
     var body: some View {
@@ -114,10 +117,12 @@ struct JapaPracticeView: View {
                     chant()
                 } label: {
                     VStack(spacing: 4) {
-                        Text("\(appState.dailyJapaCount)")
-                            .font(.system(size: 58, weight: .bold, design: .rounded))
+                        Text(appState.dailyJapaCount.formatted())
+                            .font(.system(size: 54, weight: .bold, design: .rounded))
                             .contentTransition(.numericText())
-                        Text("of \(goal)")
+                            .minimumScaleFactor(0.5)
+                            .lineLimit(1)
+                        Text("of \(goal.formatted())")
                             .font(.headline)
                             .foregroundStyle(AppTheme.muted)
                         Text(isComplete ? "Mala complete" : "Tap to chant")
@@ -125,6 +130,7 @@ struct JapaPracticeView: View {
                             .foregroundStyle(isComplete ? AppTheme.teal : AppTheme.vermilion)
                     }
                     .foregroundStyle(AppTheme.ink)
+                    .padding(.horizontal, 18)
                     .frame(width: 220, height: 220)
                     .background(AppTheme.paper, in: Circle())
                     .overlay {
@@ -138,11 +144,13 @@ struct JapaPracticeView: View {
             }
             .frame(width: 260, height: 260)
 
-            HStack {
-                goalButton(27)
-                goalButton(54)
-                goalButton(108)
+            ScrollView(.horizontal) {
+                HStack(spacing: 8) {
+                    ForEach(Self.goalPresets, id: \.self) { goalButton($0) }
+                }
+                .padding(.horizontal, 2)
             }
+            .scrollIndicators(.hidden)
 
             Button(role: .destructive) {
                 appState.resetJapa()
@@ -186,10 +194,11 @@ struct JapaPracticeView: View {
         Button {
             goal = value
         } label: {
-            Text("\(value)")
+            Text(value.formatted())
             .font(.subheadline.bold())
             .foregroundStyle(goal == value ? .white : AppTheme.vermilion)
             .frame(minWidth: 58)
+            .padding(.horizontal, 14)
             .padding(.vertical, 9)
             .background(
                 goal == value ? AppTheme.vermilion : AppTheme.paper,

@@ -94,4 +94,22 @@ final class StreakTests: XCTestCase {
         XCTAssertEqual(state.recordDailyVisit(now: day(2026, 6, 25)), 1)
         XCTAssertEqual(state.bestStreak, 2)
     }
+
+    func testJapaCountResetsWhenDayRolls() {
+        let state = makeState()
+        state.incrementJapa()
+        state.incrementJapa()
+        XCTAssertEqual(state.dailyJapaCount, 2)
+
+        let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date())!
+        state.refreshJapaForToday(now: tomorrow)
+        XCTAssertEqual(state.dailyJapaCount, 0, "Counter should reset on a new day")
+    }
+
+    func testJapaCountHoldsWithinSameDay() {
+        let state = makeState()
+        state.incrementJapa()
+        state.refreshJapaForToday(now: Date())
+        XCTAssertEqual(state.dailyJapaCount, 1, "Same-day refresh must not reset")
+    }
 }
