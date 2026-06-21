@@ -166,7 +166,10 @@ enum ContentCatalog {
     /// defects or deity-correctness concerns. Add an imageName here to remove
     /// it everywhere without breaking other entries. See Docs/IMAGE_REVIEW.md.
     static let removedImageNames: Set<String> = [
-        "day12_venkateshwar_swami" // reported: badly twisted left hand
+        "day12_venkateshwar_swami", // reported: badly twisted left hand
+        "day16_maa_kali",           // not Kali iconography (serene blue Devi)
+        "day35_maa_kali",           // not Kali iconography
+        "day54_maa_kali"            // not Kali iconography
     ]
 
     static let items: [DevotionalItem] = slugs.enumerated().compactMap { index, slug in

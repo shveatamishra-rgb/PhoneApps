@@ -83,9 +83,9 @@ Legend: ✅ no obvious issue at review size · ⚠️ closer human review · ❌
 | 6 | shri_ram | ✅ | Bow + abhaya; clean |
 | 7 | shri_ram_parivar | ⚠️ | Multi-figure Darbar — zoom Hanuman/Lakshman hands |
 | 8 | shri_hanuman | ✅ | Anjali with Ram in heart; clean, devotional |
-| 9 | vishnu | — | pending |
-| 10 | vishnu_lakshmi | — | pending |
-| 11 | vaishno_devi | — | pending |
+| 9 | vishnu | ✅ | On Shesha, 4 arms (chakra/shankha/gada/lotus); clean |
+| 10 | vishnu_lakshmi | ✅ | Both figures, attributes correct |
+| 11 | vaishno_devi | ✅ | Sherawali on lion; correct popular form |
 | 12 | venkateshwar_swami | ❌ | **Reported: left hand badly twisted. Pull from app until fixed/replaced.** |
 
 ### Pro tier (days 13–60) — high-risk forms triaged, rest pending
@@ -105,14 +105,40 @@ Still to triage (lower-risk, same checklist): days 9–11, 14–15, 17, 20–30,
 32–34, 36, 39–53, 55–60 (Shiva, Ganesha, Krishna, Ram, Hanuman, Vishnu,
 Lakshmi, Saraswati, Brahma, Shiv Ling, Vaishno Devi, Balaji repeats).
 
-## Decisions / actions
+## Triage outcome (AI first pass — complete)
 
-- ✅ **Done:** `day12_venkateshwar_swami` pulled (removed from `ContentCatalog`
-  via `removedImageNames` + asset deleted). Free tier is now days 1–11.
-- ⛔ **All three Maa Kali images (16, 35, 54) are mislabeled / iconographically
-  wrong.** Recommend **cut all three** (add to `removedImageNames` + delete
-  assets) and regenerate proper Kali later, OR drop Kali from v1. Removing them
-  drops the "Devi" representation that's actually Kali — Saraswati/Vaishno Devi
-  still cover Devi. **Needs your call: cut, or regenerate?**
-- ⏭️ Finish AI triage of the remaining ~40, then **human/priest sign-off** on
-  survivors before submission. Apply "cut when in doubt."
+All 60 images were reviewed. **4 cut, 56 retained.**
+
+- ❌ **Cut (removed + assets deleted):**
+  `day12_venkateshwar_swami` (twisted hand),
+  `day16_maa_kali`, `day35_maa_kali`, `day54_maa_kali` (not Kali iconography).
+- ✅ **Retained (56):** every deity type — Shiva, Ganesha (4 arms consistent),
+  Krishna/Radha-Krishna, Ram/Ram Darbar, Hanuman, Vishnu/Vishnu-Lakshmi (4 arms,
+  Shesha), Vaishno Devi (Sherawali on lion), Saraswati (veena/swan), Brahma
+  (4 faces), Narasimha + Prahlad (lion head, 4 arms), Shiv Ling (no figure),
+  Balaji/Venkateshwara (murti-style, stylized) — all iconographically correct
+  with clean anatomy at review resolution.
+- ⚠️ **Still recommend a full-resolution human/priest pass** before submission,
+  focusing on: multi-figure "parivar" scenes (more hands = more risk) and the
+  murti-style Balaji/Venkateshwara hands. AI triage catches gross errors; only a
+  human zoom is the final green light.
+
+## Kali — regeneration prompts (to add proper Kali back later)
+
+Generate, then run these through the same triage + human review before adding.
+Kali's **essential** markers must all be present:
+
+> A reverent, traditional depiction of Goddess Maa Kali in classic Hindu
+> iconography. Dark blue/black complexion, four arms: upper-left holding a
+> bloodied scimitar (khadga), lower-left holding a severed demon head; right
+> hands in abhaya (fearless) and varada (boon) mudras. Garland of severed heads
+> (mundamala) around the neck, skirt of demon arms, long flowing black hair,
+> three eyes, red protruding tongue, standing calmly with right foot forward on
+> the supine body of Lord Shiva. Serene-yet-fierce expression, temple setting,
+> diyas, respectful devotional art, anatomically correct hands, no extra fingers
+> or limbs. Portrait 9:16.
+
+Variants to try: **Dakshina Kali** (as above, standing on Shiva) and
+**seated Kali** on a lotus with the same attributes. Reject any output missing
+the mundamala, khadga, severed head, tongue, or dark complexion — those are what
+make it Kali rather than a generic blue Devi.
