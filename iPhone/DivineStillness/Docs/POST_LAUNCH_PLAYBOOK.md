@@ -4,8 +4,8 @@ What to do once the app is live, plus the promo-video and screenshot recipe.
 
 ## Week of launch
 
-1. **Tell your existing audience first.** Your Instagram (`divine.stillness.om`),
-   YouTube (`@divinestillnessom`), and Facebook page are your cheapest installs.
+1. **Tell your existing audience first.** Your Instagram (`bhaktiangan`),
+   YouTube (`@bhaktiangan-om`), and Facebook page are your cheapest installs.
    Pin "Download on the App Store" to each bio/About, and post the launch
    reel/video (see below) to all three the same day.
 2. **Add the App Store link everywhere:** IG link-in-bio, YouTube channel links
@@ -24,8 +24,8 @@ What to do once the app is live, plus the promo-video and screenshot recipe.
   app's funnel. Consistency is the whole game at 12 followers / 7 subs.
 - **Watch three numbers** weekly in App Store Connect: impressions→downloads
   (ASO), downloads→trial starts (paywall), trial→paid (conversion).
-- **Tune ASO** if downloads are low: try title `Divine Stillness Om: Darshan`
-  vs `Divine Stillness: Hindu Puja`, and rotate screenshot captions. You can
+- **Tune ASO** if downloads are low: try title `Bhakti Angan: Daily Darshan`
+  vs `Bhakti Angan: Hindu Darshan`, and rotate screenshot captions. You can
   change these without a new build.
 - **Tune pricing per country** after ~200 downloads — India/Nepal/Indonesia
   lower, Tier-1 standard (see `Docs/APP_STORE_METADATA.md`).
@@ -61,7 +61,7 @@ Library). **Pace:** slow, reverent — let each shot breathe ~2.5–3s.
 | 6–10s | Japa counter, finger tapping, number rising to 108 | "Chant. Breathe. Be still." |
 | 10–13s | Darshan library scrolling | "Shiva · Krishna · Devi · and more" |
 | 13–16s | Save-as-wallpaper, then phone lock screen shows it | "Keep your darshan close" |
-| 16–20s | App icon + title, App Store badge | "Divine Stillness Om — on the App Store" |
+| 16–20s | App icon + title, App Store badge | "Bhakti Angan — on the App Store" |
 
 End every cut on a calm beat; finish with "🙏 Link in bio."
 
@@ -105,7 +105,7 @@ Capture commands (simulator) for the stills, if you don't want to use a device:
 DEV="iPhone 17 Pro Max"
 xcrun simctl boot "$DEV"
 # build & install the Release app first, then:
-xcrun simctl launch "$DEV" com.shveatamishra.divinestillness --pro-mode
+xcrun simctl launch "$DEV" in.bhaktiangan.app --pro-mode
 xcrun simctl io "$DEV" screenshot today.png
 ```
 

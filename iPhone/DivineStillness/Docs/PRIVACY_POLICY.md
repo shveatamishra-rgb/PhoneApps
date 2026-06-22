@@ -1,8 +1,8 @@
-# Divine Stillness Om Privacy Policy
+# Bhakti Angan Privacy Policy
 
 Effective date: June 20, 2026
 
-Divine Stillness Om is designed to work without an account. The app stores
+Bhakti Angan is designed to work without an account. The app stores
 favorites, preferred mantra, daily japa count, daily darshan streak, and
 reminder preferences locally on the user's device.
 
@@ -42,6 +42,6 @@ advertising, or any other data collection.
 
 Questions about this policy can be sent to **divine.stillness.om@gmail.com**.
 
-Divine Stillness Om
-Instagram: https://www.instagram.com/divine.stillness.om/
-YouTube: https://www.youtube.com/@divinestillnessom
+Bhakti Angan
+Instagram: https://www.instagram.com/bhaktiangan/
+YouTube: https://www.youtube.com/@bhaktiangan-om

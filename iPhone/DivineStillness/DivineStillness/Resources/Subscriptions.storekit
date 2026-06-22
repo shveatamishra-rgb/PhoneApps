@@ -15,7 +15,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.shveatamishra.divinestillness.pro.lifetime",
+      "productID" : "in.bhaktiangan.app.pro.lifetime",
       "referenceName" : "Bhakti Angan Pro Lifetime",
       "type" : "NonConsumable"
     }
@@ -60,7 +60,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.shveatamishra.divinestillness.pro.monthly",
+          "productID" : "in.bhaktiangan.app.pro.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Bhakti Angan Pro Monthly",
           "subscriptionGroupID" : "BC089F6E-0AED-428A-9166-99D312C96045",
@@ -89,7 +89,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.shveatamishra.divinestillness.pro.yearly",
+          "productID" : "in.bhaktiangan.app.pro.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Bhakti Angan Pro Annual",
           "subscriptionGroupID" : "BC089F6E-0AED-428A-9166-99D312C96045",

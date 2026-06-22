@@ -3,9 +3,9 @@ import StoreKit
 
 @MainActor
 final class StoreManager: ObservableObject {
-    static let monthlyID = "com.shveatamishra.divinestillness.pro.monthly"
-    static let yearlyID = "com.shveatamishra.divinestillness.pro.yearly"
-    static let lifetimeID = "com.shveatamishra.divinestillness.pro.lifetime"
+    static let monthlyID = "in.bhaktiangan.app.pro.monthly"
+    static let yearlyID = "in.bhaktiangan.app.pro.yearly"
+    static let lifetimeID = "in.bhaktiangan.app.pro.lifetime"
 
     @Published private(set) var products: [Product] = []
     @Published private(set) var purchasedProductIDs: Set<String> = []

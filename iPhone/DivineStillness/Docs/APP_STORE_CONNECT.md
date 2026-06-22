@@ -2,39 +2,34 @@
 
 ## App record
 
-- Name: `Divine Stillness Om`
-- Bundle ID: `com.shveatamishra.divinestillness`
-- SKU suggestion: `DIVINE-STILLNESS-OM-IOS-001`
+- Name (App Store title): `Bhakti Angan: Daily Darshan` (home-screen display name is `Bhakti Angan`)
+- Bundle ID: `in.bhaktiangan.app`
+- SKU suggestion: `BHAKTI-ANGAN-IOS-001`
 - Primary category: Lifestyle
 - Secondary category: Health & Fitness
 - Age rating: complete the questionnaire; the current content is intended for 4+
 
-Suggested subtitle:
+The paste-ready name, subtitle, keywords, promotional text, and full description
+live in **`Docs/APP_STORE_METADATA.md`** (the single source of truth). In short:
 
-`Daily Darshan, Mantra & Japa`
-
-Suggested promotional text:
-
-`Begin each day with a peaceful darshan, a simple mantra, and one quiet minute
-of devotion. Explore Shiva, Ganesha, Krishna, Ram, Devi, Vishnu, and more.`
-
-Suggested keywords:
-
-`hindu,gods,darshan,mantra,japa,shiva,krishna,ganesha,ram,hanuman,puja,bhakti`
+- Subtitle: `Hindu Gods, Mantra & Japa`
+- Keywords: deity names + adjacent intents (see metadata doc — don't repeat
+  words already in the name/subtitle)
 
 ## In-app purchases
 
-Create one subscription group named `Divine Stillness Pro`.
+Create one subscription group named `Bhakti Angan Pro`.
 
 | Product | Type | Product ID | Suggested US price |
 | --- | --- | --- | --- |
-| Pro Monthly | Auto-renewable subscription | `com.shveatamishra.divinestillness.pro.monthly` | $4.99 |
-| Pro Annual | Auto-renewable subscription | `com.shveatamishra.divinestillness.pro.yearly` | $29.99 |
-| Pro Lifetime | Non-consumable | `com.shveatamishra.divinestillness.pro.lifetime` | $39.99 |
+| Pro Monthly | Auto-renewable subscription | `in.bhaktiangan.app.pro.monthly` | $4.99 |
+| Pro Annual | Auto-renewable subscription | `in.bhaktiangan.app.pro.yearly` | $29.99 |
+| Pro Lifetime | Non-consumable | `in.bhaktiangan.app.pro.lifetime` | $39.99 |
 
-Use localized India pricing rather than a direct currency conversion. A starting
-test is INR 99 monthly, INR 599 annual, and INR 999 lifetime. Review proceeds,
-conversion, and refund behavior before changing pricing.
+Use localized, country-specific pricing rather than currency conversion. Suggested
+India launch: ₹149 monthly, ₹999 annual (7-day trial), ₹1,499 lifetime. See the
+pricing table in `Docs/APP_STORE_METADATA.md`. Review proceeds, conversion, and
+refund behavior before changing pricing.
 
 ### Free trial (annual)
 
@@ -80,18 +75,21 @@ Apple processes purchases. Favorites, japa counts, deity preference, and
 reminder settings remain on device. Revisit the declaration before adding
 analytics, accounts, advertising, a backend, or cloud sync.
 
-Host `Docs/PRIVACY_POLICY.md` on a public HTTPS page and use that URL in App
-Store Connect. Add a real support URL and support email before submission.
+Host the privacy policy on `https://bhaktiangan.in/privacy/` (see `Docs/WEBSITE.md`)
+and use that URL in App Store Connect's App Privacy section and the app's Privacy
+Policy field. Add a real support URL (`https://bhaktiangan.in/`) and a monitored
+support email before submission.
 
 ## Review notes
 
 Suggested reviewer note:
 
-`The app includes a Free tier and StoreKit 2 Pro access. The first 12 darshan
-images and three japa mantras are free. Pro unlocks the complete 60-image
-library and all mantras. A local StoreKit configuration is included for
-development; production products use the identifiers listed above. The app
-does not require an account.`
+`Bhakti Angan includes a Free tier and StoreKit 2 Pro access. The first free
+darshans and three japa mantras are free. Pro unlocks the complete darshan
+library and all mantras via auto-renewable subscriptions (monthly, annual with a
+7-day free trial) and a non-consumable Lifetime. A local StoreKit configuration
+is included for development; production products use the identifiers listed above.
+The app does not require an account. All artwork is original devotional art.`
 
 ## Screenshots
 

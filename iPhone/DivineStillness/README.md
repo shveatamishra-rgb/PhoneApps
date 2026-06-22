@@ -1,7 +1,9 @@
-# Divine Stillness Om for iPhone
+# Bhakti Angan for iPhone
 
-Divine Stillness Om is a native SwiftUI devotional app built from the 60-image
-Divine Stillness content collection.
+Bhakti Angan (भक्ति आँगन, "the courtyard of devotion") is a native SwiftUI
+devotional app — a daily darshan, a simple mantra, and a calm japa practice.
+(Internal Xcode target/folder name remains "DivineStillness"; only user-facing
+branding and the bundle ID changed.)
 
 ## Product
 
@@ -51,9 +53,9 @@ xcodebuild \
 
 ## StoreKit products
 
-- `com.shveatamishra.divinestillness.pro.monthly`
-- `com.shveatamishra.divinestillness.pro.yearly`
-- `com.shveatamishra.divinestillness.pro.lifetime`
+- `in.bhaktiangan.app.pro.monthly`
+- `in.bhaktiangan.app.pro.yearly`
+- `in.bhaktiangan.app.pro.lifetime`
 
 `DivineStillness/Resources/Subscriptions.storekit` provides local StoreKit
 testing in Xcode. The same identifiers must be created in App Store Connect.

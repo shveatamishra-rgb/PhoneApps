@@ -6,15 +6,15 @@ Apple's; counts are noted so you stay inside them.
 
 ## Name & subtitle (App Store search weighs these most)
 
-Market research note: "Divine Stillness Om" is **not used by any existing App
-Store app or competing brand**, so it is safe and consistent with your
-Instagram/YouTube/Facebook handles — keep the brand. The niche (Sri Mandir,
-DevDham, Dharmayana, Mandir Darshan) is competitive and the word "Stillness"
-alone skews toward Christian meditation apps, so we win discovery by putting the
-high-intent Hindu keyword **Darshan** into the title and packing the subtitle.
+The brand is **Bhakti Angan** (भक्ति आँगन — "the courtyard of devotion"): a warm,
+broad umbrella name that reads as instantly Hindu to rural + urban audiences and
+can house future products (e.g. a Gita app). It's distinctive (no existing app
+and not a common ashram name) and fully ownable (`bhaktiangan.in`, handles
+secured). Win discovery by adding the high-intent keyword **Darshan** to the
+title and packing the subtitle.
 
-- **App Name** (max 30): `Divine Stillness Om: Darshan` — 28 chars ✅
-  - Pure-brand alternative: `Divine Stillness Om` (19)
+- **App Name** (max 30): `Bhakti Angan: Daily Darshan` — 27 chars ✅
+  - Home-screen display name is `Bhakti Angan` (set in the app)
 - **Subtitle** (max 30): `Hindu Gods, Mantra & Japa` — 25 chars ✅
 
 ## Keywords (max 100 chars, comma-separated, NO spaces)
@@ -23,9 +23,9 @@ Do not repeat words already in the name/subtitle (Apple indexes those
 separately). This field focuses on deity names and adjacent intents:
 
 ```
-shiva,krishna,ganesha,ram,hanuman,devi,lakshmi,bhakti,puja,aarti,wallpaper,prayer,om,temple,chalisa
+shiva,krishna,ganesha,ram,hanuman,devi,lakshmi,saraswati,puja,aarti,wallpaper,prayer,om,temple,chalisa
 ```
-(99 chars ✅)
+(~100 chars — trim if App Store Connect flags it; "bhakti/darshan/mantra/japa" are already in the name/subtitle so they're omitted here)
 
 ## Promotional text (max 170 — editable any time without review)
 
@@ -36,8 +36,9 @@ Begin each day with a peaceful darshan, a simple mantra, and one quiet minute of
 ## Description (max 4000)
 
 ```
-Divine Stillness Om brings a calm, daily moment of devotion to your iPhone —
-a beautiful darshan, a simple mantra, and one quiet minute of stillness.
+Bhakti Angan — your courtyard of devotion. A calm, daily moment with the divine
+on your iPhone: a beautiful darshan, a simple mantra, and one quiet minute of
+stillness.
 
 Open the app each morning to a new sacred darshan with its mantra, meaning, and
 a short blessing. Sit with it for a minute, chant on the japa counter, and carry
@@ -48,12 +49,13 @@ A rotating sacred image each day with mantra, meaning, and blessing — a gentle
 ritual you can keep in under a minute.
 
 • JAPA COUNTER
-A calm, distraction-free mala counter with 27, 54, and 108 goals, soft haptics,
-and a daily darshan streak that grows as you return.
+A calm, distraction-free mala counter with goals from 27 up to 10,000, soft
+haptics, and a daily darshan streak that grows as you return.
 
 • MANY DEITIES
-Shiva, Ganesha, Krishna, Radha-Krishna, Ram, Hanuman, Vishnu, Lakshmi, Durga,
-Kali, Saraswati, Balaji, Narasimha, and more — with their mantras for japa.
+Shiva, Ganesha, Krishna, Radha-Krishna, Ram, Hanuman, Vishnu, Lakshmi,
+Saraswati, Vaishno Devi, Balaji, Narasimha, Brahma, and more — with their
+mantras for japa.
 
 • SAVE & SHARE
 Keep any darshan as a wallpaper, mark favorites, and share blessings with family.
@@ -65,7 +67,7 @@ Choose a morning or evening time for one gentle daily reminder. No noise, no fee
 No account, no ads, no tracking. Your favorites, streak, and japa count stay on
 your device.
 
-DIVINE STILLNESS PRO
+BHAKTI ANGAN PRO
 Unlock the complete darshan library, every deity mantra, unlimited wallpaper
 saves, and future festival collections.
 • Free for 7 days on the annual plan, then it renews at the listed price.
@@ -74,20 +76,20 @@ Payment is charged to your Apple account. Subscriptions renew automatically
 unless cancelled at least 24 hours before the period ends; manage or cancel any
 time in your Apple account settings.
 
-Terms of Use: https://shveatamishra-rgb.github.io/divine-stillness/terms/
-Privacy Policy: https://shveatamishra-rgb.github.io/divine-stillness/privacy/
+Terms of Use: https://bhaktiangan.in/terms/
+Privacy Policy: https://bhaktiangan.in/privacy/
 
 Made with devotion. Jai Shri Mahadev 🙏
 ```
 
-> These pages are live in the separate public `shveatamishra-rgb.github.io` repo
-> (this code repo stays private). Use the Privacy URL in App Store Connect's App
-> Privacy section and the app's Privacy Policy field.
+> Host the privacy/terms pages on `bhaktiangan.in` (see `Docs/WEBSITE.md`). Use
+> the Privacy URL in App Store Connect's App Privacy section and the app's
+> Privacy Policy field.
 
 ## What's New (version 1.0)
 
 ```
-Namaste and welcome to Divine Stillness Om 🙏
+Namaste and welcome to Bhakti Angan 🙏
 • A new daily darshan with mantra, meaning, and blessing
 • A calm japa counter with a daily streak
 • Light and dark themes
@@ -99,12 +101,14 @@ Namaste and welcome to Divine Stillness Om 🙏
 - **Primary category:** Lifestyle
 - **Secondary category:** Health & Fitness (or Reference)
 - **Age rating:** 4+ (complete the questionnaire; no objectionable content)
-- **Bundle ID:** `com.shveatamishra.divinestillness`
+- **Bundle ID:** `in.bhaktiangan.app`
 - **Privacy "Data Not Collected":** declare no data collection (matches the
   privacy manifest and `Docs/PRIVACY_POLICY.md`)
-- **Support URL:** GitHub Pages support page (or a simple page that lists the
-  brand email `divine.stillness.om@gmail.com`)
-- **Marketing URL (optional):** your Instagram or a link-in-bio page
+- **Support URL:** `https://bhaktiangan.in/` (lists the brand email)
+- **Support email:** set up `hello@bhaktiangan.in` on Hostinger (preferred), or
+  keep the existing working gmail until then — the app/legal pages must point to
+  a mailbox you actually monitor
+- **Marketing URL (optional):** `https://bhaktiangan.in/` or your Instagram
 
 ## Pricing — country-specific (not currency conversion)
 
