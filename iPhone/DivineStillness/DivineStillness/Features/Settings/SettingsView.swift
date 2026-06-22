@@ -133,7 +133,7 @@ struct SettingsView: View {
             socialLink(
                 "Email us",
                 systemImage: "envelope.fill",
-                url: "mailto:divine.stillness.om@gmail.com"
+                url: "mailto:support@bhaktiangan.in"
             )
         } header: {
             Text("Connect")

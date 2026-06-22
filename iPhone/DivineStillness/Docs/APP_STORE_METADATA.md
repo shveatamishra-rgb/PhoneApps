@@ -105,9 +105,8 @@ Namaste and welcome to Bhakti Angan 🙏
 - **Privacy "Data Not Collected":** declare no data collection (matches the
   privacy manifest and `Docs/PRIVACY_POLICY.md`)
 - **Support URL:** `https://bhaktiangan.in/` (lists the brand email)
-- **Support email:** set up `hello@bhaktiangan.in` on Hostinger (preferred), or
-  keep the existing working gmail until then — the app/legal pages must point to
-  a mailbox you actually monitor
+- **Support email:** `support@bhaktiangan.in` (live; `hello@`, `info@`, `contact@`
+  are aliases to the same inbox)
 - **Marketing URL (optional):** `https://bhaktiangan.in/` or your Instagram
 
 ## Pricing — country-specific (not currency conversion)

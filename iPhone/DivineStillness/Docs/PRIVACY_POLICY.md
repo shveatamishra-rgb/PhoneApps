@@ -40,7 +40,7 @@ advertising, or any other data collection.
 
 ## Contact
 
-Questions about this policy can be sent to **divine.stillness.om@gmail.com**.
+Questions about this policy can be sent to **support@bhaktiangan.in**.
 
 Bhakti Angan
 Instagram: https://www.instagram.com/bhaktiangan/
