@@ -76,8 +76,8 @@ Payment is charged to your Apple account. Subscriptions renew automatically
 unless cancelled at least 24 hours before the period ends; manage or cancel any
 time in your Apple account settings.
 
-Terms of Use: https://bhaktiangan.in/terms/
-Privacy Policy: https://bhaktiangan.in/privacy/
+Terms of Use: https://bhaktiangan.in/terms-of-use/
+Privacy Policy: https://bhaktiangan.in/privacy-policy/
 
 Made with devotion. Jai Shri Mahadev 🙏
 ```

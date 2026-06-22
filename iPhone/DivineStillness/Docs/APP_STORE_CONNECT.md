@@ -75,9 +75,8 @@ Apple processes purchases. Favorites, japa counts, deity preference, and
 reminder settings remain on device. Revisit the declaration before adding
 analytics, accounts, advertising, a backend, or cloud sync.
 
-Host the privacy policy on `https://bhaktiangan.in/privacy/` (see `Docs/WEBSITE.md`)
-and use that URL in App Store Connect's App Privacy section and the app's Privacy
-Policy field. Add a real support URL (`https://bhaktiangan.in/`) and a monitored
+Host the privacy policy on `https://bhaktiangan.in/privacy-policy/` and use that
+URL in App Store Connect's App Privacy section and the app's Privacy Policy field. Add a real support URL (`https://bhaktiangan.in/`) and a monitored
 support email before submission.
 
 ## Review notes
