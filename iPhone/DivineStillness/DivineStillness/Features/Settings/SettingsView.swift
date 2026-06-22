@@ -43,7 +43,7 @@ struct SettingsView: View {
                 PaywallView()
             }
             .alert(
-                "Divine Stillness",
+                "Bhakti Angan",
                 isPresented: Binding(
                     get: { alertMessage != nil },
                     set: { if !$0 { alertMessage = nil } }
@@ -59,7 +59,7 @@ struct SettingsView: View {
     private var proSection: some View {
         Section {
             if store.hasPro {
-                Label("Divine Stillness Pro is active", systemImage: "checkmark.seal.fill")
+                Label("Bhakti Angan Pro is active", systemImage: "checkmark.seal.fill")
                     .foregroundStyle(AppTheme.teal)
 
                 Button("Manage Subscription") {
@@ -74,7 +74,7 @@ struct SettingsView: View {
                     showPaywall = true
                 } label: {
                     HStack {
-                        Label("Unlock Divine Stillness Pro", systemImage: "sparkles")
+                        Label("Unlock Bhakti Angan Pro", systemImage: "sparkles")
                         Spacer()
                         ProBadge()
                     }
@@ -118,12 +118,12 @@ struct SettingsView: View {
             socialLink(
                 "Instagram",
                 systemImage: "camera.fill",
-                url: "https://www.instagram.com/divine.stillness.om/"
+                url: "https://www.instagram.com/bhaktiangan/"
             )
             socialLink(
                 "YouTube",
                 systemImage: "play.rectangle.fill",
-                url: "https://www.youtube.com/@divinestillnessom"
+                url: "https://www.youtube.com/@bhaktiangan-om"
             )
             socialLink(
                 "Facebook",
@@ -138,7 +138,7 @@ struct SettingsView: View {
         } header: {
             Text("Connect")
         } footer: {
-            Text("Follow Divine Stillness Om for new darshans, mantras, and festival collections.")
+            Text("Follow Bhakti Angan for new darshans, mantras, and festival collections.")
         }
     }
 

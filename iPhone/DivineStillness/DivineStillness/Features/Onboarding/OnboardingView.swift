@@ -36,7 +36,7 @@ struct OnboardingView: View {
                 }
 
             VStack(spacing: 8) {
-                Text("Divine Stillness Om")
+                Text("Bhakti Angan")
                     .font(.largeTitle.bold())
                     .foregroundStyle(AppTheme.plum)
                 Text("Sacred images, simple mantras, and a daily pause for devotion.")

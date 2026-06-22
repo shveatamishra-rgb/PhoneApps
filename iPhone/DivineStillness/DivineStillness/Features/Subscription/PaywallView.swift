@@ -17,7 +17,7 @@ struct PaywallView: View {
                         .padding(.top, 4)
 
                     VStack(spacing: 8) {
-                        Text("Divine Stillness Pro")
+                        Text("Bhakti Angan Pro")
                             .font(.largeTitle.bold())
                             .foregroundStyle(AppTheme.plum)
                         Text("A deeper daily practice, with the complete sacred collection.")

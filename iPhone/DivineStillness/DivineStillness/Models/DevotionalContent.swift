@@ -14,7 +14,7 @@ struct DevotionalItem: Identifiable, Hashable {
     var id: String { imageName }
 
     var shareText: String {
-        "\(deity)\n\n\(mantra)\n\n\(blessing)\n\nShared from Divine Stillness Om"
+        "\(deity)\n\n\(mantra)\n\n\(blessing)\n\nShared from Bhakti Angan"
     }
 }
 

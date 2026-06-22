@@ -10,13 +10,13 @@
       "internalID" : "B82BEABC-A8F6-478A-A3E8-02D3218356B5",
       "localizations" : [
         {
-          "description" : "Unlock the complete Divine Stillness collection forever.",
-          "displayName" : "Divine Stillness Pro Lifetime",
+          "description" : "Unlock the complete Bhakti Angan collection forever.",
+          "displayName" : "Bhakti Angan Pro Lifetime",
           "locale" : "en_US"
         }
       ],
       "productID" : "com.shveatamishra.divinestillness.pro.lifetime",
-      "referenceName" : "Divine Stillness Pro Lifetime",
+      "referenceName" : "Bhakti Angan Pro Lifetime",
       "type" : "NonConsumable"
     }
   ],
@@ -39,7 +39,7 @@
       "localizations" : [
 
       ],
-      "name" : "Divine Stillness Pro",
+      "name" : "Bhakti Angan Pro",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -56,13 +56,13 @@
           "localizations" : [
             {
               "description" : "Full access to every darshan, mantra, and wallpaper.",
-              "displayName" : "Divine Stillness Pro Monthly",
+              "displayName" : "Bhakti Angan Pro Monthly",
               "locale" : "en_US"
             }
           ],
           "productID" : "com.shveatamishra.divinestillness.pro.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Divine Stillness Pro Monthly",
+          "referenceName" : "Bhakti Angan Pro Monthly",
           "subscriptionGroupID" : "BC089F6E-0AED-428A-9166-99D312C96045",
           "type" : "RecurringSubscription"
         },
@@ -85,13 +85,13 @@
           "localizations" : [
             {
               "description" : "Full access with the best annual value.",
-              "displayName" : "Divine Stillness Pro Annual",
+              "displayName" : "Bhakti Angan Pro Annual",
               "locale" : "en_US"
             }
           ],
           "productID" : "com.shveatamishra.divinestillness.pro.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Divine Stillness Pro Annual",
+          "referenceName" : "Bhakti Angan Pro Annual",
           "subscriptionGroupID" : "BC089F6E-0AED-428A-9166-99D312C96045",
           "type" : "RecurringSubscription"
         }

@@ -81,7 +81,7 @@ struct LegalTextView: View {
 
 enum LegalCopy {
     static let privacy = """
-    Divine Stillness Om stores your favorites, reminder preferences, daily darshan streak, and japa count on your device. The app does not create an account, sign you in, sell personal information, use advertising trackers, or collect analytics.
+    Bhakti Angan stores your favorites, reminder preferences, daily darshan streak, and japa count on your device. The app does not create an account, sign you in, sell personal information, use advertising trackers, or collect analytics.
 
     Purchases are processed by Apple through the App Store. Notification permission is used only for the daily darshan reminder you choose to enable. Photo-library add permission is used only when you tap Save to keep a wallpaper.
 
@@ -89,7 +89,7 @@ enum LegalCopy {
     """
 
     static let terms = """
-    Divine Stillness Om provides devotional content for personal reflection. It does not provide religious authority, medical advice, or guarantees of spiritual or material outcomes.
+    Bhakti Angan provides devotional content for personal reflection. It does not provide religious authority, medical advice, or guarantees of spiritual or material outcomes.
 
     Free content remains available without purchase. Pro unlocks additional darshan images, all mantras, and unlimited wallpaper saves. Subscriptions renew automatically unless cancelled at least 24 hours before the end of the current period; you can manage or cancel anytime in your Apple account settings. Lifetime is a one-time purchase. Billing, renewal, cancellation, and refunds are administered by Apple under the Apple Standard License Agreement.
 

@@ -82,7 +82,7 @@ struct HomeView: View {
                         .frame(width: 42, height: 42)
                         .background(AppTheme.paper, in: Circle())
                 }
-                .accessibilityLabel("Open Divine Stillness Pro")
+                .accessibilityLabel("Open Bhakti Angan Pro")
             }
         }
         .padding(.horizontal, 20)
