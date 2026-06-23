@@ -37,7 +37,6 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
     }
 
     composeOptions {
@@ -74,9 +73,6 @@ dependencies {
 
     // QR scanning via Google's on-device code scanner (no camera permission needed).
     implementation("com.google.android.gms:play-services-code-scanner:16.1.0")
-
-    // In-app purchase (Ferry Pro). Needs an in-app product configured in Play Console.
-    implementation("com.android.billingclient:billing-ktx:7.1.1")
 
     debugImplementation("androidx.compose.ui:ui-tooling")
 }

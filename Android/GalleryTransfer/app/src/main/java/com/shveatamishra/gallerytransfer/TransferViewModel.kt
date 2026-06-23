@@ -1,10 +1,8 @@
 package com.shveatamishra.gallerytransfer
 
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.Uri
-import com.shveatamishra.gallerytransfer.billing.BillingManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -26,11 +24,6 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
 
     private val prefs = app.getSharedPreferences("gallery_transfer", Context.MODE_PRIVATE)
     private val media = MediaRepository(app)
-    private val billing = BillingManager(app) { pro -> if (pro) updatePro(true) }
-
-    init {
-        billing.connect()
-    }
 
     var host by mutableStateOf(prefs.getString("host", "") ?: "")
         private set
@@ -38,10 +31,6 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         private set
     var themeMode by mutableStateOf(loadThemeMode())
         private set
-    var isPro by mutableStateOf(prefs.getBoolean("pro", false))
-        private set
-
-    private val selectionLimit: Int get() = if (isPro) Int.MAX_VALUE else FREE_LIMIT
 
     var albums by mutableStateOf<List<Album>>(emptyList())
         private set
@@ -105,53 +94,22 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
         prefs.edit().putString("theme", mode.name).apply()
     }
 
-    fun updatePro(value: Boolean) {
-        isPro = value
-        prefs.edit().putBoolean("pro", value).apply()
-    }
-
-    /** Launches the real purchase; falls back to a local unlock in debug builds. */
-    fun startPurchase(activity: Activity) {
-        if (billing.launchPurchase(activity)) return
-        if (BuildConfig.DEBUG) {
-            updatePro(true)
-            status = "Pro unlocked (debug build)."
-        } else {
-            status = "Ferry Pro isn't available yet. Please try again later."
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        billing.endConnection()
-    }
-
     fun toggle(item: MediaItem) {
-        if (selected.containsKey(item.uri)) {
-            selected = selected - item.uri
+        selected = if (selected.containsKey(item.uri)) {
+            selected - item.uri
         } else {
-            if (selected.size >= selectionLimit) {
-                status = "Free limit is $FREE_LIMIT per transfer. Go Pro for unlimited."
-                return
-            }
-            selected = selected + (item.uri to item)
+            selected + (item.uri to item)
         }
     }
 
-    /** Select (or clear) every item taken on one date (Pro is unlimited; Free is capped). */
+    /** Select (or clear) every item taken on one date. */
     fun toggleDateSelection(items: List<MediaItem>) {
         val allSelected = items.all { selected.containsKey(it.uri) }
-        if (allSelected) {
+        selected = if (allSelected) {
             val uris = items.map { it.uri }.toSet()
-            selected = selected.filterKeys { it !in uris }
+            selected.filterKeys { it !in uris }
         } else {
-            val notSelected = items.filter { !selected.containsKey(it.uri) }
-            val room = (selectionLimit - selected.size).coerceAtLeast(0)
-            val toAdd = if (room >= notSelected.size) notSelected else notSelected.take(room)
-            selected = selected + toAdd.associateBy { it.uri }
-            if (toAdd.size < notSelected.size) {
-                status = "Free limit is $FREE_LIMIT per transfer. Go Pro for unlimited."
-            }
+            selected + items.associateBy { it.uri }
         }
     }
 
@@ -347,9 +305,5 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
             .removePrefix("http://")
             .substringBefore("/")
         return "http://$hostPort"
-    }
-
-    companion object {
-        const val FREE_LIMIT = 50
     }
 }

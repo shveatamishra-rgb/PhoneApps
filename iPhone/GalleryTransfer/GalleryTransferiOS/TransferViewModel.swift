@@ -1,9 +1,112 @@
+import Combine
 import CoreTransferable
 import Foundation
 import Photos
 import PhotosUI
+import StoreKit
 import SwiftUI
 import UniformTypeIdentifiers
+
+/// Lifetime free allowance, kept in iCloud key-value storage so it is per-Apple-ID,
+/// syncs across the user's devices, and survives reinstalls. Mirrored to UserDefaults
+/// so it still works locally before the iCloud capability is enabled.
+final class UsageTracker {
+    static let freeLimit = 50
+    private let key = "ferryLifetimeTransfers"
+    private let cloud = NSUbiquitousKeyValueStore.default
+    private let local = UserDefaults.standard
+
+    init() {
+        cloud.synchronize()
+    }
+
+    var count: Int {
+        max(Int(cloud.longLong(forKey: key)), local.integer(forKey: key))
+    }
+
+    var remaining: Int {
+        max(0, Self.freeLimit - count)
+    }
+
+    func increment(by amount: Int = 1) {
+        let updated = count + amount
+        cloud.set(Int64(updated), forKey: key)
+        cloud.synchronize()
+        local.set(updated, forKey: key)
+    }
+}
+
+/// StoreKit 2 wrapper for the non-consumable "Ferry Pro" unlock.
+@MainActor
+final class PurchaseManager: ObservableObject {
+    static let productID = "ferry_pro"
+
+    @Published var isPro = false
+    @Published var product: Product?
+
+    private var updatesTask: Task<Void, Never>?
+
+    init() {
+        updatesTask = listenForTransactions()
+        Task {
+            await loadProduct()
+            await refreshEntitlements()
+        }
+    }
+
+    deinit {
+        updatesTask?.cancel()
+    }
+
+    var priceText: String { product?.displayPrice ?? "" }
+
+    func loadProduct() async {
+        product = try? await Product.products(for: [Self.productID]).first
+    }
+
+    func refreshEntitlements() async {
+        var owned = false
+        for await result in Transaction.currentEntitlements {
+            if case .verified(let transaction) = result,
+               transaction.productID == Self.productID,
+               transaction.revocationDate == nil {
+                owned = true
+            }
+        }
+        isPro = owned
+    }
+
+    func purchase() async {
+        guard let product else { return }
+        guard let result = try? await product.purchase() else { return }
+        if case .success(let verification) = result, case .verified(let transaction) = verification {
+            await transaction.finish()
+            isPro = true
+        }
+    }
+
+    func restore() async {
+        try? await AppStore.sync()
+        await refreshEntitlements()
+    }
+
+    private func listenForTransactions() -> Task<Void, Never> {
+        Task { [weak self] in
+            for await result in Transaction.updates {
+                if case .verified(let transaction) = result {
+                    await transaction.finish()
+                    await self?.refreshEntitlements()
+                }
+            }
+        }
+    }
+}
+
+struct FreeLimitReachedError: LocalizedError {
+    var errorDescription: String? {
+        "The iPhone reached its free limit of \(UsageTracker.freeLimit) lifetime transfers. Ferry Pro unlocks unlimited."
+    }
+}
 
 enum TransferMediaKind: String, Hashable, Sendable {
     case image
@@ -68,9 +171,59 @@ final class TransferViewModel: ObservableObject {
     @Published var isReceiving = false
     @Published var receivingName = ""
     @Published var receiveProgress: Double = 0
+    @Published var isPro = false
+    @Published var lifetimeUsed = 0
+
+    let purchase = PurchaseManager()
+    private let usage = UsageTracker()
+    private var cancellables = Set<AnyCancellable>()
+
+    /// Files the free tier may still transfer (send or receive). Int.max once Pro.
+    var freeRemaining: Int { isPro ? Int.max : usage.remaining }
+    var freeLimit: Int { UsageTracker.freeLimit }
 
     private var server: PhotoTransferServer?
     private let photoBridge = PhotoLibraryBridge()
+
+    init() {
+        lifetimeUsed = usage.count
+        purchase.$isPro
+            .receive(on: RunLoop.main)
+            .sink { [weak self] pro in
+                self?.isPro = pro
+                self?.updateServerAllowance()
+            }
+            .store(in: &cancellables)
+    }
+
+    /// Receive gate: blocks once the free lifetime allowance is used, then records the save.
+    func handleIncomingUpload(_ upload: ReceivedUpload) async throws -> SavedMediaMetadata {
+        if !isPro && usage.remaining <= 0 {
+            throw FreeLimitReachedError()
+        }
+        let metadata = try await photoBridge.saveReceivedMediaToPhotos(upload)
+        recordTransfer()
+        return metadata
+    }
+
+    func recordTransfer(_ amount: Int = 1) {
+        usage.increment(by: amount)
+        lifetimeUsed = usage.count
+        updateServerAllowance()
+    }
+
+    func purchasePro() async {
+        await purchase.purchase()
+    }
+
+    func restorePro() async {
+        await purchase.restore()
+    }
+
+    private func updateServerAllowance() {
+        let allowance: Int? = isPro ? nil : usage.remaining
+        Task { await server?.setDownloadAllowance(allowance) }
+    }
 
     var canWritePhotos: Bool {
         authorizationStatus == .authorized || authorizationStatus == .limited
@@ -168,8 +321,9 @@ final class TransferViewModel: ObservableObject {
             let server = PhotoTransferServer(
                 port: 8899,
                 outgoingFiles: outgoingFiles,
-                onUpload: { [photoBridge] upload in
-                    try await photoBridge.saveReceivedMediaToPhotos(upload)
+                onUpload: { [weak self] upload in
+                    guard let self else { throw CancellationError() }
+                    return try await self.handleIncomingUpload(upload)
                 },
                 onUploadStarted: { [weak self] name in
                     Task { @MainActor in
@@ -188,11 +342,17 @@ final class TransferViewModel: ObservableObject {
                     Task { @MainActor in
                         self?.recordUploadResult(result)
                     }
+                },
+                onDownloadServed: { [weak self] in
+                    Task { @MainActor in
+                        self?.recordTransfer()
+                    }
                 }
             )
 
             try await server.start()
             self.server = server
+            await server.setDownloadAllowance(isPro ? nil : freeRemaining)
             isServerRunning = true
 
             let pin = server.accessPIN

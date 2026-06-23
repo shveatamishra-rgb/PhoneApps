@@ -1,0 +1,28 @@
+{
+  "identifier" : "FERRY_PRO_CONFIG",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "2.99",
+      "familyShareable" : false,
+      "internalID" : "FERRYPRO0001",
+      "localizations" : [
+        {
+          "description" : "Unlimited sending and receiving, straight into Photos with metadata.",
+          "displayName" : "Ferry Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "ferry_pro",
+      "referenceName" : "Ferry Pro",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+  },
+  "subscriptionGroups" : [],
+  "version" : {
+    "major" : 1,
+    "minor" : 0
+  }
+}

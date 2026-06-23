@@ -10,7 +10,6 @@ struct ContentView: View {
     @State private var previewItem: PreviewItem?
     @State private var recentPage = 0
     @State private var showProSheet = false
-    @AppStorage("ferryPro") private var isPro = false
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -49,18 +48,16 @@ struct ContentView: View {
                 AssetPreviewView(localIdentifier: item.id)
             }
             .sheet(isPresented: $showProSheet) {
-                ProUpgradeView(isPro: $isPro, freeLimit: freeSelectionLimit)
+                ProUpgradeView(viewModel: viewModel)
             }
         }
         .tint(.brandPrimary)
         .preferredColorScheme(appTheme.colorScheme)
     }
 
-    private var freeSelectionLimit: Int { 50 }
-
     @ViewBuilder
     private var proButton: some View {
-        if isPro {
+        if viewModel.isPro {
             Label("PRO", systemImage: "crown.fill")
                 .labelStyle(.titleAndIcon)
                 .font(.caption.weight(.bold))
@@ -240,7 +237,7 @@ struct ContentView: View {
 
             PhotosPicker(
                 selection: $selectedPickerItems,
-                maxSelectionCount: isPro ? nil : freeSelectionLimit,
+                maxSelectionCount: nil,
                 matching: .any(of: [.images, .videos]),
                 preferredItemEncoding: .current
             ) {
@@ -435,8 +432,7 @@ private struct PreviewItem: Identifiable {
 }
 
 private struct ProUpgradeView: View {
-    @Binding var isPro: Bool
-    let freeLimit: Int
+    @ObservedObject var viewModel: TransferViewModel
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -450,39 +446,40 @@ private struct ProUpgradeView: View {
                         .font(.largeTitle.weight(.bold))
                 }
 
-                Text("Free includes up to \(freeLimit) files per transfer.")
+                Text("Free includes \(viewModel.freeLimit) lifetime transfers. You have \(max(0, viewModel.freeRemaining)) left.")
                     .foregroundStyle(.secondary)
 
                 VStack(alignment: .leading, spacing: 12) {
-                    benefit("infinity", "Unlimited files per transfer")
-                    benefit("sparkles", "More premium features coming soon")
+                    benefit("infinity", "Unlimited sending and receiving")
+                    benefit("photo.on.rectangle.angled", "Straight into Photos, metadata intact")
                 }
 
-                if isPro {
+                if viewModel.isPro {
                     Label("You're on Pro. Thank you!", systemImage: "checkmark.seal.fill")
                         .foregroundStyle(Color.brandPrimary)
                 }
 
                 Spacer()
 
-                if isPro {
+                if viewModel.isPro {
                     Button { dismiss() } label: {
                         Text("Done").frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.bordered)
                 } else {
                     Button {
-                        isPro = true
-                        dismiss()
+                        Task { await viewModel.purchasePro() }
                     } label: {
-                        Text("Unlock Pro").frame(maxWidth: .infinity)
+                        Text(unlockLabel).frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Text("Restore and real in-app purchase are coming soon.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .frame(maxWidth: .infinity, alignment: .center)
+                    Button {
+                        Task { await viewModel.restorePro() }
+                    } label: {
+                        Text("Restore Purchase").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderless)
                 }
             }
             .padding(20)
@@ -493,8 +490,16 @@ private struct ProUpgradeView: View {
                     Button("Close") { dismiss() }
                 }
             }
+            .onChange(of: viewModel.isPro) { _, pro in
+                if pro { dismiss() }
+            }
         }
         .tint(.brandPrimary)
+    }
+
+    private var unlockLabel: String {
+        let price = viewModel.purchase.priceText
+        return price.isEmpty ? "Unlock Ferry Pro" : "Unlock Ferry Pro - \(price)"
     }
 
     private func benefit(_ icon: String, _ text: String) -> some View {

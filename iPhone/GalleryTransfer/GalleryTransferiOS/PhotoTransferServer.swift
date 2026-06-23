@@ -13,6 +13,9 @@ actor PhotoTransferServer {
     private let onUploadStarted: @Sendable (String) -> Void
     private let onUploadProgress: @Sendable (Double) -> Void
     private let onUploadFinished: @Sendable (UploadResult) -> Void
+    private let onDownloadServed: @Sendable () -> Void
+    /// Remaining free downloads the iPhone may serve. nil = unlimited (Pro).
+    private var downloadAllowance: Int?
 
     init(
         port: UInt16,
@@ -20,7 +23,8 @@ actor PhotoTransferServer {
         onUpload: @escaping @Sendable (ReceivedUpload) async throws -> SavedMediaMetadata,
         onUploadStarted: @escaping @Sendable (String) -> Void,
         onUploadProgress: @escaping @Sendable (Double) -> Void,
-        onUploadFinished: @escaping @Sendable (UploadResult) -> Void
+        onUploadFinished: @escaping @Sendable (UploadResult) -> Void,
+        onDownloadServed: @escaping @Sendable () -> Void
     ) {
         self.port = port
         self.accessPIN = Self.makeAccessPIN()
@@ -29,6 +33,11 @@ actor PhotoTransferServer {
         self.onUploadStarted = onUploadStarted
         self.onUploadProgress = onUploadProgress
         self.onUploadFinished = onUploadFinished
+        self.onDownloadServed = onDownloadServed
+    }
+
+    func setDownloadAllowance(_ value: Int?) {
+        downloadAllowance = value
     }
 
     private static func makeAccessPIN() -> String {
@@ -322,6 +331,14 @@ actor PhotoTransferServer {
             return
         }
 
+        if let allowance = downloadAllowance, allowance <= 0 {
+            await send(
+                .unauthorized("The iPhone reached its free limit of 50 lifetime transfers. Ferry Pro unlocks unlimited."),
+                over: connection
+            )
+            return
+        }
+
         do {
             let fileSize = try fileByteCount(at: file.url)
             let headers = [
@@ -331,6 +348,10 @@ actor PhotoTransferServer {
                 "Connection": "close"
             ]
             try await streamFile(at: file.url, status: "HTTP/1.1 200 OK", headers: headers, over: connection)
+            if downloadAllowance != nil {
+                downloadAllowance? -= 1
+            }
+            onDownloadServed()
         } catch {
             await send(.serverError("Could not read the original photo file."), over: connection)
         }
