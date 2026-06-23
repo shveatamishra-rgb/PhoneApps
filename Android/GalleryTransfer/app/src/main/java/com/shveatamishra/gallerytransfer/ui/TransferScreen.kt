@@ -1,6 +1,7 @@
 package com.shveatamishra.gallerytransfer.ui
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -196,7 +197,7 @@ fun TransferScreen(viewModel: TransferViewModel) {
             UpgradeDialog(
                 isPro = viewModel.isPro,
                 onUnlock = {
-                    viewModel.updatePro(true)
+                    (context as? Activity)?.let { viewModel.startPurchase(it) }
                     showUpgrade = false
                 },
                 onDismiss = { showUpgrade = false },

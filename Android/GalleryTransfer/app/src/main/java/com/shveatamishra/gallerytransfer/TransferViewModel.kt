@@ -1,8 +1,10 @@
 package com.shveatamishra.gallerytransfer
 
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.net.Uri
+import com.shveatamishra.gallerytransfer.billing.BillingManager
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,6 +26,11 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
 
     private val prefs = app.getSharedPreferences("gallery_transfer", Context.MODE_PRIVATE)
     private val media = MediaRepository(app)
+    private val billing = BillingManager(app) { pro -> if (pro) updatePro(true) }
+
+    init {
+        billing.connect()
+    }
 
     var host by mutableStateOf(prefs.getString("host", "") ?: "")
         private set
@@ -101,6 +108,22 @@ class TransferViewModel(app: Application) : AndroidViewModel(app) {
     fun updatePro(value: Boolean) {
         isPro = value
         prefs.edit().putBoolean("pro", value).apply()
+    }
+
+    /** Launches the real purchase; falls back to a local unlock in debug builds. */
+    fun startPurchase(activity: Activity) {
+        if (billing.launchPurchase(activity)) return
+        if (BuildConfig.DEBUG) {
+            updatePro(true)
+            status = "Pro unlocked (debug build)."
+        } else {
+            status = "Ferry Pro isn't available yet. Please try again later."
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        billing.endConnection()
     }
 
     fun toggle(item: MediaItem) {

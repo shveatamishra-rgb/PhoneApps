@@ -9,6 +9,8 @@ struct ContentView: View {
     @State private var selectedPickerItems: [PhotosPickerItem] = []
     @State private var previewItem: PreviewItem?
     @State private var recentPage = 0
+    @State private var showProSheet = false
+    @AppStorage("ferryPro") private var isPro = false
     @AppStorage("appTheme") private var appTheme: AppTheme = .system
 
     var body: some View {
@@ -29,6 +31,9 @@ struct ContentView: View {
             .navigationTitle("Ferry")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
+                    proButton
+                }
+                ToolbarItem(placement: .topBarTrailing) {
                     themeMenu
                 }
             }
@@ -43,9 +48,32 @@ struct ContentView: View {
             .sheet(item: $previewItem) { item in
                 AssetPreviewView(localIdentifier: item.id)
             }
+            .sheet(isPresented: $showProSheet) {
+                ProUpgradeView(isPro: $isPro, freeLimit: freeSelectionLimit)
+            }
         }
         .tint(.brandPrimary)
         .preferredColorScheme(appTheme.colorScheme)
+    }
+
+    private var freeSelectionLimit: Int { 50 }
+
+    @ViewBuilder
+    private var proButton: some View {
+        if isPro {
+            Label("PRO", systemImage: "crown.fill")
+                .labelStyle(.titleAndIcon)
+                .font(.caption.weight(.bold))
+                .foregroundStyle(Color.brandAccent)
+        } else {
+            Button {
+                showProSheet = true
+            } label: {
+                Image(systemName: "crown")
+                    .foregroundStyle(Color.brandAccent)
+                    .accessibilityLabel("Go Pro")
+            }
+        }
     }
 
     private var themeMenu: some View {
@@ -212,7 +240,7 @@ struct ContentView: View {
 
             PhotosPicker(
                 selection: $selectedPickerItems,
-                maxSelectionCount: nil,
+                maxSelectionCount: isPro ? nil : freeSelectionLimit,
                 matching: .any(of: [.images, .videos]),
                 preferredItemEncoding: .current
             ) {
@@ -404,6 +432,80 @@ private func formatBytes(_ value: Int64) -> String {
 
 private struct PreviewItem: Identifiable {
     let id: String
+}
+
+private struct ProUpgradeView: View {
+    @Binding var isPro: Bool
+    let freeLimit: Int
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            VStack(alignment: .leading, spacing: 18) {
+                HStack(spacing: 12) {
+                    Image(systemName: "crown.fill")
+                        .font(.largeTitle)
+                        .foregroundStyle(Color.brandAccent)
+                    Text("Ferry Pro")
+                        .font(.largeTitle.weight(.bold))
+                }
+
+                Text("Free includes up to \(freeLimit) files per transfer.")
+                    .foregroundStyle(.secondary)
+
+                VStack(alignment: .leading, spacing: 12) {
+                    benefit("infinity", "Unlimited files per transfer")
+                    benefit("sparkles", "More premium features coming soon")
+                }
+
+                if isPro {
+                    Label("You're on Pro. Thank you!", systemImage: "checkmark.seal.fill")
+                        .foregroundStyle(Color.brandPrimary)
+                }
+
+                Spacer()
+
+                if isPro {
+                    Button { dismiss() } label: {
+                        Text("Done").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                } else {
+                    Button {
+                        isPro = true
+                        dismiss()
+                    } label: {
+                        Text("Unlock Pro").frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Text("Restore and real in-app purchase are coming soon.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                }
+            }
+            .padding(20)
+            .navigationTitle("")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Close") { dismiss() }
+                }
+            }
+        }
+        .tint(.brandPrimary)
+    }
+
+    private func benefit(_ icon: String, _ text: String) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: icon)
+                .foregroundStyle(Color.brandAccent)
+                .frame(width: 24)
+            Text(text)
+            Spacer()
+        }
+    }
 }
 
 private struct AssetPreviewView: View {
