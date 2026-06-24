@@ -10,9 +10,8 @@ videos. This app reads the **true original** (`MediaStore.setRequireOriginal`, w
 `ACCESS_MEDIA_LOCATION`) and the real `DISPLAY_NAME`, then uploads to the iPhone's
 existing PIN-protected `/upload` endpoint.
 
-> The display name, project folder (`Android/Ferry`) and Gradle root are all **Ferry**.
-> The package / `applicationId` still reads `com.shveatamishra.gallerytransfer` - kept
-> deliberately as the Play Store identity (rename it before first publish if desired).
+> Fully rebranded to **Ferry**: display name, project folder (`Android/Ferry`), Gradle
+> root, package (`com.shveatamishra.ferry`) and `applicationId` (`com.shveatamishra.ferry`).
 
 ## Status - first cut (send only)
 
@@ -37,7 +36,7 @@ JDK 21, and SDK platform 36).
 3. Run on a device/emulator (min SDK 29 / Android 10).
 
 ```
-applicationId  com.shveatamishra.gallerytransfer
+applicationId  com.shveatamishra.ferry
 minSdk 29   targetSdk 34   compileSdk 36 (only platform installed here; AGP warning suppressed)
 Kotlin 1.9.24 · AGP 8.5.2 · Gradle 8.7 · Compose BOM 2024.09.00 · OkHttp 4.12
 ```

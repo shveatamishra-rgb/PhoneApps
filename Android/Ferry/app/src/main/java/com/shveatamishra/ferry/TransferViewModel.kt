@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer
+package com.shveatamishra.ferry
 
 import android.app.Application
 import android.content.Context
@@ -8,12 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.shveatamishra.gallerytransfer.media.MediaRepository
-import com.shveatamishra.gallerytransfer.model.Album
-import com.shveatamishra.gallerytransfer.model.MediaItem
-import com.shveatamishra.gallerytransfer.model.RemoteFile
-import com.shveatamishra.gallerytransfer.net.TransferClient
-import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
+import com.shveatamishra.ferry.media.MediaRepository
+import com.shveatamishra.ferry.model.Album
+import com.shveatamishra.ferry.model.MediaItem
+import com.shveatamishra.ferry.model.RemoteFile
+import com.shveatamishra.ferry.net.TransferClient
+import com.shveatamishra.ferry.ui.theme.ThemeMode
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

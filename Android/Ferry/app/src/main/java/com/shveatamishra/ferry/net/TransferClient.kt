@@ -1,7 +1,7 @@
-package com.shveatamishra.gallerytransfer.net
+package com.shveatamishra.ferry.net
 
 import android.net.Uri
-import com.shveatamishra.gallerytransfer.model.RemoteFile
+import com.shveatamishra.ferry.model.RemoteFile
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient

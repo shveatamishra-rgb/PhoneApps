@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer
+package com.shveatamishra.ferry
 
 import android.app.Application
 import coil.ImageLoader

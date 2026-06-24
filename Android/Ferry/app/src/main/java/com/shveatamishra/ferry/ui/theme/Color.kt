@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer.ui.theme
+package com.shveatamishra.ferry.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

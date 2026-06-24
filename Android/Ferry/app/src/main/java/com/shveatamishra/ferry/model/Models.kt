@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer.model
+package com.shveatamishra.ferry.model
 
 import android.net.Uri
 

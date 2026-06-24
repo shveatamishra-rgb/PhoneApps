@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer.media
+package com.shveatamishra.ferry.media
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -9,11 +9,11 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.exifinterface.media.ExifInterface
-import com.shveatamishra.gallerytransfer.model.Album
-import com.shveatamishra.gallerytransfer.model.MediaItem
-import com.shveatamishra.gallerytransfer.model.MediaKind
-import com.shveatamishra.gallerytransfer.model.RemoteFile
-import com.shveatamishra.gallerytransfer.net.TransferClient
+import com.shveatamishra.ferry.model.Album
+import com.shveatamishra.ferry.model.MediaItem
+import com.shveatamishra.ferry.model.MediaKind
+import com.shveatamishra.ferry.model.RemoteFile
+import com.shveatamishra.ferry.net.TransferClient
 import java.io.IOException
 import java.io.InputStream
 import java.text.SimpleDateFormat

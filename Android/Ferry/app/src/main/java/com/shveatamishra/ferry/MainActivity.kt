@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer
+package com.shveatamishra.ferry
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.shveatamishra.gallerytransfer.ui.TransferScreen
-import com.shveatamishra.gallerytransfer.ui.theme.FerryTheme
+import com.shveatamishra.ferry.ui.TransferScreen
+import com.shveatamishra.ferry.ui.theme.FerryTheme
 
 class MainActivity : ComponentActivity() {
 

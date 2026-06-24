@@ -1,4 +1,4 @@
-package com.shveatamishra.gallerytransfer.ui
+package com.shveatamishra.ferry.ui
 
 import android.Manifest
 import android.content.Context
@@ -86,13 +86,13 @@ import coil.compose.AsyncImage
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.shveatamishra.gallerytransfer.TransferMode
-import com.shveatamishra.gallerytransfer.TransferViewModel
-import com.shveatamishra.gallerytransfer.model.Album
-import com.shveatamishra.gallerytransfer.model.MediaItem
-import com.shveatamishra.gallerytransfer.model.MediaKind
-import com.shveatamishra.gallerytransfer.model.RemoteFile
-import com.shveatamishra.gallerytransfer.ui.theme.ThemeMode
+import com.shveatamishra.ferry.TransferMode
+import com.shveatamishra.ferry.TransferViewModel
+import com.shveatamishra.ferry.model.Album
+import com.shveatamishra.ferry.model.MediaItem
+import com.shveatamishra.ferry.model.MediaKind
+import com.shveatamishra.ferry.model.RemoteFile
+import com.shveatamishra.ferry.ui.theme.ThemeMode
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date

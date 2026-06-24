@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.shveatamishra.gallerytransfer"
+    namespace = "com.shveatamishra.ferry"
     compileSdk = 36
     buildToolsVersion = "36.1.0"
 
     defaultConfig {
-        applicationId = "com.shveatamishra.gallerytransfer"
+        applicationId = "com.shveatamishra.ferry"
         minSdk = 29
         targetSdk = 34
         versionCode = 1

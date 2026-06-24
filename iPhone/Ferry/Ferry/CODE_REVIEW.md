@@ -3,7 +3,7 @@
 > Handoff doc for a fresh chat. Review done 2026-06-15. **All 5 findings fixed 2026-06-15** - see checked items below. Re-verified with `./build.sh` → **BUILD SUCCEEDED**. On-device pass still recommended (local-network + Photos are limited in the simulator).
 
 ## What this app is
-SwiftUI iOS app (iOS 17+, bundle `com.shveatamishra.gallerytransfer.iphone`) that moves photo/video **originals** between Android and iPhone over local Wi-Fi. It runs a local HTTP server on port **8899**; Android uploads (saved into Photos with PhotoKit) and downloads iPhone-exported originals. A native **Ferry Android app** (`Android/Ferry`) is now the primary client; the browser page still works as a fallback.
+SwiftUI iOS app (iOS 17+, bundle `com.shveatamishra.ferry`) that moves photo/video **originals** between Android and iPhone over local Wi-Fi. It runs a local HTTP server on port **8899**; Android uploads (saved into Photos with PhotoKit) and downloads iPhone-exported originals. A native **Ferry Android app** (`Android/Ferry`) is now the primary client; the browser page still works as a fallback.
 
 Key files:
 - `PhotoTransferServer.swift` - actor-based HTTP server (routing, upload/download, chunked + fixed-length body parsing, the served HTML page).
