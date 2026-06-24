@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.shveatamishra.gallerytransfer.ui.TransferScreen
-import com.shveatamishra.gallerytransfer.ui.theme.GalleryTransferTheme
+import com.shveatamishra.gallerytransfer.ui.theme.FerryTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GalleryTransferTheme(themeMode = viewModel.themeMode) {
+            FerryTheme(themeMode = viewModel.themeMode) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     TransferScreen(viewModel)
                 }

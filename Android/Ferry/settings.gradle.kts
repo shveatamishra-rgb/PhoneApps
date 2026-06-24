@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GalleryTransfer"
+rootProject.name = "Ferry"
 include(":app")

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B0000012D0C000100000001 /* GalleryTransferiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000001 /* GalleryTransferiOSApp.swift */; };
+		0B0000012D0C000100000001 /* FerryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000001 /* FerryApp.swift */; };
 		0B0000012D0C000100000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000002 /* ContentView.swift */; };
 		0B0000012D0C000100000003 /* TransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000003 /* TransferViewModel.swift */; };
 		0B0000012D0C000100000004 /* PhotoLibraryBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000004 /* PhotoLibraryBridge.swift */; };
@@ -24,7 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0B0000012D0C000000000001 /* GalleryTransferiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryTransferiOSApp.swift; sourceTree = "<group>"; };
+		0B0000012D0C000000000001 /* FerryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FerryApp.swift; sourceTree = "<group>"; };
 		0B0000012D0C000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0B0000012D0C000000000003 /* TransferViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferViewModel.swift; sourceTree = "<group>"; };
 		0B0000012D0C000000000004 /* PhotoLibraryBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryBridge.swift; sourceTree = "<group>"; };
@@ -33,7 +33,7 @@
 		0B0000012D0C000000000007 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0B0000012D0C000000000008 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		0B0000012D0C000000000009 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0B0000012D0C00000000000A /* GalleryTransferiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GalleryTransferiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0B0000012D0C00000000000A /* Ferry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ferry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0B0000012D0C00000000000C /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		0B0000012D0C00000000000D /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
 		0B0000012D0C00000000000E /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
@@ -62,16 +62,16 @@
 		0B0000012D0C000300000001 = {
 			isa = PBXGroup;
 			children = (
-				0B0000012D0C000300000002 /* GalleryTransferiOS */,
+				0B0000012D0C000300000002 /* Ferry */,
 				0B0000012D0C000300000003 /* Frameworks */,
 				0B0000012D0C000300000004 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		0B0000012D0C000300000002 /* GalleryTransferiOS */ = {
+		0B0000012D0C000300000002 /* Ferry */ = {
 			isa = PBXGroup;
 			children = (
-				0B0000012D0C000000000001 /* GalleryTransferiOSApp.swift */,
+				0B0000012D0C000000000001 /* FerryApp.swift */,
 				0B0000012D0C000000000002 /* ContentView.swift */,
 				0B0000012D0C000000000003 /* TransferViewModel.swift */,
 				0B0000012D0C000000000004 /* PhotoLibraryBridge.swift */,
@@ -81,7 +81,7 @@
 				0B0000012D0C000000000008 /* PrivacyInfo.xcprivacy */,
 				0B0000012D0C000000000009 /* Info.plist */,
 			);
-			path = GalleryTransferiOS;
+			path = Ferry;
 			sourceTree = "<group>";
 		};
 		0B0000012D0C000300000003 /* Frameworks */ = {
@@ -100,7 +100,7 @@
 		0B0000012D0C000300000004 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0B0000012D0C00000000000A /* GalleryTransferiOS.app */,
+				0B0000012D0C00000000000A /* Ferry.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0B0000012D0C000400000001 /* GalleryTransferiOS */ = {
+		0B0000012D0C000400000001 /* Ferry */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0B0000012D0C000800000002 /* Build configuration list for PBXNativeTarget "GalleryTransferiOS" */;
+			buildConfigurationList = 0B0000012D0C000800000002 /* Build configuration list for PBXNativeTarget "Ferry" */;
 			buildPhases = (
 				0B0000012D0C000500000001 /* Sources */,
 				0B0000012D0C000200000001 /* Frameworks */,
@@ -120,9 +120,9 @@
 			);
 			dependencies = (
 			);
-			name = GalleryTransferiOS;
-			productName = GalleryTransferiOS;
-			productReference = 0B0000012D0C00000000000A /* GalleryTransferiOS.app */;
+			name = Ferry;
+			productName = Ferry;
+			productReference = 0B0000012D0C00000000000A /* Ferry.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -140,7 +140,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0B0000012D0C000800000001 /* Build configuration list for PBXProject "GalleryTransferiOS" */;
+			buildConfigurationList = 0B0000012D0C000800000001 /* Build configuration list for PBXProject "Ferry" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -153,7 +153,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0B0000012D0C000400000001 /* GalleryTransferiOS */,
+				0B0000012D0C000400000001 /* Ferry */,
 			);
 		};
 /* End PBXProject section */
@@ -175,7 +175,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B0000012D0C000100000001 /* GalleryTransferiOSApp.swift in Sources */,
+				0B0000012D0C000100000001 /* FerryApp.swift in Sources */,
 				0B0000012D0C000100000002 /* ContentView.swift in Sources */,
 				0B0000012D0C000100000003 /* TransferViewModel.swift in Sources */,
 				0B0000012D0C000100000004 /* PhotoLibraryBridge.swift in Sources */,
@@ -310,7 +310,7 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 45QWJVLL5D;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = GalleryTransferiOS/Info.plist;
+				INFOPLIST_FILE = Ferry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -338,7 +338,7 @@
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = 45QWJVLL5D;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = GalleryTransferiOS/Info.plist;
+				INFOPLIST_FILE = Ferry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -360,7 +360,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0B0000012D0C000800000001 /* Build configuration list for PBXProject "GalleryTransferiOS" */ = {
+		0B0000012D0C000800000001 /* Build configuration list for PBXProject "Ferry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0B0000012D0C000900000001 /* Debug */,
@@ -369,7 +369,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0B0000012D0C000800000002 /* Build configuration list for PBXNativeTarget "GalleryTransferiOS" */ = {
+		0B0000012D0C000800000002 /* Build configuration list for PBXNativeTarget "Ferry" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0B0000012D0C000900000003 /* Debug */,

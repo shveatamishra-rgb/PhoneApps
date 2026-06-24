@@ -147,7 +147,7 @@ actor PhotoTransferServer {
 
         do {
             let uploadDirectory = FileManager.default.temporaryDirectory
-                .appendingPathComponent("GalleryTransferUploads", isDirectory: true)
+                .appendingPathComponent("FerryUploads", isDirectory: true)
                 .appendingPathComponent(UUID().uuidString, isDirectory: true)
             try FileManager.default.createDirectory(at: uploadDirectory, withIntermediateDirectories: true)
             defer {
@@ -579,7 +579,7 @@ actor PhotoTransferServer {
             <section id="installBanner" class="install" style="display:none">
               <h2>Get the Android app</h2>
               <p>Install the companion app to keep photo <strong>location</strong> and original <strong>filenames</strong> - a browser upload loses both.</p>
-              <a class="button" href="https://github.com/shveatamishra-rgb/PhoneApps/releases/latest/download/gallery-transfer.apk">Download Android app (.apk)</a>
+              <a class="button" href="https://github.com/shveatamishra-rgb/PhoneApps/releases/latest/download/ferry.apk">Download Android app (.apk)</a>
             </section>
 
             <section id="pinSection" style="display:none">

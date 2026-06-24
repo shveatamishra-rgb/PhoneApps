@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct GalleryTransferiOSApp: App {
+struct FerryApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

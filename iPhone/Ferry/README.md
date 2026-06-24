@@ -15,21 +15,21 @@
 
 Android to iPhone can land directly in iPhone Photos because this iOS app writes received files with PhotoKit.
 
-iPhone to Android is served as original file downloads from the iPhone. Whether those downloads appear directly in the Android gallery depends on the Android browser/device download behavior. A companion Android app would be needed to guarantee saving directly into Android MediaStore/Gallery every time.
+iPhone to Android is served as original file downloads from the iPhone. The companion **Ferry Android app** (`Android/Ferry`) saves them straight into the Android MediaStore/Gallery with location and capture metadata preserved. A plain browser can still download the files, but only the native app guarantees gallery placement and metadata every time.
 
 ## Build
 
-Open `GalleryTransferiOS.xcodeproj` in Xcode and run the `GalleryTransferiOS` target on a physical iPhone. A real device is recommended because local-network receiving and Photos saving are limited in the simulator.
+Open `Ferry.xcodeproj` in Xcode and run the `Ferry` target on a physical iPhone. A real device is recommended because local-network receiving and Photos saving are limited in the simulator.
 
 From the command line:
 
 ```zsh
-./build-gallery-transfer.sh
+./build.sh
 ```
 
 ## Use
 
-1. Open Gallery Transfer on the iPhone.
+1. Open Ferry on the iPhone.
 2. Allow Photos access.
 3. Tap **Start Receiver**.
 4. Open the shown `http://...:8899` address on Android while both phones are on the same Wi-Fi.

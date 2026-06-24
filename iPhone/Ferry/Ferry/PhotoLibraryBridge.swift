@@ -69,12 +69,12 @@ struct PhotoLibraryBridge {
 
     private var exportDirectory: URL {
         FileManager.default.temporaryDirectory
-            .appendingPathComponent("GalleryTransferOutgoing", isDirectory: true)
+            .appendingPathComponent("FerryOutgoing", isDirectory: true)
     }
 
     private var pickedDirectory: URL {
         FileManager.default.temporaryDirectory
-            .appendingPathComponent("GalleryTransferPicked", isDirectory: true)
+            .appendingPathComponent("FerryPicked", isDirectory: true)
     }
 
     /// Resets the outgoing staging area. Call once before exporting a fresh selection.

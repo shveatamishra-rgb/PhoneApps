@@ -2,16 +2,16 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-SCHEME="${SCHEME:-GalleryTransferiOS}"
+SCHEME="${SCHEME:-Ferry}"
 CONFIGURATION="${CONFIGURATION:-Debug}"
 SDK="${SDK:-iphonesimulator}"
 CODE_SIGNING_ALLOWED="${CODE_SIGNING_ALLOWED:-NO}"
-BUILD_ROOT="${GALLERY_TRANSFER_IOS_BUILD_DIR:-/private/tmp/GalleryTransferiOSBuild}"
-DERIVED_DATA_PATH="${GALLERY_TRANSFER_IOS_DERIVED_DATA:-/private/tmp/GalleryTransferiOSDerivedData}"
-MODULE_CACHE_PATH="${GALLERY_TRANSFER_IOS_MODULE_CACHE:-/private/tmp/GalleryTransferiOSModuleCache}"
+BUILD_ROOT="${FERRY_BUILD_DIR:-/private/tmp/FerryBuild}"
+DERIVED_DATA_PATH="${FERRY_DERIVED_DATA:-/private/tmp/FerryDerivedData}"
+MODULE_CACHE_PATH="${FERRY_MODULE_CACHE:-/private/tmp/FerryModuleCache}"
 
 xcodebuild \
-  -project "$ROOT_DIR/GalleryTransferiOS.xcodeproj" \
+  -project "$ROOT_DIR/Ferry.xcodeproj" \
   -scheme "$SCHEME" \
   -configuration "$CONFIGURATION" \
   -sdk "$SDK" \

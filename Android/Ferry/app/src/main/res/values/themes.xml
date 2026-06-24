@@ -2,7 +2,7 @@
 <resources>
     <!-- Compose draws all UI colors; this window theme just covers pre-Compose paint.
          DeviceDefault.DayNight (API 29+) follows the system light/dark setting. -->
-    <style name="Theme.GalleryTransfer" parent="android:Theme.DeviceDefault.DayNight">
+    <style name="Theme.Ferry" parent="android:Theme.DeviceDefault.DayNight">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

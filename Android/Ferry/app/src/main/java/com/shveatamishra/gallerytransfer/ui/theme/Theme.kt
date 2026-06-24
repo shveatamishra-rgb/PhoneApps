@@ -39,7 +39,7 @@ private val DarkColors = darkColorScheme(
 )
 
 @Composable
-fun GalleryTransferTheme(themeMode: ThemeMode, content: @Composable () -> Unit) {
+fun FerryTheme(themeMode: ThemeMode, content: @Composable () -> Unit) {
     val dark = when (themeMode) {
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
         ThemeMode.LIGHT -> false

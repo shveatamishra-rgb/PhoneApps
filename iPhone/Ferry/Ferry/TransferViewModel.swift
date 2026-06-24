@@ -138,7 +138,7 @@ struct PickedMediaFile: Transferable {
     static var transferRepresentation: some TransferRepresentation {
         FileRepresentation(importedContentType: .item) { received in
             let directory = FileManager.default.temporaryDirectory
-                .appendingPathComponent("GalleryTransferPicked", isDirectory: true)
+                .appendingPathComponent("FerryPicked", isDirectory: true)
                 .appendingPathComponent(UUID().uuidString, isDirectory: true)
             try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
 

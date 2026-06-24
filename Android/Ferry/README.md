@@ -10,8 +10,9 @@ videos. This app reads the **true original** (`MediaStore.setRequireOriginal`, w
 `ACCESS_MEDIA_LOCATION`) and the real `DISPLAY_NAME`, then uploads to the iPhone's
 existing PIN-protected `/upload` endpoint.
 
-> The display name is **Ferry**; the project folder and package id still read
-> `gallerytransfer` (internal only - safe to rename later).
+> The display name, project folder (`Android/Ferry`) and Gradle root are all **Ferry**.
+> The package / `applicationId` still reads `com.shveatamishra.gallerytransfer` - kept
+> deliberately as the Play Store identity (rename it before first publish if desired).
 
 ## Status - first cut (send only)
 
@@ -29,7 +30,7 @@ existing PIN-protected `/upload` endpoint.
 Compiles to a debug APK (verified 2026-06-15 with the Gradle wrapper, Android Studio's
 JDK 21, and SDK platform 36).
 
-1. **Open** `Android/GalleryTransfer` in Android Studio and let it sync, **or** from a
+1. **Open** `Android/Ferry` in Android Studio and let it sync, **or** from a
    terminal: `./gradlew :app:assembleDebug` (the wrapper is committed).
    - Needs a `local.properties` with `sdk.dir=/path/to/Android/sdk` (Android Studio
      writes this automatically; it's gitignored).
