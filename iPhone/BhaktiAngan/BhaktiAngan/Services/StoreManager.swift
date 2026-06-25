@@ -3,7 +3,7 @@ import StoreKit
 
 @MainActor
 final class StoreManager: ObservableObject {
-    static let monthlyID = "in.bhaktiangan.app.pro.monthly"
+    static let monthlyID = "in.bhaktiangan.app.pro.monthly2"  // .pro.monthly was burned in ASC (created + deleted; Apple reserves IDs permanently)
     static let yearlyID = "in.bhaktiangan.app.pro.yearly"
     static let lifetimeID = "in.bhaktiangan.app.pro.lifetime"
 

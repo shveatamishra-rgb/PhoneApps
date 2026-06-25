@@ -10,7 +10,7 @@ the app** — use them verbatim so the paywall matches.
 
 | Plan | Where in ASC | Type | Product ID | Price (US) | India |
 | --- | --- | --- | --- | --- | --- |
-| **Monthly** | Subscriptions | Auto-renewable | `in.bhaktiangan.app.pro.monthly` | **$4.99 / mo** | ₹149 |
+| **Monthly** | Subscriptions | Auto-renewable | `in.bhaktiangan.app.pro.monthly2` | **$4.99 / mo** | ₹149 |
 | **Annual** | Subscriptions | Auto-renewable (+ 7-day free trial) | `in.bhaktiangan.app.pro.yearly` | **$29.99 / yr** | ₹999 |
 | **Lifetime** | In-App Purchases | Non-Consumable (one-time) | `in.bhaktiangan.app.pro.lifetime` | **$39.99** | ₹1,499 |
 
@@ -37,7 +37,10 @@ under "Monetization").
 ### A2. Add the Monthly subscription
 1. Inside the `Bhakti Angan Pro` group → **Create Subscription**.
 2. **Reference Name:** `Bhakti Angan Pro Monthly`
-   **Product ID:** `in.bhaktiangan.app.pro.monthly` → **Create**.
+   **Product ID:** `in.bhaktiangan.app.pro.monthly2` → **Create**.
+   > Note: the original `...pro.monthly` was created then deleted, and Apple
+   > reserves Product IDs permanently — so we use `...pro.monthly2`. This matches
+   > the app code; do not use the old `...pro.monthly`.
 3. **Subscription Duration:** `1 Month`.
 4. **Subscription Prices** → **Add Subscription Price** →
    - Country: **United States** → price **$4.99** → **Next**.
@@ -46,7 +49,7 @@ under "Monetization").
      `APP_STORE_METADATA.md`) before confirming.
 5. **App Store Localization** (English U.S.):
    - **Display Name:** `Bhakti Angan Pro (Monthly)`
-   - **Description:** `Full access to every darshan, all mantras, and unlimited wallpaper saves.`
+   - **Description (≤55 chars):** `Full darshan library, all mantras, unlimited saves`
 6. **Review Information → App Store Promotion / Review Screenshot:** upload
    `Docs/Screenshots/v1/05-paywall.png` (a purchase screenshot is required).
 7. **Save.**
@@ -60,7 +63,7 @@ Same group → **Create Subscription** again:
    (India **₹999**).
 4. **Localization (en-US):**
    - **Display Name:** `Bhakti Angan Pro (Annual)`
-   - **Description:** `Best value — a full year of every darshan, all mantras, and unlimited saves.`
+   - **Description (≤55 chars):** `Best value: full year of darshan, mantras, saves`
 5. **Review Screenshot:** `05-paywall.png`.
 6. **Save.**
 
@@ -111,7 +114,7 @@ Subscriptions).
 3. **Price:** United States **$39.99** → confirm worldwide (India **₹1,499**).
 4. **Localization (en-US):**
    - **Display Name:** `Bhakti Angan Pro (Lifetime)`
-   - **Description:** `Unlock the complete Bhakti Angan collection forever — one-time purchase, no subscription.`
+   - **Description (≤55 chars):** `Unlock the complete collection forever`
 5. **Review Screenshot:** `05-paywall.png`.
 6. **Save.**
 

@@ -44,7 +44,7 @@ Create a subscription group: **`Bhakti Angan Pro`**, then:
 
 | Product | Type | Product ID | US price | India price |
 | --- | --- | --- | --- | --- |
-| Pro Monthly | Auto-renewable subscription | `in.bhaktiangan.app.pro.monthly` | $4.99 | ₹149 |
+| Pro Monthly | Auto-renewable subscription | `in.bhaktiangan.app.pro.monthly2` | $4.99 | ₹149 |
 | Pro Annual | Auto-renewable subscription | `in.bhaktiangan.app.pro.yearly` | $29.99 | ₹999 |
 | Pro Lifetime | Non-consumable | `in.bhaktiangan.app.pro.lifetime` | $39.99 | ₹1,499 |
 
