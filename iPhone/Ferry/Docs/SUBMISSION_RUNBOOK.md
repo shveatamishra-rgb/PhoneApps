@@ -262,10 +262,13 @@ Already live.
 
 ## H. Screenshots
 
-**Required size — iPhone 6.9":** `1320 × 2868` px, **portrait**. Upload this set and
-Apple scales it down for smaller iPhones. (6.7" `1290 × 2796` is an accepted alternative;
-6.5" `1242 × 2688` is now optional.) **1–10 images**; supply at least **3**. No iPad
-screenshots needed unless you add iPad support.
+**Size:** match whatever slot ASC shows you. This app's ASC shows the **iPhone 6.5"
+Display** slot, which accepts **`1242 × 2688`** or **`1284 × 2778`** (portrait). The
+captured set in `Docs/screenshots/` is **`1284 × 2778`** — ready to drag in. ASC reuses
+these for all display sizes; only the first 3 appear on install sheets. **1–10 images**;
+supply at least **3**. (If ASC ever shows a 6.9" slot instead, use the originals in
+`Docs/screenshots/source-6.9in/` at `1320 × 2868`.) No iPad screenshots unless you add
+iPad support.
 
 **How to capture (free, from the simulator):**
 1. In Xcode, set the run destination to **iPhone 16 Pro Max** (a 6.9" device) and run
@@ -396,8 +399,9 @@ No login is required to use the app.
 - [x] ~~Add the **`CA92.1` UserDefaults** block to `PrivacyInfo.xcprivacy`.~~ Done; manifest
   lints OK and the app still builds.
 - [ ] (Recommended) enable **iCloud Key-Value storage** capability.
-- [x] ~~Capture **screenshots** (1320 × 2868).~~ Done — 5 shots in
-  `~/Desktop/Ferry-AppStore-Screenshots/` (home, receiver QR, send, received, Pro).
+- [x] ~~Capture **screenshots**.~~ Done — 5 shots at `1284 × 2778` in
+  `iPhone/Ferry/Docs/screenshots/` (home, receiver QR, send, received, Pro), 6.9"
+  originals in `source-6.9in/`.
 - [ ] Create the **`ferry_pro`** IAP in ASC + its review screenshot.
 - [ ] **Archive & upload** the build, then attach build + IAP and submit.
 - [ ] Ensure **Agreements/Tax/Banking** is Active (needed for the IAP).
