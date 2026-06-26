@@ -396,7 +396,8 @@ No login is required to use the app.
 - [x] ~~Add the **`CA92.1` UserDefaults** block to `PrivacyInfo.xcprivacy`.~~ Done; manifest
   lints OK and the app still builds.
 - [ ] (Recommended) enable **iCloud Key-Value storage** capability.
-- [ ] Capture **screenshots** (1320 × 2868).
+- [x] ~~Capture **screenshots** (1320 × 2868).~~ Done — 5 shots in
+  `~/Desktop/Ferry-AppStore-Screenshots/` (home, receiver QR, send, received, Pro).
 - [ ] Create the **`ferry_pro`** IAP in ASC + its review screenshot.
 - [ ] **Archive & upload** the build, then attach build + IAP and submit.
 - [ ] Ensure **Agreements/Tax/Banking** is Active (needed for the IAP).
