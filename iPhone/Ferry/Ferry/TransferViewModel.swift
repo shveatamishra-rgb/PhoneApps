@@ -236,7 +236,7 @@ final class TransferViewModel: ObservableObject {
     var permissionMessage: String {
         switch authorizationStatus {
         case .notDetermined:
-            return "Gallery Transfer needs Photos access so received media can land directly in the Photos app."
+            return "Ferry needs Photos access so received media can land directly in the Photos app."
         case .denied, .restricted:
             return "Photos access is off. Enable it in Settings to save received photos and videos directly to Photos."
         case .limited:
