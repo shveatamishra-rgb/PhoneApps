@@ -210,15 +210,20 @@ brand-new IAP can't go live on its own.
 
 ## G. Version page copy (sidebar → *iOS App → 1.0 Prepare for Submission*)
 
+> **Note (2.3.10 rejection, Jul 2026):** App Review rejected v1.0 for naming a
+> third-party platform (Android) in metadata. All store copy below is now
+> Android-free. Keep it that way. In-app text that names Android is fine (genuine
+> interoperability), but marketing metadata must not.
+
 **Promotional text** (≤170 chars, editable anytime without re-review):
 ```
-Send full-quality photos and videos between iPhone and Android over Wi-Fi - no cables,
-no cloud, no compression. Location and capture date stay intact.
+Send full-quality photos and videos between phones over Wi-Fi - no cables, no cloud,
+no compression. Your location and capture date stay intact.
 ```
 
 **Description** (≤4000 chars):
 ```
-Ferry moves your photos and videos between iPhone and Android the way they should move:
+Ferry moves your photos and videos between phones the way they should move:
 full quality, over your own Wi-Fi, with nothing uploaded to a server.
 
 Pick the photos and videos you want, scan a QR code, and they transfer directly between
@@ -241,13 +246,11 @@ WHY FERRY
 FREE AND PRO
 Ferry is free for your first 50 transfers. Ferry Pro is a one-time purchase that unlocks
 unlimited sending and receiving, forever.
-
-Works with the free Ferry app for Android.
 ```
 
 **Keywords** (≤100 chars, comma-separated, no spaces after commas):
 ```
-photo transfer,video,android,wifi,move,share,send,migrate,backup,export,gallery,qr
+photo transfer,video,wifi,wireless,move,share,send,migrate,backup,export,gallery,qr
 ```
 
 **Support URL** (required): `https://shveatamishra-rgb.github.io/ferry/support.html` — a
