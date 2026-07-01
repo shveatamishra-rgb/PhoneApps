@@ -250,7 +250,7 @@ final class TransferViewModel: ObservableObject {
 
     var receiverHint: String {
         if !canWritePhotos {
-            return "Allow Photos access to start receiving."
+            return "Photos access is needed to start receiving."
         }
         return "Start the receiver to get a local transfer address."
     }
@@ -273,7 +273,7 @@ final class TransferViewModel: ObservableObject {
 
     func prepareOutgoingPhotos(from pickerItems: [PhotosPickerItem]) async {
         guard hasReadAccess else {
-            status = "Allow Photos access before choosing images."
+            status = "Photos access is needed before choosing images."
             return
         }
 
@@ -313,7 +313,7 @@ final class TransferViewModel: ObservableObject {
 
     private func startServer() async {
         guard canWritePhotos else {
-            status = "Allow Photos access first."
+            status = "Photos access is needed first."
             return
         }
 

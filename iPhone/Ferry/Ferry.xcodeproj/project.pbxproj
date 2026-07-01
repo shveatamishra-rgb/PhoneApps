@@ -14,13 +14,13 @@
 		0B0000012D0C000100000005 /* PhotoTransferServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000005 /* PhotoTransferServer.swift */; };
 		0B0000012D0C000100000006 /* NetworkInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000006 /* NetworkInterface.swift */; };
 		0B0000012D0C000100000007 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000008 /* PrivacyInfo.xcprivacy */; };
-		0B0000012D0C00010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000007 /* Assets.xcassets */; };
 		0B0000012D0C000100000008 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C00000000000C /* Photos.framework */; };
 		0B0000012D0C000100000009 /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C00000000000D /* PhotosUI.framework */; };
 		0B0000012D0C00010000000A /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C00000000000E /* Network.framework */; };
 		0B0000012D0C00010000000B /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C00000000000F /* ImageIO.framework */; };
 		0B0000012D0C00010000000C /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000010 /* CoreLocation.framework */; };
 		0B0000012D0C00010000000D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000011 /* AVFoundation.framework */; };
+		0B0000012D0C00010000000E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0B0000012D0C000000000007 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -306,9 +306,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Ferry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
@@ -334,9 +334,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Ferry/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;

@@ -112,7 +112,7 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                Button("Allow Photos Access") {
+                Button("Continue") {
                     Task {
                         await viewModel.requestPhotoAuthorization()
                     }
@@ -247,7 +247,7 @@ struct ContentView: View {
             .disabled(!viewModel.hasReadAccess)
 
             if viewModel.outgoingFiles.isEmpty {
-                Text(viewModel.hasReadAccess ? "No media selected for Android yet." : "Allow Photos access first.")
+                Text(viewModel.hasReadAccess ? "No media selected for Android yet." : "Photos access is needed first.")
                     .font(.callout)
                     .foregroundStyle(.secondary)
             } else {
