@@ -92,9 +92,14 @@ App Store Connect → your app → **iOS App → 1.0 → (the version page)**
 Version page → **Previews and Screenshots → iPhone 6.9"**. Upload from
 `Docs/Screenshots/v1/` (all are 1320 × 2868):
 
-`01-today` → `03-japa` → `02-darshan` → `05-paywall` → `06-today-dark` → `04-settings`
+`01-today` → `03-japa` → `02-darshan` → `06-today-dark` → `04-settings`
 
 (6.9" is the only required size; ASC scales it down for other devices. Captions optional.)
+
+> **Do NOT put the paywall (`05-paywall`) on the product page.** IAP/subscription
+> screenshots don't belong in the listing — they sell nothing and can read as
+> paywall-forward. `05-paywall.png` is used only as the **review screenshot on each
+> IAP** (Pro Monthly, Pro Annual, and Pro Lifetime) — see §2.
 
 ---
 

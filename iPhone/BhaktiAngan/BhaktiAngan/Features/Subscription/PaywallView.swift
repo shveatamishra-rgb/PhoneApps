@@ -41,6 +41,8 @@ struct PaywallView: View {
 
                     productOptions
 
+                    trialTerms
+
                     purchaseButton
 
                     Button(loc.s("Restore Purchases", "खरीद पुनर्स्थापित करें")) {
@@ -127,6 +129,71 @@ struct PaywallView: View {
         .disabled(store.isLoading)
     }
 
+    /// Prominent, plain-language terms shown at the point of purchase for the selected plan:
+    /// trial length (if any), the exact amount billed afterward, and that it auto-renews.
+    /// Required by App Store Guideline 3.1.2(c).
+    private var trialTerms: some View {
+        Text(selectedTermsText)
+            .font(.footnote.weight(.medium))
+            .multilineTextAlignment(.center)
+            .foregroundStyle(AppTheme.ink)
+            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 4)
+    }
+
+    private var selectedTermsText: String {
+        // Prefer the live product so the real storefront price/currency is shown.
+        if let p = selectedProduct {
+            switch p.id {
+            case StoreManager.lifetimeID:
+                return loc.s(
+                    "One-time purchase of \(p.displayPrice). No subscription, no auto-renewal.",
+                    "\(p.displayPrice) की एकमुश्त खरीद। कोई सदस्यता या स्वतः नवीनीकरण नहीं।"
+                )
+            case StoreManager.monthlyID:
+                if let days = store.freeTrialDays(for: p) {
+                    return loc.s(
+                        "\(days) days free, then \(p.displayPrice) per month. Renews automatically until cancelled.",
+                        "\(days) दिन निःशुल्क, फिर \(p.displayPrice) प्रति माह। रद्द करने तक स्वतः नवीनीकृत।"
+                    )
+                }
+                return loc.s(
+                    "\(p.displayPrice) per month. Renews automatically until cancelled.",
+                    "\(p.displayPrice) प्रति माह। रद्द करने तक स्वतः नवीनीकृत।"
+                )
+            default: // annual
+                if let days = store.freeTrialDays(for: p) {
+                    return loc.s(
+                        "\(days) days free, then \(p.displayPrice) per year. Renews automatically until cancelled.",
+                        "\(days) दिन निःशुल्क, फिर \(p.displayPrice) प्रति वर्ष। रद्द करने तक स्वतः नवीनीकृत।"
+                    )
+                }
+                return loc.s(
+                    "\(p.displayPrice) per year. Renews automatically until cancelled.",
+                    "\(p.displayPrice) प्रति वर्ष। रद्द करने तक स्वतः नवीनीकृत।"
+                )
+            }
+        }
+        // Fallback copy when StoreKit products haven't loaded (matches the fallback prices).
+        switch selectedProductID {
+        case StoreManager.lifetimeID:
+            return loc.s(
+                "One-time purchase of $39.99. No subscription, no auto-renewal.",
+                "$39.99 की एकमुश्त खरीद। कोई सदस्यता या स्वतः नवीनीकरण नहीं।"
+            )
+        case StoreManager.monthlyID:
+            return loc.s(
+                "$4.99 per month. Renews automatically until cancelled.",
+                "$4.99 प्रति माह। रद्द करने तक स्वतः नवीनीकृत।"
+            )
+        default:
+            return loc.s(
+                "7 days free, then $29.99 per year. Renews automatically until cancelled.",
+                "7 दिन निःशुल्क, फिर $29.99 प्रति वर्ष। रद्द करने तक स्वतः नवीनीकृत।"
+            )
+        }
+    }
+
     // MARK: - Product options
 
     private var productOptions: some View {
@@ -136,7 +203,7 @@ struct PaywallView: View {
                     id: StoreManager.yearlyID,
                     title: loc.s("Annual", "वार्षिक"),
                     price: "$29.99/yr",
-                    detail: loc.s("7-day free trial, then about $2.50/mo", "7-दिन का निःशुल्क परीक्षण, फिर लगभग $2.50/माह"),
+                    detail: loc.s("7-day free trial, then $29.99/yr", "7-दिन का निःशुल्क परीक्षण, फिर $29.99/वर्ष"),
                     badge: loc.s("BEST VALUE", "सर्वोत्तम")
                 )
                 fallbackOption(
@@ -196,9 +263,7 @@ struct PaywallView: View {
     private func detail(for product: Product) -> String {
         if let days = store.freeTrialDays(for: product) {
             var parts = [loc.s("\(days)-day free trial", "\(days)-दिन का निःशुल्क परीक्षण")]
-            if let perMonth = store.monthlyEquivalentText(for: product) {
-                parts.append(loc.s("then \(perMonth)", "फिर \(perMonth)"))
-            }
+            parts.append(loc.s("then \(price(for: product))", "फिर \(price(for: product))"))
             if let percent = store.annualSavingsPercent {
                 parts.append(loc.s("save \(percent)%", "\(percent)% की बचत"))
             }
