@@ -12,7 +12,7 @@ struct DarshanDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {
-                Image(item.imageName)
+                item.displayImage
                     .resizable()
                     .scaledToFit()
                     .frame(maxWidth: .infinity)
@@ -76,7 +76,7 @@ struct DarshanDetailView: View {
             }
         }
         .sheet(isPresented: $showShare) {
-            if let image = UIImage(named: item.imageName) {
+            if let image = DarshanImageStore.uiImage(named: item.imageName) {
                 ActivityView(activityItems: [image, item.shareText(loc.lang)])
                     .presentationDetents([.medium, .large])
             }

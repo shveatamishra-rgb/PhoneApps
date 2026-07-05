@@ -50,7 +50,7 @@ struct HomeView: View {
                 }
             }
             .sheet(isPresented: $showShare) {
-                if let image = UIImage(named: today.imageName) {
+                if let image = DarshanImageStore.uiImage(named: today.imageName) {
                     ActivityView(activityItems: [image, today.shareText(loc.lang)])
                         .presentationDetents([.medium, .large])
                 }
@@ -193,7 +193,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 500)
                 .overlay(alignment: .top) {
-                    Image(today.imageName)
+                    today.displayImage
                         .resizable()
                         .scaledToFill()
                 }
@@ -308,7 +308,7 @@ struct HomeView: View {
                                 Color.clear
                                     .frame(width: 142, height: 205)
                                     .overlay(alignment: .top) {
-                                        Image(item.imageName)
+                                        item.displayImage
                                             .resizable()
                                             .scaledToFill()
                                     }

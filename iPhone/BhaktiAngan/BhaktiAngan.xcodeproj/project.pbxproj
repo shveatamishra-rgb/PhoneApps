@@ -36,6 +36,7 @@
 		DS1000000000000000000025 /* Data/Cities.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000025 /* Data/Cities.swift */; };
 		DS1000000000000000000026 /* Features/Panchang/PanchangView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000026 /* Features/Panchang/PanchangView.swift */; };
 		DS1000000000000000000027 /* Services/LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000027 /* Services/LocationManager.swift */; };
+		DS1000000000000000000028 /* Services/RemoteCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000028 /* Services/RemoteCatalog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		DS0000000000000000000025 /* Data/Cities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Data/Cities.swift; sourceTree = "<group>"; };
 		DS0000000000000000000026 /* Features/Panchang/PanchangView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Panchang/PanchangView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000027 /* Services/LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/LocationManager.swift; sourceTree = "<group>"; };
+		DS0000000000000000000028 /* Services/RemoteCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/RemoteCatalog.swift; sourceTree = "<group>"; };
 		DS0000000000000000000012 /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		DS0000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DS0000000000000000000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				DS0000000000000000000022 /* Services/Astronomy.swift */,
 				DS0000000000000000000023 /* Services/Panchang.swift */,
 				DS0000000000000000000027 /* Services/LocationManager.swift */,
+				DS0000000000000000000028 /* Services/RemoteCatalog.swift */,
 				DS0000000000000000000024 /* Data/PanchangNames.swift */,
 				DS0000000000000000000025 /* Data/Cities.swift */,
 				DS0000000000000000000004 /* Models/DevotionalContent.swift */,
@@ -281,6 +284,7 @@
 				DS1000000000000000000008 /* Services/NotificationManager.swift in Sources */,
 				DS1000000000000000000009 /* Services/WallpaperLibrary.swift in Sources */,
 				DS1000000000000000000015 /* Services/AudioManager.swift in Sources */,
+				DS1000000000000000000028 /* Services/RemoteCatalog.swift in Sources */,
 				DS100000000000000000000A /* Components/SharedComponents.swift in Sources */,
 				DS100000000000000000000B /* Features/Onboarding/OnboardingView.swift in Sources */,
 				DS100000000000000000000C /* Features/Home/HomeView.swift in Sources */,
@@ -425,7 +429,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = BhaktiAngan/Info.plist;
@@ -434,7 +438,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -454,7 +458,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = BhaktiAngan/Info.plist;
@@ -463,7 +467,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -482,11 +486,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 45QWJVLL5D;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_STRICT_CONCURRENCY = minimal;
@@ -501,11 +505,11 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 45QWJVLL5D;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app.tests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_STRICT_CONCURRENCY = minimal;

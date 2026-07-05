@@ -227,7 +227,20 @@ enum ContentCatalog {
     /// leaves a locked tile under the "always free" strip on Home.
     static let freeDarshanCount = 12
 
-    static let items: [DevotionalItem] = {
+    /// The full catalog: bundled darshans, minus any remotely pulled image,
+    /// plus any remotely added ones (see `RemoteCatalog`). Bundled-only until
+    /// a manifest has been fetched, so behavior without network is unchanged.
+    static var items: [DevotionalItem] {
+        let remote = RemoteCatalog.shared
+        let removedRemotely = remote.removedImageNames
+        var merged = removedRemotely.isEmpty
+            ? bundledItems
+            : bundledItems.filter { !removedRemotely.contains($0.imageName) }
+        merged.append(contentsOf: remote.availableAdditions)
+        return merged
+    }
+
+    static let bundledItems: [DevotionalItem] = {
         var result: [DevotionalItem] = []
         for (index, slug) in slugs.enumerated() {
             guard let template = templates[slug] else { continue }

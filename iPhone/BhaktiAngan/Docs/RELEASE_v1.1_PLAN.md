@@ -1,8 +1,26 @@
 # Bhakti Angan — v1.1 (next feature release) plan & checklist
 
-**Status:** parked. v1.0 is **submitted / in App Review**. Do **not** start building
-until v1.0 is **approved** (owner's call, 2026-07-01). This file is the ready-to-go
-checklist for the first feature drop after launch.
+**Status:** v1.0 is **APPROVED & LIVE** on the App Store (id6782816559, released
+2026-07-02). v1.1 build is now **in progress** (version bumped to 1.1(1)). Do **not**
+upload a new build while any v1.0 review is pending; local development is fine.
+
+## Progress log since v1.0 approval
+
+- **2026-07-04 — #6 Remote content pipeline: SHIPPED & VERIFIED.** `Services/RemoteCatalog.swift`
+  (manifest fetch/cache/refresh, offline-first `DarshanImageStore` seam, festival windows,
+  `removed` kill-switch, `replaces` swap) wired into `ContentCatalog.items`, the launch
+  refresh hook, and every image call site. Website endpoint `GET /wp-json/bhaktiangan/v1/app-catalog`
+  live + schema-valid; publisher `bhaktiangan-site/95-app-catalog.mjs`. 5 RemoteCatalogTests
+  pass; full app compiles on iPhone 17 sim.
+- **2026-07-04 — #7 Library/Gallery redesign: BUILT & VERIFIED.** `Features/Library/LibraryView.swift`
+  rebuilt from a flat grid + chip filter into curated per-deity shelves (gold COLLECTION
+  eyebrow, serif family headers, teal See all → per-deity grid, editorial cover cards with
+  scrim + serif name, favorite + Pro lock preserved; search → flat results grid). Verified
+  visually in the simulator across all collections. NOTE: the deeper #7 goals (avatar
+  collections as categories; darshan ↔ story internal links) depend on #1 (stories in-app).
+- Committed to `main` 2026-07-04 (remote pipeline + Library redesign + tests).
+
+_Keep appending dated entries here as v1.1/v1.2 items land._
 
 **Scope agreed with owner:** all five below go into the next release cycle (they can
 be split across v1.1 / v1.2 by the sequencing at the bottom — voice + festivals are

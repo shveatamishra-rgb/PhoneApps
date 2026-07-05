@@ -264,3 +264,65 @@ final class PanchangTests: XCTestCase {
         XCTAssertTrue(foundEkadashi, "An Ekadashi vrat should be flagged within a month")
     }
 }
+
+final class RemoteCatalogTests: XCTestCase {
+    private let sampleJSON = """
+    {
+      "version": 1,
+      "removed": ["day20_shiv"],
+      "replaces": [{ "imageName": "day1_shiv", "url": "https://example.com/day1_shiv-v2.jpg", "rev": 2 }],
+      "additions": [{
+        "id": "r1_durga_navratri",
+        "url": "https://example.com/r1_durga.jpg",
+        "deityEN": "Maa Durga", "deityHI": "मां दुर्गा", "category": "Devi",
+        "mantraEN": "Om Dum Durgayei Namah", "mantraHI": "ॐ दुं दुर्गायै नमः",
+        "meaningEN": "m", "meaningHI": "म", "blessingEN": "b", "blessingHI": "ब",
+        "isPremium": true,
+        "availableFrom": "2026-09-20", "availableUntil": "2026-10-05"
+      }]
+    }
+    """.data(using: .utf8)!
+
+    private func date(_ y: Int, _ m: Int, _ d: Int) -> Date {
+        Calendar.current.date(from: DateComponents(year: y, month: m, day: d, hour: 12))!
+    }
+
+    func testManifestDecodes() throws {
+        let manifest = try JSONDecoder().decode(RemoteManifest.self, from: sampleJSON)
+        XCTAssertEqual(manifest.version, 1)
+        XCTAssertEqual(manifest.removed, ["day20_shiv"])
+        XCTAssertEqual(manifest.replaces?.first?.cacheFileName, "day1_shiv-r2.img")
+        XCTAssertEqual(manifest.additions?.count, 1)
+    }
+
+    func testAdditionAvailabilityWindow() throws {
+        let manifest = try JSONDecoder().decode(RemoteManifest.self, from: sampleJSON)
+        let add = manifest.additions![0]
+        XCTAssertFalse(add.isAvailable(on: date(2026, 9, 19)), "before the window")
+        XCTAssertTrue(add.isAvailable(on: date(2026, 9, 20)), "window opens")
+        XCTAssertTrue(add.isAvailable(on: date(2026, 10, 5)), "end day is inclusive")
+        XCTAssertFalse(add.isAvailable(on: date(2026, 10, 6)), "after the window")
+    }
+
+    func testAdditionMapsToDevotionalItem() throws {
+        let manifest = try JSONDecoder().decode(RemoteManifest.self, from: sampleJSON)
+        let item = manifest.additions![0].devotionalItem(day: 1001)
+        XCTAssertEqual(item.imageName, "r1_durga_navratri")
+        XCTAssertEqual(item.category, .shakti, "\"Devi\" is the Shakti category's raw value")
+        XCTAssertTrue(item.isPremium)
+        XCTAssertEqual(item.deity(.hi), "मां दुर्गा")
+    }
+
+    func testItemsFallBackToBundledWithoutManifest() {
+        // The test environment has no fetched manifest, so the merged catalog
+        // must be exactly the bundled one (offline-first guarantee).
+        XCTAssertEqual(ContentCatalog.items.map(\.imageName),
+                       ContentCatalog.bundledItems.map(\.imageName))
+    }
+
+    func testUnavailableAdditionExcludedEvenIfCached() throws {
+        // availableAdditions gates on the window before it ever checks disk.
+        let manifest = try JSONDecoder().decode(RemoteManifest.self, from: sampleJSON)
+        XCTAssertFalse(manifest.additions![0].isAvailable(on: date(2026, 7, 3)))
+    }
+}

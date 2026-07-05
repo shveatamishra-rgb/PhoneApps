@@ -24,6 +24,11 @@ struct BhaktiAnganApp: App {
                     // location picker opens instantly later.
                     _ = Cities.all
                 }
+                .task(priority: .background) {
+                    // Remote content pipeline: pick up new/replaced/pulled
+                    // darshans (at most one fetch per 12h; offline-safe).
+                    await RemoteCatalog.shared.refreshIfStale()
+                }
         }
     }
 }

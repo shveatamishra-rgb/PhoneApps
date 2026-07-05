@@ -3,7 +3,7 @@ import UIKit
 
 enum WallpaperLibrary {
     static func save(imageNamed name: String) async throws {
-        guard let image = UIImage(named: name) else {
+        guard let image = DarshanImageStore.uiImage(named: name) else {
             throw WallpaperError.imageMissing
         }
 
