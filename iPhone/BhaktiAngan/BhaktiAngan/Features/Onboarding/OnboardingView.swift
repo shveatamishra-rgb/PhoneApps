@@ -96,37 +96,104 @@ struct OnboardingView: View {
     }
 
     private var preferencePage: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            Text(loc.s("Who would you like to begin with?", "आप किसके साथ आरंभ करना चाहेंगे?"))
-                .font(.largeTitle.bold())
+        VStack(spacing: 16) {
+            VStack(spacing: 8) {
+                Text(loc.s("Choose your deity", "अपना इष्ट चुनें"))
+                    .font(.title.bold())
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(AppTheme.plum)
+                Text(loc.s(
+                    "Pick who you would like to begin with. You can explore every deity and change this anytime.",
+                    "चुनें कि आप किसके साथ आरंभ करना चाहेंगे। आप हर देवता के दर्शन कर सकते हैं और इसे कभी भी बदल सकते हैं।"
+                ))
+                .font(.subheadline)
                 .multilineTextAlignment(.center)
-                .foregroundStyle(AppTheme.plum)
-                .padding(.horizontal, 24)
-
-            Text(loc.s(
-                "You can explore every deity and change this anytime.",
-                "आप हर देवता के दर्शन कर सकते हैं और इसे कभी भी बदल सकते हैं।"
-            ))
-            .foregroundStyle(AppTheme.muted)
-
-            VStack(spacing: 10) {
-                ishtaRow(id: "shiv", name: loc.s("Lord Shiva", "भगवान शिव"), mantra: loc.s("Om Namah Shivaya", "ॐ नमः शिवाय"))
-                ishtaRow(id: "ganesh", name: loc.s("Lord Ganesha", "भगवान गणेश"), mantra: loc.s("Om Gan Ganapataye Namah", "ॐ गं गणपतये नमः"))
-                ishtaRow(id: "krishna", name: loc.s("Lord Krishna", "भगवान कृष्ण"), mantra: loc.s("Hare Krishna Hare Rama", "हरे कृष्ण हरे राम"))
+                .foregroundStyle(AppTheme.muted)
             }
+            .padding(.top, 22)
             .padding(.horizontal, 24)
 
-            Spacer()
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 96), spacing: 12)], spacing: 20) {
+                    ForEach(ishtaOptions) { option in
+                        deityCell(option)
+                    }
+                }
+                .padding(.horizontal, 22)
+                .padding(.vertical, 8)
+            }
 
             Button(loc.s("Begin My Daily Darshan", "मेरा दैनिक दर्शन आरंभ करें")) {
                 appState.completeOnboarding(ishta: selectedIshta)
             }
             .buttonStyle(PrimaryButtonStyle())
             .padding(.horizontal, 28)
-            .padding(.bottom, 28)
+            .padding(.bottom, 24)
         }
+    }
+
+    private struct IshtaOption: Identifiable {
+        let id: String
+        let name: String
+        let image: String?
+    }
+
+    /// Popular deities that have a valid bundled image and a mantra, drawn from
+    /// the live (defect-filtered) catalog so a thumbnail is never a removed image.
+    private var ishtaOptions: [IshtaOption] {
+        func img(_ slug: String) -> String? {
+            ContentCatalog.items.first { $0.imageName.contains(slug) }?.imageName
+        }
+        return [
+            IshtaOption(id: "shiv", name: loc.s("Shiva", "शिव"), image: img("shiv")),
+            IshtaOption(id: "ganesh", name: loc.s("Ganesha", "गणेश"), image: img("ganesh")),
+            IshtaOption(id: "krishna", name: loc.s("Krishna", "कृष्ण"), image: img("krishna")),
+            IshtaOption(id: "shri_ram", name: loc.s("Rama", "राम"), image: img("shri_ram")),
+            IshtaOption(id: "shri_hanuman", name: loc.s("Hanuman", "हनुमान"), image: img("shri_hanuman")),
+            IshtaOption(id: "vishnu", name: loc.s("Vishnu", "विष्णु"), image: img("vishnu")),
+            IshtaOption(id: "vaishno_devi", name: loc.s("Vaishno Devi", "वैष्णो देवी"), image: img("vaishno_devi")),
+            IshtaOption(id: "saraswati_mata", name: loc.s("Saraswati", "सरस्वती"), image: img("saraswati_mata")),
+        ]
+    }
+
+    private func deityCell(_ option: IshtaOption) -> some View {
+        let selected = selectedIshta == option.id
+        return Button {
+            withAnimation(.easeOut(duration: 0.15)) { selectedIshta = option.id }
+        } label: {
+            VStack(spacing: 8) {
+                Color.clear
+                    .frame(width: 96, height: 96)
+                    .overlay(alignment: .top) {
+                        if let name = option.image {
+                            Image(name).resizable().scaledToFill()
+                        } else {
+                            AppTheme.paper
+                        }
+                    }
+                    .clipShape(Circle())
+                    .overlay(
+                        Circle().stroke(
+                            selected ? AppTheme.vermilion : Color.black.opacity(0.08),
+                            lineWidth: selected ? 3 : 1
+                        )
+                    )
+                    .overlay(alignment: .bottomTrailing) {
+                        if selected {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(AppTheme.vermilion)
+                                .background(Circle().fill(.white))
+                        }
+                    }
+                    .shadow(color: .black.opacity(selected ? 0.20 : 0.08), radius: 6, y: 3)
+                Text(option.name)
+                    .font(.subheadline.weight(selected ? .bold : .medium))
+                    .foregroundStyle(selected ? AppTheme.plum : AppTheme.ink)
+                    .lineLimit(1)
+            }
+        }
+        .buttonStyle(.plain)
     }
 
     private func benefit(_ icon: String, _ title: String, _ detail: String) -> some View {
@@ -145,34 +212,6 @@ struct OnboardingView: View {
         }
     }
 
-    private func ishtaRow(id: String, name: String, mantra: String) -> some View {
-        Button {
-            selectedIshta = id
-        } label: {
-            HStack {
-                Image(systemName: selectedIshta == id ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selectedIshta == id ? AppTheme.vermilion : AppTheme.muted)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(name).font(.headline)
-                    Text(mantra)
-                        .font(.subheadline)
-                        .foregroundStyle(AppTheme.muted)
-                }
-                Spacer()
-            }
-            .foregroundStyle(AppTheme.ink)
-            .padding(16)
-            .background(AppTheme.paper, in: RoundedRectangle(cornerRadius: 12))
-            .overlay {
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(
-                        selectedIshta == id ? AppTheme.vermilion : Color.black.opacity(0.08),
-                        lineWidth: selectedIshta == id ? 2 : 1
-                    )
-            }
-        }
-        .buttonStyle(.plain)
-    }
 }
 
 struct PrimaryButtonStyle: ButtonStyle {

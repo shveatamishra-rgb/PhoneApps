@@ -38,14 +38,18 @@ struct JapaView: View {
     private var mantraSelector: some View {
         Menu {
             ForEach(ContentCatalog.mantraChoices) { choice in
+                // A devotee's chosen ishta (their onboarding pick / current mantra)
+                // is always theirs, even on the free tier; Pro only gates switching
+                // to the *other* premium mantras.
+                let locked = choice.isPremium && !store.hasPro && choice.id != appState.selectedMantraID
                 Button {
-                    if choice.isPremium && !store.hasPro {
+                    if locked {
                         showPaywall = true
                     } else {
                         appState.selectMantra(choice.id)
                     }
                 } label: {
-                    if choice.isPremium && !store.hasPro {
+                    if locked {
                         Label(choice.deity(loc.lang), systemImage: "lock.fill")
                     } else {
                         Text(choice.deity(loc.lang))

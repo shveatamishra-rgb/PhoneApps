@@ -37,6 +37,7 @@
 		DS1000000000000000000026 /* Features/Panchang/PanchangView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000026 /* Features/Panchang/PanchangView.swift */; };
 		DS1000000000000000000027 /* Services/LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000027 /* Services/LocationManager.swift */; };
 		DS1000000000000000000028 /* Services/RemoteCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000028 /* Services/RemoteCatalog.swift */; };
+		DS1000000000000000000029 /* Features/Katha/KathaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000029 /* Features/Katha/KathaView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		DS0000000000000000000026 /* Features/Panchang/PanchangView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Panchang/PanchangView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000027 /* Services/LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/LocationManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000028 /* Services/RemoteCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/RemoteCatalog.swift; sourceTree = "<group>"; };
+		DS0000000000000000000029 /* Features/Katha/KathaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Katha/KathaView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000012 /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
 		DS0000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DS0000000000000000000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				DS0000000000000000000023 /* Services/Panchang.swift */,
 				DS0000000000000000000027 /* Services/LocationManager.swift */,
 				DS0000000000000000000028 /* Services/RemoteCatalog.swift */,
+				DS0000000000000000000029 /* Features/Katha/KathaView.swift */,
 				DS0000000000000000000024 /* Data/PanchangNames.swift */,
 				DS0000000000000000000025 /* Data/Cities.swift */,
 				DS0000000000000000000004 /* Models/DevotionalContent.swift */,
@@ -285,6 +288,7 @@
 				DS1000000000000000000009 /* Services/WallpaperLibrary.swift in Sources */,
 				DS1000000000000000000015 /* Services/AudioManager.swift in Sources */,
 				DS1000000000000000000028 /* Services/RemoteCatalog.swift in Sources */,
+				DS1000000000000000000029 /* Features/Katha/KathaView.swift in Sources */,
 				DS100000000000000000000A /* Components/SharedComponents.swift in Sources */,
 				DS100000000000000000000B /* Features/Onboarding/OnboardingView.swift in Sources */,
 				DS100000000000000000000C /* Features/Home/HomeView.swift in Sources */,

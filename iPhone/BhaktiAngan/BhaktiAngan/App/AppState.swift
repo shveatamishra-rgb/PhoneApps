@@ -34,6 +34,8 @@ final class AppState: ObservableObject {
 
         if arguments.contains("--tab-library") {
             selectedTab = .library
+        } else if arguments.contains("--tab-katha") {
+            selectedTab = .katha
         } else if arguments.contains("--tab-japa") {
             selectedTab = .japa
         } else if arguments.contains("--tab-settings") {
@@ -135,6 +137,7 @@ final class AppState: ObservableObject {
 enum AppTab: Hashable {
     case home
     case library
+    case katha
     case japa
     case settings
 }

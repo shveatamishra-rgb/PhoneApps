@@ -68,3 +68,27 @@ enum DeityCategory: String, CaseIterable, Identifiable {
 
     func label(_ l: Lang) -> String { l == .hi ? hindi : rawValue }
 }
+
+/// A short katha for the Katha tab. Decoded from the bundled `stories.json`
+/// (extracted from the website's hindu-stories builders, EN + HI). No network.
+struct Story: Identifiable, Hashable, Codable {
+    let id: String
+    let deity: String
+    let titleEN: String
+    let titleHI: String
+    let eyebrowEN: String
+    let eyebrowHI: String
+    let introEN: String
+    let introHI: String
+    let bodyEN: [String]
+    let bodyHI: [String]
+    let moralEN: String
+    let moralHI: String
+    let isPremium: Bool
+
+    func title(_ l: Lang) -> String { l == .hi ? titleHI : titleEN }
+    func eyebrow(_ l: Lang) -> String { l == .hi ? eyebrowHI : eyebrowEN }
+    func intro(_ l: Lang) -> String { l == .hi ? introHI : introEN }
+    func body(_ l: Lang) -> [String] { l == .hi ? bodyHI : bodyEN }
+    func moral(_ l: Lang) -> String { l == .hi ? moralHI : moralEN }
+}

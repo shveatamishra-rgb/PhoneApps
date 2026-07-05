@@ -19,6 +19,26 @@ upload a new build while any v1.0 review is pending; local development is fine.
   visually in the simulator across all collections. NOTE: the deeper #7 goals (avatar
   collections as categories; darshan ↔ story internal links) depend on #1 (stories in-app).
 - Committed to `main` 2026-07-04 (remote pipeline + Library redesign + tests).
+- **2026-07-04 — #1 Katha tab: BUILT & VERIFIED.** New 5th tab (`book.closed.fill`,
+  "Katha"/"कथा"). Content: the 10 short katha extracted bilingually from the website
+  builders (`bhaktiangan-site/extract-stories.mjs` reads 76-EN + 79-HI → bundled
+  `Resources/Assets.xcassets/stories.dataset/stories.json`, no network). `Story` model
+  in DevotionalContent.swift; `StoryCatalog` + `KathaView`/`KathaDetailView` in
+  Features/Katha/KathaView.swift (registered pbxproj DS…0029). Native reader (NOT
+  redirect-to-web): deity-tinted gradient covers, serif titles, gold eyebrows, serif
+  reader with a "The Moral" box, share. Hybrid free/Pro: 5 free (one marquee per
+  deity: neelkanth, krishna-govardhan, durga-mahishasura, birth-of-ganesha,
+  hanuman-sanjeevani), 5 Pro. Verified in the simulator (list + reader). **Hero art bundled**
+  (2026-07-05): the 10 website story heroes downloaded from `story-hero-images.json`,
+  resized to 1200w, added as imagesets in Assets.xcassets (asset name = story id;
+  auto-compiles, no pbxproj change); cards + reader layer the image over the deity
+  gradient with a scrim (fixed a scaledToFill clip that hid the title). Follow-on:
+  expand a katha into its full pillar long-form (#8); darshan katha cross-links (#7).
+- **2026-07-05 — Onboarding deity picker redesigned** (Spotify-style): the 3-row radio
+  list becomes a grid of 8 circular deity portraits + names (Shiva, Ganesha, Krishna,
+  Rama, Hanuman, Vishnu, Vaishno Devi, Saraswati). Plus a Japa fix: a devotee's chosen
+  ishta is never locked to them (Pro only gates switching to the other premium mantras).
+  EN + HI verified in the sim.
 
 _Keep appending dated entries here as v1.1/v1.2 items land._
 

@@ -64,6 +64,10 @@ private struct MainTabView: View {
                 .tabItem { Label(loc.s("Darshan", "दर्शन"), systemImage: "photo.on.rectangle.angled") }
                 .tag(AppTab.library)
 
+            KathaView()
+                .tabItem { Label(loc.s("Katha", "कथा"), systemImage: "book.closed.fill") }
+                .tag(AppTab.katha)
+
             JapaView()
                 .tabItem { Label(loc.s("Japa", "जप"), systemImage: "circle.grid.3x3.fill") }
                 .tag(AppTab.japa)
