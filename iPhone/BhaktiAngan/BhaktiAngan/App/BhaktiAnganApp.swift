@@ -25,6 +25,7 @@ struct BhaktiAnganApp: App {
                     // Publish immediately too, independent of StoreKit, so the widget
                     // still gets data if store.start() is slow on first launch.
                     WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
+                    ChoghadiyaBridge.publish()
                 }
                 .task(priority: .background) {
                     // Decode the ~69k-city dataset off the main thread so the
@@ -42,14 +43,15 @@ struct BhaktiAnganApp: App {
                     await LikeCounts.shared.refreshIfStale()
                 }
                 .onChange(of: scenePhase) { _, phase in
-                    // Keep the Daily Darshan widget in sync with what the app shows.
+                    // Keep the widgets in sync with what the app shows.
                     if phase == .active {
                         WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
+                        ChoghadiyaBridge.publish()
                     }
                 }
                 .onOpenURL { url in
-                    // Deep link from the widget: bhaktiangan://today
-                    if url.host == "today" || url.host == "home" {
+                    // Deep links from the widgets: bhaktiangan://today | ://panchang
+                    if url.host == "today" || url.host == "home" || url.host == "panchang" {
                         appState.selectedTab = .home
                     }
                 }

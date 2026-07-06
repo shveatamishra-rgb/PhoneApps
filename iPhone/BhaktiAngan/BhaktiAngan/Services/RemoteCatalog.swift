@@ -354,3 +354,60 @@ enum WidgetBridge {
         return resized.jpegData(compressionQuality: 0.8)
     }
 }
+
+// MARK: - Choghadiya widget bridge
+
+/// Feeds the Choghadiya (muhurat) widget. Same idea as `WidgetBridge`: the app
+/// computes the day's choghadiya periods for the user's chosen Panchang location
+/// and writes them to the shared App Group container; the widget reads and rolls
+/// through them. The widget follows the app's location (iOS widgets can't host a
+/// location picker in the tile). No-op if the App Group is off; if no location is
+/// chosen it clears the file so the widget prompts the user to set one.
+@MainActor
+enum ChoghadiyaBridge {
+    static let appGroup = "group.in.bhaktiangan.app"
+    private static var containerURL: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+    }
+
+    static func publish() {
+        guard let dir = containerURL else { return }
+        let target = dir.appendingPathComponent("choghadiya.json")
+        let cityID = UserDefaults.standard.string(forKey: "panchangCityID") ?? ""
+        guard let city = LocationManager.shared.activeCity(manualID: cityID, lang: .en) else {
+            try? FileManager.default.removeItem(at: target)
+            WidgetCenter.shared.reloadAllTimelines()
+            return
+        }
+        let cal = Calendar(identifier: .gregorian)
+        var periods: [Choghadiya] = []
+        for offset in 0...1 {
+            let day = cal.date(byAdding: .day, value: offset, to: Date()) ?? Date()
+            if let r = PanchangCalculator.compute(for: day, city: city) {
+                periods += r.dayChoghadiya + r.nightChoghadiya
+            }
+        }
+        let now = Date()
+        var seen = Set<Int>()
+        let list = periods
+            .filter { $0.end > now }
+            .filter { seen.insert(Int($0.start.timeIntervalSince1970)).inserted }
+            .sorted { $0.start < $1.start }
+        let rows: [[String: Any]] = list.map { c in
+            [
+                "nameEN": c.nameEN, "nameHI": c.nameHI,
+                "start": c.start.timeIntervalSince1970,
+                "end": c.end.timeIntervalSince1970,
+                "quality": c.quality == .good ? "good" : (c.quality == .bad ? "bad" : "neutral"),
+                "isDay": c.isDay,
+            ]
+        }
+        let payload: [String: Any] = [
+            "cityEN": city.nameEN, "cityHI": city.nameHI, "tz": city.timeZoneID, "periods": rows,
+        ]
+        if let data = try? JSONSerialization.data(withJSONObject: payload) {
+            try? data.write(to: target, options: .atomic)
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}

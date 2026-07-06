@@ -65,6 +65,23 @@ upload a new build while any v1.0 review is pending; local development is fine.
   `DarshanWidget/SETUP.md`): create the Widget Extension target, drop in the .swift, add the
   App Groups capability to BOTH targets. Until then `WidgetBridge` is a silent no-op. Free, never gated.
 
+- **2026-07-06 — Daily Darshan widget WORKING end-to-end** (committed e4d4ba3). The
+  marathon fix: `UIGraphicsImageRendererFormat.scale = 1` so shared widget images are
+  ~820px not ~2460px (oversized images blew the widget memory budget -> black render).
+  Also: placeholder reads live data + retries fast when empty; publish also fires from
+  `HomeView.onAppear`. Widget target created in Xcode by owner (App Groups on both targets).
+- **2026-07-06 — #3 Panchang/Choghadiya widget: BUILT (option B, follows app location).**
+  Second widget `DarshanWidget/ChoghadiyaWidget.swift` in the SAME extension (WidgetBundle
+  now lists both; the synchronized folder auto-includes it, no Xcode step). `ChoghadiyaBridge`
+  (in RemoteCatalog.swift) computes today+tomorrow choghadiya via the app's `PanchangCalculator`
+  for `panchangCityID` and writes `choghadiya.json` (periods name/start/end/quality/isDay + city
+  + tz) to the App Group; publishes on launch/foreground/Today-appear/Panchang-recompute. Widget:
+  systemSmall/Medium + lock-screen rectangular/inline; quality-colored (green/red/gold), shows
+  current muhurat + "until h:mm" + next period; timeline entry per boundary; "Set your city"
+  fallback. Deep link `bhaktiangan://panchang`. App + both widgets build clean. Publish path
+  verified running in the sim (darshan file written); choghadiya needs a city (owner has one set
+  on device) so final visual check is on-device. Free, never gated.
+
 _Keep appending dated entries here as v1.1/v1.2 items land._
 
 **Scope agreed with owner:** all five below go into the next release cycle (they can

@@ -232,5 +232,6 @@ struct DarshanWidget: Widget {
 struct DarshanWidgetBundle: WidgetBundle {
     var body: some Widget {
         DarshanWidget()
+        ChoghadiyaWidget()
     }
 }

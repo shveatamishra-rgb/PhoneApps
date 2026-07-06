@@ -129,6 +129,7 @@ struct PanchangCard: View {
         } else {
             result = nil
         }
+        ChoghadiyaBridge.publish()   // keep the Choghadiya widget in sync with the chosen city
     }
 }
 

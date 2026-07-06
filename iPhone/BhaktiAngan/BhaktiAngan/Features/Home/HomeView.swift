@@ -33,6 +33,7 @@ struct HomeView: View {
                 today = ContentCatalog.dailyItem(hasPro: store.hasPro)
                 appState.recordDailyVisit()
                 WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
+                ChoghadiyaBridge.publish()
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
