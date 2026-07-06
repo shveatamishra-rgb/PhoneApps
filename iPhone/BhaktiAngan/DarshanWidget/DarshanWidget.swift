@@ -63,7 +63,7 @@ struct DarshanEntry: TimelineEntry {
 }
 
 struct DarshanProvider: TimelineProvider {
-    func placeholder(in context: Context) -> DarshanEntry { DarshanEntry(date: Date(), info: nil) }
+    func placeholder(in context: Context) -> DarshanEntry { currentEntry() }
 
     func getSnapshot(in context: Context, completion: @escaping (DarshanEntry) -> Void) {
         completion(currentEntry())
@@ -73,8 +73,9 @@ struct DarshanProvider: TimelineProvider {
         let cal = Calendar(identifier: .gregorian)
         let infos = DarshanStore.timeline()
         guard !infos.isEmpty else {
-            let reload = cal.date(byAdding: .hour, value: 4, to: Date()) ?? Date().addingTimeInterval(3600)
-            completion(Timeline(entries: [placeholder(in: context)], policy: .after(reload)))
+            // No data yet (app may not have written it). Retry soon rather than
+            // caching an empty state for hours.
+            completion(Timeline(entries: [currentEntry()], policy: .after(Date().addingTimeInterval(60))))
             return
         }
         let entries = infos.map { DarshanEntry(date: $0.date, info: $0) }

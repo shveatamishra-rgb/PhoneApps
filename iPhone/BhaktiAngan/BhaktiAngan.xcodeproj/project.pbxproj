@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C8592EB2FFB6552006ECCB9 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8592EA2FFB6551006ECCB9 /* WidgetKit.framework */; };
+		3C8592ED2FFB6552006ECCB9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C8592EC2FFB6552006ECCB9 /* SwiftUI.framework */; };
+		3C8592FA2FFB6554006ECCB9 /* DarshanWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3C8592E82FFB6551006ECCB9 /* DarshanWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		DS1000000000000000000001 /* App/BhaktiAnganApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000001 /* App/BhaktiAnganApp.swift */; };
 		DS1000000000000000000002 /* App/AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000002 /* App/AppState.swift */; };
 		DS1000000000000000000003 /* App/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000003 /* App/RootView.swift */; };
@@ -41,6 +44,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		3C8592F82FFB6554006ECCB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = DS7000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3C8592E72FFB6551006ECCB9;
+			remoteInfo = DarshanWidgetExtension;
+		};
 		DSA000000000000000000001 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = DS7000000000000000000001 /* Project object */;
@@ -50,7 +60,26 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		3C8592FB2FFB6554006ECCB9 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3C8592FA2FFB6554006ECCB9 /* DarshanWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		3C8592E82FFB6551006ECCB9 /* DarshanWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DarshanWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		3C8592EA2FFB6551006ECCB9 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		3C8592EC2FFB6552006ECCB9 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		3C8593052FFB6995006ECCB9 /* DarshanWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DarshanWidgetExtension.entitlements; sourceTree = "<group>"; };
+		3C85930F2FFB6FEE006ECCB9 /* BhaktiAngan.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BhaktiAngan.entitlements; sourceTree = "<group>"; };
 		DS0000000000000000000001 /* App/BhaktiAnganApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/BhaktiAnganApp.swift; sourceTree = "<group>"; };
 		DS0000000000000000000002 /* App/AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/AppState.swift; sourceTree = "<group>"; };
 		DS0000000000000000000003 /* App/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/RootView.swift; sourceTree = "<group>"; };
@@ -68,6 +97,14 @@
 		DS000000000000000000000F /* Features/Japa/JapaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Japa/JapaView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000010 /* Features/Subscription/PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Subscription/PaywallView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000011 /* Features/Settings/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Settings/SettingsView.swift; sourceTree = "<group>"; };
+		DS0000000000000000000012 /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
+		DS0000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		DS0000000000000000000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DS0000000000000000000015 /* Resources/Subscriptions.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Resources/Subscriptions.storekit; sourceTree = "<group>"; };
+		DS0000000000000000000016 /* BhaktiAngan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BhaktiAngan.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DS0000000000000000000017 /* ContentCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCatalogTests.swift; sourceTree = "<group>"; };
+		DS0000000000000000000018 /* BhaktiAnganTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BhaktiAnganTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DS0000000000000000000019 /* Services/AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000020 /* Features/Settings/SupportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Settings/SupportView.swift; sourceTree = "<group>"; };
 		DS0000000000000000000021 /* App/LocalizationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/LocalizationManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000022 /* Services/Astronomy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/Astronomy.swift; sourceTree = "<group>"; };
@@ -78,17 +115,32 @@
 		DS0000000000000000000027 /* Services/LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/LocationManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000028 /* Services/RemoteCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/RemoteCatalog.swift; sourceTree = "<group>"; };
 		DS0000000000000000000029 /* Features/Katha/KathaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Katha/KathaView.swift; sourceTree = "<group>"; };
-		DS0000000000000000000012 /* Resources/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Resources/Assets.xcassets; sourceTree = "<group>"; };
-		DS0000000000000000000013 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		DS0000000000000000000014 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DS0000000000000000000015 /* Resources/Subscriptions.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Resources/Subscriptions.storekit; sourceTree = "<group>"; };
-		DS0000000000000000000016 /* BhaktiAngan.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BhaktiAngan.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DS0000000000000000000017 /* ContentCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentCatalogTests.swift; sourceTree = "<group>"; };
-		DS0000000000000000000018 /* BhaktiAnganTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BhaktiAnganTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		DS0000000000000000000019 /* Services/AudioManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/AudioManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		3C8592FE2FFB6554006ECCB9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3C8592E72FFB6551006ECCB9 /* DarshanWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3C8592EE2FFB6552006ECCB9 /* DarshanWidget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (3C8592FE2FFB6554006ECCB9 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = DarshanWidget; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
+		3C8592E52FFB6551006ECCB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3C8592ED2FFB6552006ECCB9 /* SwiftUI.framework in Frameworks */,
+				3C8592EB2FFB6552006ECCB9 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DS2000000000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -106,11 +158,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C8592E92FFB6551006ECCB9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3C8592EA2FFB6551006ECCB9 /* WidgetKit.framework */,
+				3C8592EC2FFB6552006ECCB9 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DS3000000000000000000001 = {
 			isa = PBXGroup;
 			children = (
+				3C8593052FFB6995006ECCB9 /* DarshanWidgetExtension.entitlements */,
 				DS3000000000000000000002 /* BhaktiAngan */,
 				DS3000000000000000000004 /* BhaktiAnganTests */,
+				3C8592EE2FFB6552006ECCB9 /* DarshanWidget */,
+				3C8592E92FFB6551006ECCB9 /* Frameworks */,
 				DS3000000000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -118,6 +182,7 @@
 		DS3000000000000000000002 /* BhaktiAngan */ = {
 			isa = PBXGroup;
 			children = (
+				3C85930F2FFB6FEE006ECCB9 /* BhaktiAngan.entitlements */,
 				DS0000000000000000000001 /* App/BhaktiAnganApp.swift */,
 				DS0000000000000000000002 /* App/AppState.swift */,
 				DS0000000000000000000003 /* App/RootView.swift */,
@@ -159,6 +224,7 @@
 			children = (
 				DS0000000000000000000016 /* BhaktiAngan.app */,
 				DS0000000000000000000018 /* BhaktiAnganTests.xctest */,
+				3C8592E82FFB6551006ECCB9 /* DarshanWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -174,6 +240,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3C8592E72FFB6551006ECCB9 /* DarshanWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3C8592FF2FFB6554006ECCB9 /* Build configuration list for PBXNativeTarget "DarshanWidgetExtension" */;
+			buildPhases = (
+				3C8592E42FFB6551006ECCB9 /* Sources */,
+				3C8592E52FFB6551006ECCB9 /* Frameworks */,
+				3C8592E62FFB6551006ECCB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3C8592EE2FFB6552006ECCB9 /* DarshanWidget */,
+			);
+			name = DarshanWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = DarshanWidgetExtension;
+			productReference = 3C8592E82FFB6551006ECCB9 /* DarshanWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		DS4000000000000000000001 /* BhaktiAngan */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DS8000000000000000000002 /* Build configuration list for PBXNativeTarget "BhaktiAngan" */;
@@ -181,10 +269,12 @@
 				DS5000000000000000000001 /* Sources */,
 				DS2000000000000000000001 /* Frameworks */,
 				DS6000000000000000000001 /* Resources */,
+				3C8592FB2FFB6554006ECCB9 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3C8592F92FFB6554006ECCB9 /* PBXTargetDependency */,
 			);
 			name = BhaktiAngan;
 			productName = BhaktiAngan;
@@ -219,6 +309,9 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
+					3C8592E72FFB6551006ECCB9 = {
+						CreatedOnToolsVersion = 26.5;
+					};
 					DS4000000000000000000001 = {
 						CreatedOnToolsVersion = 26.5;
 					};
@@ -243,11 +336,19 @@
 			targets = (
 				DS4000000000000000000001 /* BhaktiAngan */,
 				DS4000000000000000000002 /* BhaktiAnganTests */,
+				3C8592E72FFB6551006ECCB9 /* DarshanWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		3C8592E62FFB6551006ECCB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DS6000000000000000000001 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -267,6 +368,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3C8592E42FFB6551006ECCB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		DS5000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -313,6 +421,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3C8592F92FFB6554006ECCB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3C8592E72FFB6551006ECCB9 /* DarshanWidgetExtension */;
+			targetProxy = 3C8592F82FFB6554006ECCB9 /* PBXContainerItemProxy */;
+		};
 		DSB000000000000000000001 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = DS4000000000000000000001 /* BhaktiAngan */;
@@ -321,6 +434,85 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		3C8592FC2FFB6554006ECCB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = DarshanWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DarshanWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DarshanWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app.DarshanWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3C8592FD2FFB6554006ECCB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = DarshanWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DarshanWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = DarshanWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = in.bhaktiangan.app.DarshanWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		DS9000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -432,6 +624,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BhaktiAngan/BhaktiAngan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8XK3A4CWY;
@@ -461,6 +654,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BhaktiAngan/BhaktiAngan.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = P8XK3A4CWY;
@@ -526,6 +720,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3C8592FF2FFB6554006ECCB9 /* Build configuration list for PBXNativeTarget "DarshanWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3C8592FC2FFB6554006ECCB9 /* Debug */,
+				3C8592FD2FFB6554006ECCB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		DS8000000000000000000001 /* Build configuration list for PBXProject "BhaktiAngan" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

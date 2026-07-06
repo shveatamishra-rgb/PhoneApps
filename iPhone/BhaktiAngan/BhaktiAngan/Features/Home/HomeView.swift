@@ -32,6 +32,7 @@ struct HomeView: View {
             .onAppear {
                 today = ContentCatalog.dailyItem(hasPro: store.hasPro)
                 appState.recordDailyVisit()
+                WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {

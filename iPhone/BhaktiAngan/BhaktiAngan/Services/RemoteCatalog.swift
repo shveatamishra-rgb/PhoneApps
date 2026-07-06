@@ -345,8 +345,12 @@ enum WidgetBridge {
     private static func jpeg(_ image: UIImage, maxWidth: CGFloat) -> Data? {
         let scale = min(1, maxWidth / max(image.size.width, 1))
         let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
-        let renderer = UIGraphicsImageRenderer(size: size)
+        // Force 1 point = 1 pixel; the renderer otherwise defaults to 3x, which
+        // would make a ~2400px, multi-MB image that blows the widget memory budget.
+        let format = UIGraphicsImageRendererFormat.default()
+        format.scale = 1
+        let renderer = UIGraphicsImageRenderer(size: size, format: format)
         let resized = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: size)) }
-        return resized.jpegData(compressionQuality: 0.85)
+        return resized.jpegData(compressionQuality: 0.8)
     }
 }

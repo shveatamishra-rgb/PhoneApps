@@ -21,6 +21,11 @@ struct BhaktiAnganApp: App {
                     await store.start()
                     WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                 }
+                .task {
+                    // Publish immediately too, independent of StoreKit, so the widget
+                    // still gets data if store.start() is slow on first launch.
+                    WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
+                }
                 .task(priority: .background) {
                     // Decode the ~69k-city dataset off the main thread so the
                     // location picker opens instantly later.
