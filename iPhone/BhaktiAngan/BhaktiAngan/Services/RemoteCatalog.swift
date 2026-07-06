@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import WidgetKit
 
 /// Remote content pipeline (v1.1): lets the darshan catalog grow, and lets an
 /// image be replaced or pulled, without shipping a new build.
@@ -280,5 +281,72 @@ final class LikeCounts: ObservableObject {
         if let out = try? JSONSerialization.data(withJSONObject: map) {
             try? out.write(to: cacheFile, options: .atomic)
         }
+    }
+}
+
+// MARK: - Daily Darshan widget bridge
+
+/// Feeds the Daily Darshan home / lock screen widget. The widget is a separate
+/// process that cannot see the app's catalog or asset bundle, so the app writes
+/// the next few days of darshan (a small timeline + de-duplicated JPEGs) into a
+/// shared App Group container; the widget only reads and renders it. This keeps
+/// the widget in perfect sync with what the app shows, including remotely added
+/// or festival darshans, with no shared model code.
+///
+/// SETUP (one time, in Xcode): add the "App Groups" capability with the identifier
+/// below to BOTH the app target and the widget extension target. Until that is done
+/// this is a silent no-op, so the app builds and runs exactly as before.
+enum WidgetBridge {
+    static let appGroup = "group.in.bhaktiangan.app"
+
+    private static var containerURL: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+    }
+
+    /// Publish the next 7 days of darshan for the widget and ask it to reload.
+    /// Cheap and idempotent; safe to call on launch and on every foreground.
+    static func publish(hasPro: Bool, lang: Lang) {
+        guard let dir = containerURL else { return } // App Group not enabled yet
+        let imagesDir = dir.appendingPathComponent("images", isDirectory: true)
+        try? FileManager.default.createDirectory(at: imagesDir, withIntermediateDirectories: true)
+
+        let cal = Calendar(identifier: .gregorian)
+        let fmt = DateFormatter()
+        fmt.calendar = cal
+        fmt.locale = Locale(identifier: "en_US_POSIX")
+        fmt.dateFormat = "yyyy-MM-dd"
+
+        var entries: [[String: String]] = []
+        var written = Set<String>()
+        for offset in 0..<7 {
+            guard let date = cal.date(byAdding: .day, value: offset, to: Date()) else { continue }
+            let item = ContentCatalog.dailyItem(for: date, hasPro: hasPro)
+            if !written.contains(item.imageName) {
+                if let ui = DarshanImageStore.uiImage(named: item.imageName),
+                   let data = Self.jpeg(ui, maxWidth: 820) {
+                    try? data.write(to: imagesDir.appendingPathComponent(item.imageName + ".jpg"), options: .atomic)
+                    written.insert(item.imageName)
+                }
+            }
+            entries.append([
+                "date": fmt.string(from: date),
+                "image": item.imageName,
+                "deity": item.deity(lang),
+                "mantra": item.mantra(lang),
+                "eyebrow": item.collection(lang),
+            ])
+        }
+        if let data = try? JSONSerialization.data(withJSONObject: entries) {
+            try? data.write(to: dir.appendingPathComponent("timeline.json"), options: .atomic)
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    private static func jpeg(_ image: UIImage, maxWidth: CGFloat) -> Data? {
+        let scale = min(1, maxWidth / max(image.size.width, 1))
+        let size = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+        let renderer = UIGraphicsImageRenderer(size: size)
+        let resized = renderer.image { _ in image.draw(in: CGRect(origin: .zero, size: size)) }
+        return resized.jpegData(compressionQuality: 0.85)
     }
 }

@@ -7,6 +7,7 @@ struct BhaktiAnganApp: App {
     @StateObject private var audio = AudioManager.shared
     @StateObject private var loc = LocalizationManager()
     @StateObject private var locationManager = LocationManager.shared
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup {
@@ -18,6 +19,7 @@ struct BhaktiAnganApp: App {
                 .environmentObject(locationManager)
                 .task {
                     await store.start()
+                    WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                 }
                 .task(priority: .background) {
                     // Decode the ~69k-city dataset off the main thread so the
@@ -33,6 +35,18 @@ struct BhaktiAnganApp: App {
                     // Public gallery like counts (bare GET, no identifiers; read-only
                     // social proof). Same 12h cadence; offline-safe.
                     await LikeCounts.shared.refreshIfStale()
+                }
+                .onChange(of: scenePhase) { _, phase in
+                    // Keep the Daily Darshan widget in sync with what the app shows.
+                    if phase == .active {
+                        WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
+                    }
+                }
+                .onOpenURL { url in
+                    // Deep link from the widget: bhaktiangan://today
+                    if url.host == "today" || url.host == "home" {
+                        appState.selectedTab = .home
+                    }
                 }
         }
     }

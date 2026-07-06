@@ -52,6 +52,19 @@ upload a new build while any v1.0 review is pending; local development is fine.
   label-safe web-counts option over full app-side likes (which would change the privacy
   label). Compiles + launches clean on the sim.
 
+- **2026-07-06 — #2 Daily Darshan widget: CODE COMPLETE (needs one ~2-min Xcode step).**
+  WidgetKit extension in `DarshanWidget/DarshanWidget.swift` (Home small/medium/large +
+  Lock Screen rectangular/inline; timeline rolls forward daily for a week; tap deep-links
+  `bhaktiangan://today` to the Today tab). The app feeds it via `WidgetBridge` (appended to
+  `Services/RemoteCatalog.swift`): on launch + every foreground it writes the next 7 days of
+  darshan (de-duplicated JPEGs + `timeline.json`) into the App Group `group.in.bhaktiangan.app`
+  and reloads WidgetKit, so the widget mirrors exactly what the app shows (incl. remote/festival
+  darshans) with no shared model code and no darshan images bundled into the widget. URL scheme
+  registered in `Info.plist`; deep link handled in `BhaktiAnganApp`. App builds clean; widget
+  type-checks against the iOS 17 simulator SDK as a library. REMAINING (owner, in Xcode, see
+  `DarshanWidget/SETUP.md`): create the Widget Extension target, drop in the .swift, add the
+  App Groups capability to BOTH targets. Until then `WidgetBridge` is a silent no-op. Free, never gated.
+
 _Keep appending dated entries here as v1.1/v1.2 items land._
 
 **Scope agreed with owner:** all five below go into the next release cycle (they can

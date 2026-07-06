@@ -12,6 +12,17 @@
     <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>in.bhaktiangan.app</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>bhaktiangan</string>
+            </array>
+        </dict>
+    </array>
     <key>CFBundleLocalizations</key>
     <array>
         <string>en</string>
