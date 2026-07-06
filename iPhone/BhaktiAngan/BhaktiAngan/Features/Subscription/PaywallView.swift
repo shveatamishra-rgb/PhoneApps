@@ -11,30 +11,42 @@ struct PaywallView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 22) {
-                    Image("BrandMark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 96, height: 96)
-                        .padding(.top, 4)
+                    heroCollage
+                        .padding(.top, 6)
 
                     VStack(spacing: 8) {
                         Text("Bhakti Angan Pro")
                             .font(.largeTitle.bold())
                             .foregroundStyle(AppTheme.plum)
                         Text(loc.s(
-                            "A deeper daily practice, with the complete sacred collection.",
-                            "एक गहरा दैनिक अभ्यास, संपूर्ण पावन संग्रह के साथ।"
+                            "The complete collection of the gods, growing with every festival.",
+                            "देवताओं का संपूर्ण संग्रह, हर पर्व के साथ बढ़ता हुआ।"
                         ))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(AppTheme.muted)
                     }
 
-                    VStack(spacing: 14) {
-                        feature("photo.stack.fill", loc.s("The complete darshan library", "संपूर्ण दर्शन संग्रह"))
-                        feature("arrow.down.to.line", loc.s("Unlimited wallpaper saves", "असीमित वॉलपेपर सहेजें"))
-                        feature("circle.grid.3x3.fill", loc.s("All deity mantras for japa", "जप के लिए सभी देवताओं के मंत्र"))
-                        feature("bell.badge.fill", loc.s("Custom daily reminders", "अनुकूलित दैनिक स्मरण"))
-                        feature("sparkles", loc.s("New festival collections", "नए पर्व संग्रह"))
+                    VStack(spacing: 15) {
+                        feature("photo.stack.fill",
+                                loc.s("The complete darshan collection", "संपूर्ण दर्शन संग्रह"),
+                                loc.s("60+ collectible scenes: Kaliya Mardan, Govardhan, Nataraja, Vishwaroop and more",
+                                      "60+ संग्रहणीय दृश्य: कालिय मर्दन, गोवर्धन, नटराज, विश्वरूप और भी बहुत कुछ"))
+                        feature("sparkles",
+                                loc.s("New art arrives by itself", "नई कला स्वयं आती है"),
+                                loc.s("Festival collections and fresh darshans land in your app, no update needed",
+                                      "पर्व संग्रह और नए दर्शन सीधे आपके ऐप में, बिना किसी अपडेट के"))
+                        feature("book.closed.fill",
+                                loc.s("Every katha, every mantra", "हर कथा, हर मंत्र"),
+                                loc.s("All stories of the gods and all japa mantras, unlocked",
+                                      "देवताओं की सभी कथाएँ और सभी जप मंत्र, अनलॉक"))
+                        feature("square.grid.2x2.fill",
+                                loc.s("Widgets with the full collection", "विजेट में पूरा संग्रह"),
+                                loc.s("Your Home Screen darshan rotates through everything you own",
+                                      "आपकी होम स्क्रीन का दर्शन आपके पूरे संग्रह में घूमता है"))
+                        feature("infinity",
+                                loc.s("All future Pro features, included", "आने वाले सभी प्रो फ़ीचर शामिल"),
+                                loc.s("Whatever we build next is yours, at no extra cost",
+                                      "हम आगे जो भी बनाएँ, वह बिना किसी अतिरिक्त शुल्क के आपका है"))
                     }
                     .padding(18)
                     .background(AppTheme.paper, in: RoundedRectangle(cornerRadius: 14))
@@ -217,7 +229,8 @@ struct PaywallView: View {
                     id: StoreManager.lifetimeID,
                     title: loc.s("Lifetime", "लाइफटाइम"),
                     price: "$39.99",
-                    detail: loc.s("One-time purchase, no subscription", "एकमुश्त खरीद, कोई सदस्यता नहीं"),
+                    detail: loc.s("One purchase. Everything, forever, including future features",
+                                  "एक खरीद। सब कुछ, हमेशा के लिए, भविष्य के फ़ीचर सहित"),
                     badge: nil
                 )
             } else {
@@ -276,7 +289,8 @@ struct PaywallView: View {
             }
             return loc.s("Best annual value", "सर्वोत्तम वार्षिक मूल्य")
         case StoreManager.lifetimeID:
-            return loc.s("One-time purchase, no subscription", "एकमुश्त खरीद, कोई सदस्यता नहीं")
+            return loc.s("One purchase. Everything, forever, including future features",
+                         "एक खरीद। सब कुछ, हमेशा के लिए, भविष्य के फ़ीचर सहित")
         default:
             return loc.s("Cancel anytime", "कभी भी रद्द करें")
         }
@@ -374,15 +388,64 @@ struct PaywallView: View {
         .foregroundStyle(AppTheme.vermilion)
     }
 
-    private func feature(_ icon: String, _ text: String) -> some View {
-        HStack(spacing: 12) {
+    private func feature(_ icon: String, _ title: String, _ sub: String) -> some View {
+        HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .foregroundStyle(AppTheme.vermilion)
                 .frame(width: 26)
-            Text(text)
-                .font(.body.weight(.medium))
-            Spacer()
+                .padding(.top, 2)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                Text(sub)
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.muted)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
         }
-        .foregroundStyle(AppTheme.ink)
+    }
+
+    // MARK: - Hero
+
+    /// A fanned triptych of the collectible art: the product itself, in the first
+    /// second of the paywall. Prefers the new remote collection (cached by
+    /// RemoteCatalog) and falls back to strong bundled darshans on a fresh install,
+    /// so the hero is never empty.
+    private var heroCollage: some View {
+        ZStack {
+            heroCard(remote: "r_shiva_nataraja", fallback: "day1_shiv",
+                     width: 116, angle: -9, offsetX: -96, offsetY: 12)
+            heroCard(remote: "r_vishnu_anantashayana", fallback: "day28_vishnu",
+                     width: 116, angle: 9, offsetX: 96, offsetY: 12)
+            heroCard(remote: "r_krishna_govardhan", fallback: "day23_krishna",
+                     width: 150, angle: 0, offsetX: 0, offsetY: 0)
+        }
+        .frame(height: 240)
+        .accessibilityHidden(true)
+    }
+
+    private func heroCard(
+        remote: String, fallback: String,
+        width: CGFloat, angle: Double, offsetX: CGFloat, offsetY: CGFloat
+    ) -> some View {
+        let ui = DarshanImageStore.uiImage(named: remote) ?? UIImage(named: fallback)
+        return Group {
+            if let ui {
+                Image(uiImage: ui)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                LinearGradient(colors: [AppTheme.teal, AppTheme.plum],
+                               startPoint: .top, endPoint: .bottom)
+            }
+        }
+        .frame(width: width, height: width * 1.5)
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(AppTheme.marigold.opacity(0.55), lineWidth: 1))
+        .shadow(color: .black.opacity(0.28), radius: 10, x: 0, y: 6)
+        .rotationEffect(.degrees(angle))
+        .offset(x: offsetX, y: offsetY)
     }
 }
