@@ -40,6 +40,18 @@ upload a new build while any v1.0 review is pending; local development is fine.
   ishta is never locked to them (Pro only gates switching to the other premium mantras).
   EN + HI verified in the sim.
 
+- **2026-07-05 — 25 collectible darshans pushed live** via the remote pipeline
+  (manifest **v2**: Krishna 11 + Shiva 10 + Vishnu 4; 3 free tasters + 22 Pro).
+  Publisher `bhaktiangan-site/95-app-catalog.mjs`. Reuses the website gallery URLs.
+- **2026-07-05 — In-app gallery like counts (read-only social proof): BUILT & VERIFIED.**
+  `LikeCounts` (appended to `Services/RemoteCatalog.swift`) reads the website's public
+  `/gallery-likes` via a **bare GET, no uid / no identifiers** so App Privacy
+  "Data Not Collected" holds; cached + 12h refresh (launch hook in `BhaktiAnganApp`).
+  `DarshanDetailView` shows "Loved by N" only for remote collectibles that have website
+  likes (bundled darshans show nothing, so no empty zeros at launch). Owner chose the
+  label-safe web-counts option over full app-side likes (which would change the privacy
+  label). Compiles + launches clean on the sim.
+
 _Keep appending dated entries here as v1.1/v1.2 items land._
 
 **Scope agreed with owner:** all five below go into the next release cycle (they can

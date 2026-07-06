@@ -211,3 +211,74 @@ extension DevotionalItem {
         return Image(imageName)
     }
 }
+
+// MARK: - Gallery like counts (read-only social proof)
+
+/// Reads the website's public gallery like counts and shows them in the app as
+/// social proof ("loved by N").
+///
+/// IMPORTANT privacy stance: this is a BARE GET with NO identifiers, no body, no
+/// device id, and we never POST a like from the app. We only read public totals,
+/// so the App Privacy "Data Not Collected" label continues to hold (the same
+/// stance as `RemoteCatalog`). Counts are cached for offline use and refreshed at
+/// most once every 12h. Only the remotely-added collectibles (ids like
+/// `r_krishna_tokri`) map to a website gallery slug; bundled darshans have no
+/// website counterpart and simply show no count.
+@MainActor
+final class LikeCounts: ObservableObject {
+    static let shared = LikeCounts()
+
+    @Published private(set) var counts: [String: Int] = [:]
+
+    private static let url = URL(string: "https://bhaktiangan.com/wp-json/bhaktiangan/v1/gallery-likes")!
+    private static let refreshInterval: TimeInterval = 12 * 60 * 60
+    private static let lastKey = "likeCountsLastRefresh"
+    private let cacheFile: URL
+
+    init() {
+        let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
+        cacheFile = support.appendingPathComponent("gallery-like-counts.json")
+        if let data = try? Data(contentsOf: cacheFile),
+           let map = try? JSONDecoder().decode([String: Int].self, from: data) {
+            counts = map
+        }
+    }
+
+    /// Website like-slug for a darshan item, or nil if it has no website counterpart.
+    static func webSlug(forImageName name: String) -> String? {
+        guard name.hasPrefix("r_") else { return nil }
+        return String(name.dropFirst(2)).replacingOccurrences(of: "_", with: "-")
+    }
+
+    /// The public like count for this darshan, or nil when there is none to show.
+    func count(for item: DevotionalItem) -> Int? {
+        guard let slug = Self.webSlug(forImageName: item.imageName),
+              let n = counts[slug], n > 0 else { return nil }
+        return n
+    }
+
+    func refreshIfStale() async {
+        let last = UserDefaults.standard.double(forKey: Self.lastKey)
+        guard Date().timeIntervalSince1970 - last > Self.refreshInterval else { return }
+        await refresh()
+    }
+
+    func refresh() async {
+        var request = URLRequest(url: Self.url)
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        request.timeoutInterval = 10
+        guard let (data, response) = try? await URLSession.shared.data(for: request),
+              (response as? HTTPURLResponse)?.statusCode == 200,
+              let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+              let raw = obj["counts"] as? [String: Any] else { return }
+        var map: [String: Int] = [:]
+        for (key, value) in raw {
+            if let n = (value as? NSNumber)?.intValue { map[key] = n }
+        }
+        counts = map
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: Self.lastKey)
+        if let out = try? JSONSerialization.data(withJSONObject: map) {
+            try? out.write(to: cacheFile, options: .atomic)
+        }
+    }
+}

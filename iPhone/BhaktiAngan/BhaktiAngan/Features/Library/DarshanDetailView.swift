@@ -4,6 +4,7 @@ import UIKit
 struct DarshanDetailView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var loc: LocalizationManager
+    @ObservedObject private var likes = LikeCounts.shared
     @State private var showShare = false
     @State private var toast: String?
 
@@ -41,6 +42,15 @@ struct DarshanDetailView: View {
                     Text(item.blessing(loc.lang))
                         .font(.body.italic())
                         .foregroundStyle(AppTheme.ink)
+
+                    if let n = likes.count(for: item) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "heart.fill").font(.caption)
+                            Text(loc.s("Loved by \(n.formatted())", "\(n.formatted()) लोगों को प्रिय"))
+                                .font(.caption.weight(.semibold))
+                        }
+                        .foregroundStyle(AppTheme.vermilion)
+                    }
 
                     HStack(spacing: 10) {
                         actionButton(

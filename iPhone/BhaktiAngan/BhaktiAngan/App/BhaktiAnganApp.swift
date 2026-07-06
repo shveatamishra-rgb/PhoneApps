@@ -29,6 +29,11 @@ struct BhaktiAnganApp: App {
                     // darshans (at most one fetch per 12h; offline-safe).
                     await RemoteCatalog.shared.refreshIfStale()
                 }
+                .task(priority: .background) {
+                    // Public gallery like counts (bare GET, no identifiers; read-only
+                    // social proof). Same 12h cadence; offline-safe.
+                    await LikeCounts.shared.refreshIfStale()
+                }
         }
     }
 }
