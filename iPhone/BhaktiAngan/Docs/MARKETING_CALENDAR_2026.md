@@ -20,14 +20,14 @@ Recycle every Reel as a YouTube Short and an Instagram Story. One asset, three s
 
 - [ ] Archive + upload v1.1 build (widgets included), submit for review with new screenshots (EN 5 panels, HI 5 panels, in AppStore/v1.1/)
 - [ ] What's New copy in both languages (below)
-- [ ] Announcement newsletter drafted in Brevo, held until approval
 - [ ] On approval: release, then announcement Reel "Your home screen is now a mandir" (widget panel as the visual)
+- [ ] NO announcement newsletter yet: the list is ~0. Announcement energy goes to IG/YT/WhatsApp. The Brevo list keeps growing from gallery opt-ins; send the first newsletter at ~100 subscribers (target: before Shravan, Jul 30). Add the opt-in block to story pages + /panchang/ to speed this up (see ROADMAP_v1.2.md).
 
 ## Phase 1: Shravan (Jul 30 - Aug 27) "Shiva month"
 
 Shravan Mondays: Aug 3, 10, 17, 24. This is the highest-intent Shiva audience of the year.
 
-- Jul 30: Shravan kickoff. Newsletter: "Shravan begins today. A Shiva darshan every Somwar."
+- Jul 30: Shravan kickoff. Newsletter "Shravan begins today. A Shiva darshan every Somwar." IF the list has passed ~100 by then; otherwise the same message as a Reel + WhatsApp broadcast.
 - Every Somwar (Mon): Shiva Reel at 6 AM IST (Adiyogi, Nataraja, Gangadhar, Neelkanth rotation), WhatsApp status, gallery Shiva collection link
 - Aug 24 (last Somwar): "Shravan is ending" Reel + Pro pitch (the full Shiva collection lives in the app)
 - App: no new build needed; remote pipeline can time a bonus Shiva drop (availableFrom) for Aug 3
