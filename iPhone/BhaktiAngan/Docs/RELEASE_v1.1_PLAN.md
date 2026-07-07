@@ -82,6 +82,15 @@ upload a new build while any v1.0 review is pending; local development is fine.
   verified running in the sim (darshan file written); choghadiya needs a city (owner has one set
   on device) so final visual check is on-device. Free, never gated.
 
+- **2026-07-06 — Pro paywall REDESIGNED around the collectible collection** (86d1459).
+  Hero = fanned triptych of the NEW remote art (Nataraja / Govardhan / Anantashayana,
+  remote-first with bundled fallbacks). Feature list rewritten outcome-led and HONEST:
+  removed "Unlimited wallpaper saves" + "Custom daily reminders" (never actually gated);
+  now sells the 60+ collection, auto-arriving festival drops, all katha + mantras, widget
+  full-collection rotation, and "All future Pro features, included". Lifetime = "One
+  purchase. Everything, forever, including future features". Purchase machinery, 3.1.2(c)
+  terms, disclosure and legal links untouched (App Review approved). EN + HI verified in sim.
+
 _Keep appending dated entries here as v1.1/v1.2 items land._
 
 **Scope agreed with owner:** all five below go into the next release cycle (they can
