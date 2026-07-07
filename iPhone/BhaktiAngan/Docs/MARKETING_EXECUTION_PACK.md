@@ -1,4 +1,4 @@
-# Marketing execution pack — launch to Diwali 2026
+# Marketing execution pack: launch to Diwali 2026
 
 Companion to `MARKETING_CALENDAR_2026.md` (the WHEN). This is the WHAT: every
 reel script, image prompt, Grok image-to-video prompt, caption, newsletter, and
@@ -40,7 +40,7 @@ given per asset. 8-12 total, never more.
 
 ## PHASE 0 · LAUNCH WEEK (the day v1.1 is approved + day before)
 
-### Asset L0 · Teaser reel — "Something divine is coming"
+### Asset L0 · Teaser reel: "Something divine is coming"
 - **When**: the evening BEFORE release day, 7:30 PM IST (IG reel + story + FB)
 - **Stills** (2): 
   - P1: `a glowing golden diya flame in complete darkness, a faint silhouette
@@ -56,7 +56,7 @@ given per asset. 8-12 total, never more.
   - 4-6s: end card silhouette. "Tomorrow. 8 AM." / "कल। सुबह 8 बजे।"
 - **Caption**: "Something divine arrives on your home screen tomorrow. 🪔 #bhakti #dailydarshan #comingsoon"
 
-### Asset L1 · Launch reel — "Your home screen is now a mandir"
+### Asset L1 · Launch reel: "Your home screen is now a mandir"
 - **When**: release day, 8:00 AM IST (IG reel, FB reel, YT Short at 6 AM next morning)
 - **Stills** (3):
   - P1: `iPhone home screen mockup held in praying hands at dawn, a radiant
@@ -89,9 +89,9 @@ given per asset. 8-12 total, never more.
 
 ---
 
-## PHASE 1 · SHRAVAN (Jul 30 - Aug 27) — Shiva month
+## PHASE 1 · SHRAVAN (Jul 30 - Aug 27): Shiva month
 
-### Asset S0 · Shravan kickoff reel — Jul 30, 6:00 AM IST
+### Asset S0 · Shravan kickoff reel: Jul 30, 6:00 AM IST
 - **Stills** (2): Adiyogi from the app collection (r_shiva_adiyogi, reuse the
   actual art, it is the product) + `Kailash peak at first light, snow glowing
   saffron, tiny lone temple bell in foreground` + house suffix
@@ -109,19 +109,19 @@ given per asset. 8-12 total, never more.
   "Open your Angan". HI mirror: "आज से श्रावण 🪔 हर सोमवार शिव दर्शन". If <100
   subs: same copy as WhatsApp broadcast + IG story instead.
 
-### Assets S1-S4 · Somwar series (Aug 3, 10, 17, 24 — all 6:00 AM IST)
+### Assets S1-S4 · Somwar series (Aug 3, 10, 17, 24: all 6:00 AM IST)
 One template, rotate the art + one line. Format: single still (the app's own
 collectible), Grok motion, two overlays, end card. 15-20s.
 - **Grok motion (all)**: `very slow cinematic push-in, incense smoke curling
   through the frame, ember particles floating, subtle divine glow pulse`
-- S1 Aug 3 — Adiyogi: "Somwar 1. Stillness." / "सोमवार 1। स्थिरता।"
-- S2 Aug 10 — Nataraja: "Somwar 2. The cosmic dance." / "सोमवार 2। तांडव।"
-- S3 Aug 17 — Gangadhar: "Somwar 3. He holds the river." / "सोमवार 3। गंगाधर।"
-- S4 Aug 24 — Neelkanth: "Somwar 4. He drank the poison." / "सोमवार 4। नीलकंठ।"
+- S1 Aug 3: Adiyogi: "Somwar 1. Stillness." / "सोमवार 1। स्थिरता।"
+- S2 Aug 10: Nataraja: "Somwar 2. The cosmic dance." / "सोमवार 2। तांडव।"
+- S3 Aug 17: Gangadhar: "Somwar 3. He holds the river." / "सोमवार 3। गंगाधर।"
+- S4 Aug 24: Neelkanth: "Somwar 4. He drank the poison." / "सोमवार 4। नीलकंठ।"
 - Every caption ends: "Full Shiva collection in the app. Link in bio."
 - WhatsApp status each Somwar with the same clip.
 
-### Asset S5 · Shravan farewell / Pro pitch reel — Aug 24, 7:30 PM IST
+### Asset S5 · Shravan farewell / Pro pitch reel: Aug 24, 7:30 PM IST
 (The "farewell" asset. Same day as S4 but evening slot, different job: conversion.)
 - **Stills**: fast montage of ALL 10 Shiva artworks (the actual collection grid
   screen-recorded from the app Library, slow scroll)
@@ -130,7 +130,7 @@ collectible), Grok motion, two overlays, end card. 15-20s.
   - "But Mahadev's collection stays." / "पर महादेव का संग्रह रहेगा।"
   - "10 Shiva darshans. Every katha. In your pocket." / "10 शिव दर्शन। हर कथा। आपकी जेब में।"
   - End card: "Bhakti Angan Pro. 7 days free." / "भक्ति आँगन प्रो। 7 दिन निःशुल्क।"
-- **Newsletter N2** (Aug 24, 7:00 AM IST): "Shravan's last Somwar 🙏" — recap
+- **Newsletter N2** (Aug 24, 7:00 AM IST): "Shravan's last Somwar 🙏": recap
   the 4 Somwar darshans, introduce Pro (7-day trial), soft close.
 
 ---
@@ -139,7 +139,7 @@ collectible), Grok motion, two overlays, end card. 15-20s.
 
 - **App**: manifest availableFrom Sep 1: feature krishna-makhan-chor +
   krishna-raas as the festival window darshans (already live art, timed re-feature).
-- **Asset J1 · reel — Sep 2, 7:30 PM IST** (eve): stills krishna-tokri +
+- **Asset J1 · reel: Sep 2, 7:30 PM IST** (eve): stills krishna-tokri +
   krishna-makhan-chor + krishna-bansuri. Grok motion: `rain streaks over the
   Yamuna scene, basket bobbing gently` / `butter glistening, curious eyes
   blink softly` / `peacock feather swaying, flute light shimmering`.
@@ -147,29 +147,29 @@ collectible), Grok motion, two overlays, end card. 15-20s.
   "Tomorrow, celebrate with a darshan every hour of Nishita." -> end card
   "Janmashtami collection, in the app." Tags: `#janmashtami #krishna
   #jaishreekrishna #laddugopal #dahihandi`
-- **Asset J2 · Janmashtami day reel — Sep 3, 6:00 AM IST**: single art
+- **Asset J2 · Janmashtami day reel: Sep 3, 6:00 AM IST**: single art
   krishna-raas, motion `slow orbit, moonlight ripple on water, gopis' lamps
   flickering`. Overlay: "Happy Janmashtami 🦚" / "जन्माष्टमी की शुभकामनाएँ"।
-- **Newsletter N3 — Sep 3, 7:00 AM IST**: "Nand ghar anand bhayo 🦚" — the
+- **Newsletter N3: Sep 3, 7:00 AM IST**: "Nand ghar anand bhayo 🦚": the
   Krishna gallery collection link (website), app CTA, 1 image.
 
 ## PHASE 3 · GANESH CHATURTHI (Sep 14)
 
 - **App**: manifest window Sep 12-21 features ganesha-chaturthi + ganesha-nritya.
-- **Asset G1 · reel — Sep 13, 7:30 PM IST**: stills ganesha-chaturthi +
+- **Asset G1 · reel: Sep 13, 7:30 PM IST**: stills ganesha-chaturthi +
   ganesha-bal. Motion: `modak steam rising, diya ring glow breathing, petals
   falling slowly`. Overlays: "Bappa arrives tomorrow." / "कल बप्पा आ रहे हैं।"
   -> "10 days. 9 Ganesha darshans." -> end card. Tags: `#ganeshchaturthi
   #ganpatibappamorya #bappa #ganesha`
-- **Asset G2 · day reel — Sep 14, 6:00 AM IST**: ganesha-signature art.
+- **Asset G2 · day reel: Sep 14, 6:00 AM IST**: ganesha-signature art.
   Overlay: "Ganpati Bappa Morya 🙏" only. Let the art carry it.
-- **Newsletter N4 — Sep 14**: "Bappa is home 🐘" + Ganesha collection.
+- **Newsletter N4: Sep 14**: "Bappa is home 🐘" + Ganesha collection.
 
-## PHASE 4 · NAVRATRI (Oct 11-20) — the Devi flagship
+## PHASE 4 · NAVRATRI (Oct 11-20): the Devi flagship
 
 We hold EXACTLY 9 Devi artworks: sherawali, navadurga, vaishno-devi,
 mahishasura-mardini, parvati, lakshmi, saraswati, kali, devi-close.
-**"Nav Din, Nav Darshan" — one reel per day, 6:30 AM IST, Oct 11-19**, format
+**"Nav Din, Nav Darshan": one reel per day, 6:30 AM IST, Oct 11-19**, format
 identical (one art, one motion clip, day number + name overlay, end card),
 producible in ONE batch session before Oct 8.
 - Day 1 Shailputri slot -> sherawali: "Din 1. Sherawali Maa." 
@@ -186,26 +186,26 @@ producible in ONE batch session before Oct 8.
   in breeze`
 - **App**: manifest window Oct 9-22 features the Devi set as daily darshans in
   this order (matches the reels; the widget shows the same Maa as the reel that
-  morning — THIS is the magic moment, say it in captions: "Aaj ki Maa aapki
+  morning: THIS is the magic moment, say it in captions: "Aaj ki Maa aapki
   home screen par bhi.")
-- **Asset D10 · Dussehra reel — Oct 20, 7:30 PM IST**: mahishasura-mardini,
+- **Asset D10 · Dussehra reel: Oct 20, 7:30 PM IST**: mahishasura-mardini,
   overlay "Good wins. Every time." / "जीत हमेशा धर्म की होती है।"
-- **Newsletter N5 — Oct 11, 7:00 AM IST**: "Nav Din, Nav Darshan 🌺" — the 9-day
+- **Newsletter N5: Oct 11, 7:00 AM IST**: "Nav Din, Nav Darshan 🌺": the 9-day
   plan, one image, app CTA. This is the list's biggest send; by now opt-ins
   from gallery + panchang should be well past 100.
 
 ## PHASE 5 · DIWALI (Nov 8)
 
 - **App**: manifest window Nov 5-12: lakshmi + rama-ayodhya-diwali featured.
-- **Asset DW1 · reel — Nov 7, 7:30 PM IST**: stills rama-ayodhya-diwali +
+- **Asset DW1 · reel: Nov 7, 7:30 PM IST**: stills rama-ayodhya-diwali +
   lakshmi. Motion: `thousands of diyas igniting in waves across Ayodhya ghats,
   reflections shimmering` / `gold coins glinting, lotus pond diyas drifting`.
   Overlays: "He returned home. Light everything." / "वे घर लौटे। हर दीप जलाओ।"
   -> "Diwali collection + Lakshmi darshan, in the app."
-- **Asset DW2 · Diwali morning — Nov 8, 6:30 AM IST**: lakshmi art, overlay
+- **Asset DW2 · Diwali morning: Nov 8, 6:30 AM IST**: lakshmi art, overlay
   "Shubh Deepawali 🪔" / "शुभ दीपावली 🪔". Warmest caption of the year, zero sell.
-- **Newsletter N6 — Nov 8, 7:00 AM IST**: "Shubh Deepawali from the Angan 🪔"
-  — gratitude note (year recap: 61 artworks, 2 widgets, your dua), Lakshmi
+- **Newsletter N6: Nov 8, 7:00 AM IST**: "Shubh Deepawali from the Angan 🪔"
+ : gratitude note (year recap: 61 artworks, 2 widgets, your dua), Lakshmi
   wallpaper gift link (auto-fit download), one-line Pro mention, done.
 
 ---
