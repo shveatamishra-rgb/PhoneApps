@@ -282,9 +282,9 @@ auto-renewable subscriptions (monthly, annual with a 7-day free trial) and a
 non-consumable Lifetime. Terms of Use and Privacy Policy links appear on the
 paywall and in Settings. No account or login is required.
 
-The app is fully bilingual (English / Hindi) — toggle in Settings or the top of
+The app is fully bilingual (English / Hindi); toggle in Settings or the top of
 the Home screen. The Panchang feature can use location for accurate sunrise; it
-is optional (a city picker is offered) and used only on-device — nothing is
+is optional (a city picker is offered) and used only on-device. Nothing is
 transmitted, so App Privacy is "Data Not Collected." A local StoreKit
 configuration is included for development; production uses the product IDs in
 App Store Connect. All artwork is original devotional art created for this app.
