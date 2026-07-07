@@ -381,7 +381,9 @@ enum ChoghadiyaBridge {
         }
         let cal = Calendar(identifier: .gregorian)
         var periods: [Choghadiya] = []
-        for offset in 0...1 {
+        // 7 days like WidgetBridge: the widget's timeline advances by itself at every
+        // muhurat boundary, so this window is how long it stays correct app-unopened.
+        for offset in 0..<7 {
             let day = cal.date(byAdding: .day, value: offset, to: Date()) ?? Date()
             if let r = PanchangCalculator.compute(for: day, city: city) {
                 periods += r.dayChoghadiya + r.nightChoghadiya
