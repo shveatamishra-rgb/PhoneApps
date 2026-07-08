@@ -394,43 +394,79 @@ struct VerseShareCard: View {
     let verse: Verse
     let lang: Lang
 
+    // The Gita is Krishna's teaching to Arjuna, so one coherent scene backs every
+    // verse: the Gita Updesh art if the collectible is cached, else a bundled
+    // Krishna, else the plum->teal gradient. Never a per-verse image (arbitrary).
+    private static let backgroundNames = ["r_krishna_gita", "day23_krishna", "day4_krishna", "krishna-govardhan"]
+    private var background: UIImage? {
+        for n in Self.backgroundNames { if let ui = DarshanImageStore.uiImage(named: n) { return ui } }
+        return nil
+    }
+
+    private var gradientFallback: LinearGradient {
+        LinearGradient(colors: [Color(red: 0.24, green: 0.08, blue: 0.16),
+                                Color(red: 0.08, green: 0.30, blue: 0.30)],
+                       startPoint: .top, endPoint: .bottom)
+    }
+
     var body: some View {
-        VStack(spacing: 18) {
-            Text("\u{0950}")   // Om
-                .font(.system(size: 40, design: .serif))
-                .foregroundStyle(.white.opacity(0.9))
+        ZStack {
+            // Backdrop: artwork (filled) or the gradient.
+            if let bg = background {
+                Image(uiImage: bg)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 540, height: 675)
+                    .clipped()
+            } else {
+                gradientFallback
+            }
+            // Scrim for legibility: darker at top and bottom to anchor Om and brand,
+            // still firm through the middle so the verse reads over any painting.
+            LinearGradient(stops: [
+                .init(color: .black.opacity(0.62), location: 0.0),
+                .init(color: .black.opacity(0.42), location: 0.5),
+                .init(color: .black.opacity(0.72), location: 1.0),
+            ], startPoint: .top, endPoint: .bottom)
 
-            Text(verse.sanskrit)
-                .font(.system(size: 27, weight: .semibold, design: .serif))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white)
-                .lineSpacing(8)
+            VStack(spacing: 18) {
+                Text("\u{0950}")   // Om
+                    .font(.system(size: 40, design: .serif))
+                    .foregroundStyle(.white.opacity(0.92))
 
-            Rectangle().fill(.white.opacity(0.35)).frame(width: 60, height: 1)
+                Text(verse.sanskrit)
+                    .font(.system(size: 27, weight: .semibold, design: .serif))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white)
+                    .lineSpacing(8)
 
-            Text(verse.meaning(lang))
-                .font(.system(size: 20, design: .serif))
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.white.opacity(0.95))
-                .lineSpacing(4)
+                Rectangle().fill(Color(red: 0.80, green: 0.64, blue: 0.29)).frame(width: 60, height: 2)
 
-            Text(verse.source(lang))
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.85))
+                Text(verse.meaning(lang))
+                    .font(.system(size: 20, design: .serif))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.white.opacity(0.96))
+                    .lineSpacing(4)
 
-            Spacer(minLength: 0)
+                Text(verse.source(lang))
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(Color(red: 0.90, green: 0.83, blue: 0.65))
 
-            Text(lang == .hi ? "भक्ति आँगन" : "Bhakti Angan")
-                .font(.system(size: 17, weight: .bold))
-                .foregroundStyle(.white.opacity(0.9))
+                Spacer(minLength: 0)
+
+                Text(lang == .hi ? "भक्ति आँगन" : "Bhakti Angan")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundStyle(.white.opacity(0.92))
+            }
+            .padding(44)
+            .shadow(color: .black.opacity(0.55), radius: 7, x: 0, y: 2)  // lifts text off the art
+
+            // Inset gold hairline for a collectible frame.
+            RoundedRectangle(cornerRadius: 0)
+                .strokeBorder(Color(red: 0.80, green: 0.64, blue: 0.29).opacity(0.55), lineWidth: 1.5)
+                .padding(14)
         }
-        .padding(44)
         .frame(width: 540, height: 675, alignment: .center)
-        .background(
-            LinearGradient(colors: [Color(red: 0.24, green: 0.08, blue: 0.16),
-                                    Color(red: 0.08, green: 0.30, blue: 0.30)],
-                           startPoint: .top, endPoint: .bottom)
-        )
     }
 
     /// Renders the card to a shareable UIImage at 2x for crisp output.
