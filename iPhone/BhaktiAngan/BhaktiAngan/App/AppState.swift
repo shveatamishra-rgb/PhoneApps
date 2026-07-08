@@ -4,6 +4,7 @@ import Foundation
 final class AppState: ObservableObject {
     @Published private(set) var favorites: Set<String>
     @Published private(set) var savedVerses: Set<String>
+    @Published private(set) var onboardingIntents: Set<String>
     @Published var hasCompletedOnboarding: Bool
     @Published var selectedTab: AppTab = .home
     @Published var selectedMantraID: String
@@ -14,6 +15,7 @@ final class AppState: ObservableObject {
     private let defaults: UserDefaults
     private let favoritesKey = "favoriteImageNames"
     private let savedVersesKey = "savedVerseIDs"
+    private let intentsKey = "onboardingIntents"
     private let onboardingKey = "hasCompletedOnboarding"
     private let selectedMantraKey = "selectedMantraID"
     private let currentStreakKey = "currentStreak"
@@ -28,6 +30,7 @@ final class AppState: ObservableObject {
         self.defaults = defaults
         favorites = Set(defaults.stringArray(forKey: favoritesKey) ?? [])
         savedVerses = Set(defaults.stringArray(forKey: savedVersesKey) ?? [])
+        onboardingIntents = Set(defaults.stringArray(forKey: intentsKey) ?? [])
         selectedMantraID = defaults.string(forKey: selectedMantraKey)
             ?? "shiv"
 
@@ -51,11 +54,27 @@ final class AppState: ObservableObject {
         bestStreak = defaults.integer(forKey: bestStreakKey)
     }
 
-    func completeOnboarding(ishta: String) {
+    func completeOnboarding(ishta: String, intents: Set<String> = []) {
         selectedMantraID = ishta
+        onboardingIntents = intents
         hasCompletedOnboarding = true
         defaults.set(true, forKey: onboardingKey)
         defaults.set(ishta, forKey: selectedMantraKey)
+        defaults.set(Array(intents), forKey: intentsKey)
+        // Personalize only the FIRST landing after onboarding, then Today is home
+        // (so a one-time intent never traps a daily darshan user on another tab).
+        selectedTab = Self.preferredTab(for: intents)
+    }
+
+    /// Darshan-first by default; only lands elsewhere when the devotee's chosen
+    /// interests point that way and darshan/panchang/gita are not among them.
+    static func preferredTab(for intents: Set<String>) -> AppTab {
+        if intents.contains("darshan") || intents.contains("panchang") || intents.contains("gita") {
+            return .home
+        }
+        if intents.contains("katha") { return .katha }
+        if intents.contains("japa") { return .japa }
+        return .home
     }
 
     func toggleFavorite(_ item: DevotionalItem) {

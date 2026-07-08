@@ -18,6 +18,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 proSection
+                statsSection
                 appearanceSection
                 practiceSection
                 connectSection
@@ -166,6 +167,39 @@ struct SettingsView: View {
         }
     }
 
+    private var statsSection: some View {
+        Section {
+            HStack(spacing: 0) {
+                statTile(value: "\(appState.currentStreak)",
+                         label: loc.s("Day streak", "दिन की लय"), icon: "flame.fill", tint: AppTheme.vermilion)
+                Divider()
+                statTile(value: "\(appState.bestStreak)",
+                         label: loc.s("Best streak", "सर्वश्रेष्ठ"), icon: "trophy.fill", tint: AppTheme.marigold)
+                Divider()
+                statTile(value: "\(appState.savedVerses.count)",
+                         label: loc.s("Shloks saved", "सहेजे श्लोक"), icon: "bookmark.fill", tint: AppTheme.teal)
+                Divider()
+                statTile(value: "\(appState.favorites.count)",
+                         label: loc.s("Favorites", "पसंदीदा"), icon: "heart.fill", tint: AppTheme.plum)
+            }
+            .frame(maxWidth: .infinity)
+            .listRowInsets(EdgeInsets(top: 12, leading: 8, bottom: 12, trailing: 8))
+        } header: {
+            Text(loc.s("Your Practice", "आपकी साधना"))
+        }
+    }
+
+    private func statTile(value: String, label: String, icon: String, tint: Color) -> some View {
+        VStack(spacing: 5) {
+            Image(systemName: icon).font(.callout).foregroundStyle(tint)
+            Text(value).font(.title3.bold()).foregroundStyle(AppTheme.ink)
+            Text(label)
+                .font(.caption2).foregroundStyle(AppTheme.muted)
+                .multilineTextAlignment(.center).lineLimit(2)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
     private var practiceSection: some View {
         Section {
             Toggle(loc.s("Daily darshan reminder", "दैनिक दर्शन स्मरण"), isOn: $reminderEnabled)
@@ -207,7 +241,7 @@ struct SettingsView: View {
 
     private var supportSection: some View {
         Section {
-            NavigationLink(loc.s("Contact Support", "सहायता से संपर्क करें")) {
+            NavigationLink(loc.s("Write to us", "हमें लिखें")) {
                 SupportView()
             }
             NavigationLink(loc.s("Privacy Policy", "गोपनीयता नीति")) {

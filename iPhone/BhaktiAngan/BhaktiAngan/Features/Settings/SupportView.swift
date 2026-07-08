@@ -77,7 +77,7 @@ struct SupportView: View {
         }
         .scrollContentBackground(.hidden)
         .background(AppTheme.ivory)
-        .navigationTitle(loc.s("Contact Support", "सहायता से संपर्क करें"))
+        .navigationTitle(loc.s("Write to us", "हमें लिखें"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showMailComposer) {
             MailComposeView(

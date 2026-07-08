@@ -5,6 +5,7 @@ struct OnboardingView: View {
     @EnvironmentObject private var loc: LocalizationManager
     @State private var page = 0
     @State private var selectedIshta = "shiv"
+    @State private var selectedIntents: Set<String> = []
 
     var body: some View {
         ZStack {
@@ -13,11 +14,98 @@ struct OnboardingView: View {
             TabView(selection: $page) {
                 welcomePage.tag(0)
                 ritualPage.tag(1)
-                preferencePage.tag(2)
+                intentPage.tag(2)
+                preferencePage.tag(3)
             }
             .tabViewStyle(.page(indexDisplayMode: .always))
             .indexViewStyle(.page(backgroundDisplayMode: .always))
         }
+    }
+
+    // MARK: - Intent (what brings you here)
+
+    private struct Intent: Identifiable {
+        let id: String
+        let icon: String
+        let title: String
+    }
+
+    private var intentOptions: [Intent] {
+        [
+            Intent(id: "darshan", icon: "photo.fill", title: loc.s("Daily darshan", "दैनिक दर्शन")),
+            Intent(id: "panchang", icon: "sun.and.horizon.fill", title: loc.s("Panchang & muhurat", "पंचांग और मुहूर्त")),
+            Intent(id: "japa", icon: "circle.grid.3x3.fill", title: loc.s("Japa & chanting", "जप और मंत्र")),
+            Intent(id: "katha", icon: "book.closed.fill", title: loc.s("Katha & stories", "कथा और कहानियाँ")),
+            Intent(id: "gita", icon: "text.book.closed.fill", title: loc.s("Learn the Gita", "गीता सीखें")),
+        ]
+    }
+
+    private var intentPage: some View {
+        VStack(spacing: 18) {
+            Spacer(minLength: 8)
+
+            VStack(spacing: 8) {
+                Text(loc.s("What brings you here?", "आपको यहाँ क्या लाया?"))
+                    .font(.largeTitle.bold())
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(AppTheme.plum)
+                Text(loc.s("Choose all that speak to you. This shapes where you begin.",
+                           "जो भी आपके मन को भाए चुनें। इससे तय होगा आप कहाँ से आरंभ करें।"))
+                    .font(.subheadline)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(AppTheme.muted)
+                    .padding(.horizontal, 28)
+            }
+
+            VStack(spacing: 12) {
+                ForEach(intentOptions) { option in
+                    intentRow(option)
+                }
+            }
+            .padding(.horizontal, 24)
+
+            Spacer()
+
+            Button(loc.s("Choose My Deity", "अपना इष्ट चुनें")) {
+                withAnimation { page = 3 }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .padding(.horizontal, 28)
+            .padding(.bottom, 28)
+        }
+    }
+
+    private func intentRow(_ option: Intent) -> some View {
+        let selected = selectedIntents.contains(option.id)
+        return Button {
+            withAnimation(.easeOut(duration: 0.15)) {
+                if selected { selectedIntents.remove(option.id) }
+                else { selectedIntents.insert(option.id) }
+            }
+        } label: {
+            HStack(spacing: 14) {
+                Image(systemName: option.icon)
+                    .font(.title3)
+                    .foregroundStyle(selected ? .white : AppTheme.vermilion)
+                    .frame(width: 30)
+                Text(option.title)
+                    .font(.headline)
+                    .foregroundStyle(selected ? .white : AppTheme.ink)
+                Spacer()
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(selected ? .white : AppTheme.muted.opacity(0.5))
+            }
+            .padding(.horizontal, 16).padding(.vertical, 14)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(selected ? AppTheme.teal : AppTheme.paper)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .strokeBorder(selected ? .clear : AppTheme.muted.opacity(0.18))
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private var welcomePage: some View {
@@ -86,7 +174,7 @@ struct OnboardingView: View {
 
             Spacer()
 
-            Button(loc.s("Choose My Deity", "अपना इष्ट चुनें")) {
+            Button(loc.s("Continue", "आगे बढ़ें")) {
                 withAnimation { page = 2 }
             }
             .buttonStyle(PrimaryButtonStyle())
@@ -124,7 +212,7 @@ struct OnboardingView: View {
             }
 
             Button(loc.s("Begin My Daily Darshan", "मेरा दैनिक दर्शन आरंभ करें")) {
-                appState.completeOnboarding(ishta: selectedIshta)
+                appState.completeOnboarding(ishta: selectedIshta, intents: selectedIntents)
             }
             .buttonStyle(PrimaryButtonStyle())
             .padding(.horizontal, 28)
