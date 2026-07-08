@@ -383,7 +383,11 @@ enum ChoghadiyaBridge {
         var periods: [Choghadiya] = []
         // 7 days like WidgetBridge: the widget's timeline advances by itself at every
         // muhurat boundary, so this window is how long it stays correct app-unopened.
-        for offset in 0..<7 {
+        // Start at -1: night choghadiya belongs to the date it STARTS on, so between
+        // midnight and sunrise the running period lives in yesterday's compute. Without
+        // yesterday, a post-midnight publish loses the current period and the widget
+        // falls back to showing the morning's first muhurat as if it were current.
+        for offset in -1..<7 {
             let day = cal.date(byAdding: .day, value: offset, to: Date()) ?? Date()
             if let r = PanchangCalculator.compute(for: day, city: city) {
                 periods += r.dayChoghadiya + r.nightChoghadiya

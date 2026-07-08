@@ -95,9 +95,12 @@ struct ChoghProvider: TimelineProvider {
         guard !d.periods.isEmpty else {
             return ChoghEntry(date: date, current: nil, next: nil, city: "", tz: d.tz, hasData: false)
         }
-        let cur = d.periods.first { date >= $0.start && date < $0.end } ?? d.periods.first { $0.start > date }
+        // Only a period that actually covers `date` may render as current. If the
+        // data has a gap (stale file), show the upcoming period in the NEXT slot
+        // only; never present a future muhurat as the running one.
+        let cur = d.periods.first { date >= $0.start && date < $0.end }
         let nxt = d.periods.first { $0.start > (cur?.start ?? date) }
-        return ChoghEntry(date: date, current: cur, next: nxt, city: d.cityEN, tz: d.tz, hasData: true)
+        return ChoghEntry(date: date, current: cur, next: nxt, city: d.cityEN, tz: d.tz, hasData: cur != nil || nxt != nil)
     }
 }
 
@@ -107,8 +110,14 @@ struct ChoghWidgetView: View {
     @Environment(\.widgetFamily) private var family
     let entry: ChoghEntry
 
-    private var name: String { entry.current?.nameEN ?? "" }
-    private var quality: String { entry.current?.quality ?? "neutral" }
+    private var name: String { entry.current?.nameEN ?? entry.next?.nameEN ?? "" }
+    private var quality: String { (entry.current ?? entry.next)?.quality ?? "neutral" }
+    // "until <end>" while a period runs; "starts <time>" when only a future one exists.
+    private var timeLine: String? {
+        if let end = entry.current?.end { return "until \(clock(end))" }
+        if let start = entry.next?.start { return "starts \(clock(start))" }
+        return nil
+    }
 
     private func clock(_ date: Date) -> String {
         let f = DateFormatter()
@@ -141,8 +150,8 @@ struct ChoghWidgetView: View {
             Text(name).font(.system(size: 25, weight: .bold, design: .serif))
                 .foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
             Text(CBrand.label(quality)).font(.caption2.weight(.semibold)).foregroundStyle(.white.opacity(0.9))
-            if let end = entry.current?.end {
-                Text("until \(clock(end))").font(.caption2).foregroundStyle(.white.opacity(0.85))
+            if let t = timeLine {
+                Text(t).font(.caption2).foregroundStyle(.white.opacity(0.85))
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -159,12 +168,12 @@ struct ChoghWidgetView: View {
                 Text(name).font(.system(size: 27, weight: .bold, design: .serif))
                     .foregroundStyle(.white).lineLimit(1).minimumScaleFactor(0.6)
                 Text(CBrand.label(quality)).font(.caption.weight(.semibold)).foregroundStyle(.white.opacity(0.92))
-                if let end = entry.current?.end {
-                    Text("until \(clock(end))").font(.caption2).foregroundStyle(.white.opacity(0.85))
+                if let t = timeLine {
+                    Text(t).font(.caption2).foregroundStyle(.white.opacity(0.85))
                 }
             }
             Spacer(minLength: 8)
-            if let nxt = entry.next {
+            if entry.current != nil, let nxt = entry.next {
                 VStack(alignment: .leading, spacing: 3) {
                     Text("NEXT").font(.system(size: 8, weight: .bold)).tracking(1).foregroundStyle(.white.opacity(0.7))
                     Text(nxt.nameEN).font(.system(size: 15, weight: .semibold)).foregroundStyle(.white).lineLimit(1)
@@ -184,14 +193,20 @@ struct ChoghWidgetView: View {
         VStack(alignment: .leading, spacing: 1) {
             Text(name.isEmpty ? "Choghadiya" : "Choghadiya · \(name)").font(.headline).lineLimit(1)
             Text(CBrand.label(quality)).font(.caption)
-            if let end = entry.current?.end { Text("until \(clock(end))").font(.caption2) }
+            if let t = timeLine { Text(t).font(.caption2) }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .containerBackground(for: .widget) { Color.clear }
     }
 
-    private var inline: some View {
-        Text(entry.current == nil ? "Choghadiya" : "\(name) · \(CBrand.label(quality))")
+    @ViewBuilder private var inline: some View {
+        if entry.current != nil {
+            Text("\(name) · \(CBrand.label(quality))")
+        } else if let nxt = entry.next {
+            Text("\(nxt.nameEN) \(clock(nxt.start))")
+        } else {
+            Text("Choghadiya")
+        }
     }
 
     private var noData: some View {
