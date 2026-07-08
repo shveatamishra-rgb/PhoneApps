@@ -25,24 +25,31 @@ Content work starts now; build work starts once v1.1 is approved.
 - [ ] Gallery: Katha tab + auto-fit phone wallpaper downloads.
 - [ ] First newsletter when list >= 100 subs (copy in MARKETING_EXECUTION_PACK.md).
 
-## Stage 3 · App build (after v1.1 approved)
+## Stage 3 · App build — BUILT 2026-07-07 (local; not submitted)
 
-Order matches review risk, lowest first.
+Order matched review risk, lowest first. All committed to main (bc74837,
+0039d74, fae46bc), all 28 tests pass on a clean manifest cache.
 
-- [ ] Verse dataset bundled (Resources, like stories.json) + `Verse` model +
-      `VerseCatalog`.
-- [ ] "Today's Shlok" card on Today tab (free: daily verse; taps into library).
-- [ ] Verse library screen (search by theme, save favorite, share as card).
-      Free: daily verse + chapter 1. Pro: full library.
-- [ ] Daily Verse widget in DarshanWidgetExtension (small/medium + lock screen
-      rectangular/inline). Bridge writes 7 days like darshan. Widget #3 in the
-      existing WidgetBundle, no new target needed.
-- [ ] Intent onboarding: one "What brings you here" multi-select screen before
-      the ishta grid; sets default tab + notification framing. @AppStorage only.
-- [ ] "Your practice" card (days streak, japa total, darshans seen, katha read,
-      verses saved). All on-device counters, no new collection.
-- [ ] Settings support row copy: "Write to us, we read everything" EN/HI.
-- [ ] Version bump 1.2 (1), both targets; widget MARKETING_VERSION matches.
+- [x] Verse dataset bundled (verses.dataset, 25 famous Gita shlokas, 9 free /
+      16 Pro) + `Verse` model (DevotionalContent.swift) + `VerseCatalog`.
+      **DRAFT: EN/HI meanings + translit still need scholar/native review.**
+- [x] "Today's Shlok" card on Today tab (free daily verse; taps into library).
+- [x] Verse library screen (VerseLibraryView: featured today, search, theme
+      chips, Saved filter, detail with save + share). Free vs Pro mirrors darshan.
+- [x] Daily Shlok widget in DarshanWidgetExtension (small/medium/large + lock
+      screen). VerseBridge writes 7 days to App Group. Widget #3 in WidgetBundle.
+      Verified: verse_timeline.json written on launch. **On-device check: add the
+      widget from the gallery and confirm it renders (text-only, no black-render
+      risk).**
+- [x] Intent onboarding: "What brings you here" multi-select before the ishta
+      grid; stored in AppState.onboardingIntents; personalizes first landing tab.
+- [x] "Your Practice" card in Settings (streak, best streak, shloks saved,
+      favorites). On-device counters only.
+- [x] Settings support row: "Write to us" (EN/HI) + nav title.
+- [x] Share-as-card (VerseShareCard, ImageRenderer) — the research growth loop.
+- [ ] **Version bump: DO NOT bump to 1.2 yet.** The binary is still 1.1(3) so it
+      does not collide with the in-review v1.1 resubmit. Bump to 1.2(1) (both
+      targets, widget MARKETING_VERSION matches) only once v1.1 has shipped.
 
 ## Stage 4 · Verification (the v1.1 lessons, do not skip)
 
