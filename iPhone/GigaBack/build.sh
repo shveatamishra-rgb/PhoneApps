@@ -2,14 +2,14 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-TARGET="${TARGET:-DuplicateImageFinderiOS}"
+TARGET="${TARGET:-GigaBack}"
 CONFIGURATION="${CONFIGURATION:-Debug}"
 SDK="${SDK:-iphonesimulator}"
 CODE_SIGNING_ALLOWED="${CODE_SIGNING_ALLOWED:-NO}"
-BUILD_ROOT="${DUPLICATE_IMAGE_FINDER_IOS_BUILD_DIR:-/private/tmp/DuplicateImageFinderiOSBuild}"
+BUILD_ROOT="${GIGABACK_BUILD_DIR:-/private/tmp/GigaBackBuild}"
 
 xcodebuild \
-  -project "$ROOT_DIR/DuplicateImageFinderiOS.xcodeproj" \
+  -project "$ROOT_DIR/GigaBack.xcodeproj" \
   -target "$TARGET" \
   -configuration "$CONFIGURATION" \
   -sdk "$SDK" \

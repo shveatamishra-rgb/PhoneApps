@@ -92,3 +92,45 @@ struct Story: Identifiable, Hashable, Codable {
     func body(_ l: Lang) -> [String] { l == .hi ? bodyHI : bodyEN }
     func moral(_ l: Lang) -> String { l == .hi ? moralHI : moralEN }
 }
+
+/// A Bhagavad Gita verse (shlok) for the Verse library + Today's Shlok card +
+/// the Daily Verse widget. Decoded from the bundled `verses.json`. No network.
+/// NOTE: Sanskrit is public-domain; EN/HI meanings + "live it today" lines are an
+/// authored draft pending native-speaker / scholar review (see RELEASE_v1.2_CHECKLIST).
+struct Verse: Identifiable, Hashable, Codable {
+    let id: String
+    let ref: String          // "2.47" for display
+    let chapter: Int
+    let verse: Int
+    let theme: String        // karma, dharma, devotion, peace, self
+    let sanskrit: String     // Devanagari, lines joined with \n
+    let translit: String
+    let meaningEN: String
+    let meaningHI: String
+    let liveEN: String       // one-line "live it today"
+    let liveHI: String
+    let isPremium: Bool
+
+    func meaning(_ l: Lang) -> String { l == .hi ? meaningHI : meaningEN }
+    func live(_ l: Lang) -> String { l == .hi ? liveHI : liveEN }
+
+    /// Localized source label, e.g. "Bhagavad Gita 2.47" / "भगवद्गीता 2.47".
+    func source(_ l: Lang) -> String {
+        (l == .hi ? "भगवद्गीता " : "Bhagavad Gita ") + ref
+    }
+
+    /// Localized theme label for chips/filters.
+    func themeLabel(_ l: Lang) -> String {
+        Verse.themeLabels[theme]?[l == .hi ? 1 : 0] ?? theme.capitalized
+    }
+
+    static let themeLabels: [String: [String]] = [
+        "karma":    ["Action", "कर्म"],
+        "dharma":   ["Duty", "धर्म"],
+        "devotion": ["Devotion", "भक्ति"],
+        "peace":    ["Peace", "शांति"],
+        "self":     ["The Self", "आत्मा"],
+    ]
+
+    static let themeOrder = ["karma", "dharma", "devotion", "peace", "self"]
+}

@@ -7,22 +7,29 @@ import UniformTypeIdentifiers
 
 struct ContentView: View {
     @StateObject private var viewModel = ScanViewModel()
+    @ObservedObject private var store = GigaBackStore.shared
     @State private var isShowingFileImporter = false
-    @State private var previewRequest: PreviewRequest?
+    @State private var showPaywall = false
+    @State private var isSmartCleaning = false
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 18) {
-                    header
                     authorizationSection
+                    heroSection
                     scanControls
-                    resultsSection
+                    if viewModel.summary != nil {
+                        categoryGrid
+                    }
+                    if let summary = viewModel.summary {
+                        SummaryView(summary: summary)
+                    }
                 }
                 .padding(18)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Duplicate Images")
+            .navigationTitle("GigaBack")
             .toolbar {
                 if viewModel.hasLimitedAccess {
                     Button("Manage Access") {
@@ -43,26 +50,159 @@ struct ContentView: View {
                     await viewModel.importImages(result)
                 }
             }
-            .sheet(item: $previewRequest) { request in
-                ImageCompareView(
-                    request: request,
-                    selectedPhotoIDs: $viewModel.selectedForDeletion,
-                    onSelectionChange: viewModel.setDeletionSelection
-                )
+            .sheet(isPresented: $showPaywall) {
+                PaywallView(reclaimableBytes: viewModel.reclaimableBytes)
             }
         }
     }
 
-    private var header: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Label("iPhone Image Scan", systemImage: "photo.stack")
-                .font(.headline)
-                .foregroundStyle(Color.accentColor)
+    private var heroSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            if viewModel.summary != nil {
+                let reclaimable = viewModel.reclaimableBytes
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(reclaimable > 0 ? formatBytes(reclaimable) : "All clean")
+                        .font(.system(size: 40, weight: .bold, design: .rounded))
+                        .foregroundStyle(reclaimable > 0 ? Color.accentColor : .green)
+                    Text(reclaimable > 0
+                        ? "reclaimable from duplicates and similar photos"
+                        : "No duplicate space left to reclaim.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
 
-            Text("Find exact copies and same-looking images from Photos plus files you import from apps like WhatsApp.")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
+                if reclaimable > 0 {
+                    Button {
+                        smartClean()
+                    } label: {
+                        HStack {
+                            if isSmartCleaning {
+                                ProgressView()
+                            } else {
+                                Image(systemName: store.isPro ? "wand.and.stars" : "lock.fill")
+                            }
+                            Text("Smart Clean \(formatBytes(reclaimable))")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(isSmartCleaning || viewModel.isScanning)
+
+                    Text("Keeps the best photo of every group. Deleted items stay in Recently Deleted for 30 days.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Label("Get your gigabytes back", systemImage: "sparkles")
+                    .font(.headline)
+                    .foregroundStyle(Color.accentColor)
+
+                Text("GigaBack finds duplicates, similar shots, screenshots, blurry photos, and large videos wasting space. Everything runs on your iPhone; photos never leave your device.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .sectionSurface()
+    }
+
+    private var categoryGrid: some View {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible())], spacing: 12) {
+            NavigationLink {
+                DuplicateGroupsDetailView(
+                    viewModel: viewModel,
+                    kinds: [.bytes, .pixels],
+                    title: "Duplicates",
+                    allowBulkSelection: true
+                )
+            } label: {
+                CategoryCard(
+                    title: "Duplicates",
+                    systemImage: "doc.on.doc",
+                    detail: categoryDetail(groupCount: viewModel.duplicateGroups.count),
+                    tint: .blue
+                )
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                DuplicateGroupsDetailView(
+                    viewModel: viewModel,
+                    kinds: [.visual],
+                    title: "Similar",
+                    allowBulkSelection: true
+                )
+            } label: {
+                CategoryCard(
+                    title: "Similar",
+                    systemImage: "photo.on.rectangle.angled",
+                    detail: categoryDetail(groupCount: viewModel.similarGroups.count),
+                    tint: .indigo
+                )
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                ScreenshotsSwipeView(viewModel: viewModel)
+            } label: {
+                CategoryCard(
+                    title: "Screenshots",
+                    systemImage: "camera.viewfinder",
+                    detail: viewModel.screenshots.isEmpty
+                        ? "None found"
+                        : "\(viewModel.screenshots.count) · \(formatBytes(viewModel.screenshotsBytes))",
+                    tint: .teal
+                )
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                BlurryPhotosView(viewModel: viewModel)
+            } label: {
+                CategoryCard(
+                    title: "Blurry",
+                    systemImage: "camera.metering.none",
+                    detail: viewModel.blurryPhotos.isEmpty
+                        ? "None found"
+                        : "\(viewModel.blurryPhotos.count) photos",
+                    tint: .orange
+                )
+            }
+            .buttonStyle(.plain)
+
+            NavigationLink {
+                LargeVideosView(viewModel: viewModel)
+            } label: {
+                CategoryCard(
+                    title: "Large Videos",
+                    systemImage: "video",
+                    detail: viewModel.largeVideos.isEmpty
+                        ? "None found"
+                        : "\(viewModel.largeVideos.count) · \(formatBytes(viewModel.largeVideosBytes))",
+                    tint: .pink
+                )
+            }
+            .buttonStyle(.plain)
+        }
+    }
+
+    private func categoryDetail(groupCount: Int) -> String {
+        groupCount == 0 ? "None found" : "\(groupCount) groups"
+    }
+
+    private func smartClean() {
+        guard store.isPro else {
+            showPaywall = true
+            return
+        }
+        isSmartCleaning = true
+        Task {
+            viewModel.selectAllExtras()
+            await viewModel.deleteSelectedPhotos()
+            isSmartCleaning = false
         }
     }
 
@@ -77,7 +217,9 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
 
-                Button("Allow Photos Access") {
+                // 5.1.1(iv): pre-permission buttons must not say "Allow"; the
+                // system prompt is where the user grants access.
+                Button("Continue") {
                     Task {
                         await viewModel.requestAuthorization()
                     }
@@ -105,14 +247,6 @@ struct ContentView: View {
 
     private var scanControls: some View {
         VStack(alignment: .leading, spacing: 14) {
-            Picker("Compare", selection: $viewModel.mode) {
-                ForEach(ScanMode.allCases) { mode in
-                    Text(mode.title).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
-            .disabled(viewModel.isScanning)
-
             HStack(spacing: 12) {
                 if viewModel.isScanning {
                     Button(role: .destructive) {
@@ -124,7 +258,7 @@ struct ContentView: View {
                     Button {
                         viewModel.startScan()
                     } label: {
-                        Label("Scan Images", systemImage: "magnifyingglass")
+                        Label("Scan", systemImage: "sparkle.magnifyingglass")
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(!viewModel.canScan)
@@ -175,45 +309,94 @@ struct ContentView: View {
         .sectionSurface()
     }
 
-    @ViewBuilder
-    private var resultsSection: some View {
-        if let summary = viewModel.summary {
-            SummaryView(summary: summary)
-        }
+}
 
-        if viewModel.groups.isEmpty {
-            EmptyStateView(viewModel: viewModel)
-        } else {
+/// Group-based results screen, shared by Duplicates (bytes + pixels) and Similar (visual).
+///
+/// Free vs Pro: reviewing groups and deleting one group at a time is free (the app
+/// must visibly work before asking for money). Selecting extras across every group
+/// at once is a Pro convenience.
+struct DuplicateGroupsDetailView: View {
+    @ObservedObject var viewModel: ScanViewModel
+    @ObservedObject private var store = GigaBackStore.shared
+    let kinds: Set<DuplicateKind>
+    let title: String
+    let allowBulkSelection: Bool
+
+    @State private var previewRequest: PreviewRequest?
+    @State private var showPaywall = false
+
+    init(viewModel: ScanViewModel, kinds: Set<DuplicateKind>, title: String, allowBulkSelection: Bool) {
+        self.viewModel = viewModel
+        self.kinds = kinds
+        self.title = title
+        self.allowBulkSelection = allowBulkSelection
+    }
+
+    var body: some View {
+        ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                selectionBar
-
-                ForEach(sections) { section in
-                    DuplicateSectionView(
-                        section: section,
-                        selectedPhotoIDs: viewModel.selectedForDeletion,
-                        onPhotoSelection: viewModel.setDeletionSelection,
-                        onSelectExtras: viewModel.selectExtras,
-                        onClearGroup: viewModel.clearGroupSelection,
-                        onPreview: { group, photo in
-                            previewRequest = PreviewRequest(group: group, initialPhotoID: photo.localIdentifier)
-                        }
+                if filteredGroups.isEmpty {
+                    ContentUnavailableView(
+                        "Nothing here",
+                        systemImage: "checkmark.circle",
+                        description: Text("No \(title.lowercased()) found in the last scan.")
                     )
+                } else {
+                    selectionBar
+
+                    ForEach(sections) { section in
+                        DuplicateSectionView(
+                            section: section,
+                            selectedPhotoIDs: viewModel.selectedForDeletion,
+                            onPhotoSelection: viewModel.setDeletionSelection,
+                            onSelectExtras: viewModel.selectExtras,
+                            onClearGroup: viewModel.clearGroupSelection,
+                            onPreview: { group, photo in
+                                previewRequest = PreviewRequest(group: group, initialPhotoID: photo.localIdentifier)
+                            }
+                        )
+                    }
                 }
             }
+            .padding(18)
+        }
+        .background(Color(.systemGroupedBackground))
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $previewRequest) { request in
+            ImageCompareView(
+                request: request,
+                selectedPhotoIDs: $viewModel.selectedForDeletion,
+                onSelectionChange: viewModel.setDeletionSelection
+            )
+        }
+        .sheet(isPresented: $showPaywall) {
+            PaywallView(reclaimableBytes: viewModel.reclaimableBytes)
         }
     }
 
     private var selectionBar: some View {
         HStack(spacing: 12) {
-            Text("\(viewModel.selectedForDeletion.count) selected")
+            Text("\(selectedCount) selected")
                 .font(.callout)
                 .foregroundStyle(.secondary)
 
             Spacer()
 
-            if viewModel.selectedForDeletion.isEmpty {
-                Button("Select Extras") {
-                    viewModel.selectAllExtras()
+            if selectedCount == 0 {
+                if allowBulkSelection {
+                    Button {
+                        if store.isPro {
+                            for group in filteredGroups {
+                                viewModel.selectExtras(group)
+                            }
+                        } else {
+                            showPaywall = true
+                        }
+                    } label: {
+                        Label("Select All Extras", systemImage: store.isPro ? "checklist" : "lock.fill")
+                    }
                 }
             } else {
                 Button("Clear") {
@@ -232,9 +415,19 @@ struct ContentView: View {
         .sectionSurface()
     }
 
+    private var filteredGroups: [DuplicateGroup] {
+        viewModel.groups.filter { kinds.contains($0.kind) }
+    }
+
+    private var selectedCount: Int {
+        let visible = Set(filteredGroups.flatMap { $0.photos.map(\.localIdentifier) })
+        return viewModel.selectedForDeletion.intersection(visible).count
+    }
+
     private var sections: [DuplicateResultSection] {
         DuplicateKind.allCases.compactMap { kind in
-            let groups = viewModel.groups.filter { $0.kind == kind }
+            guard kinds.contains(kind) else { return nil }
+            let groups = filteredGroups.filter { $0.kind == kind }
             guard !groups.isEmpty else { return nil }
             return DuplicateResultSection(kind: kind, groups: groups)
         }
@@ -515,7 +708,7 @@ private struct PhotoRow: View {
     }()
 }
 
-private struct PhotoThumbnailView: View {
+struct PhotoThumbnailView: View {
     let photo: ScannedPhoto
     @State private var image: UIImage?
 
@@ -689,9 +882,11 @@ private actor FullImageLoader {
                 options: options
             ) { image, info in
                 guard !didResume else { return }
-                if let degraded = info?[PHImageResultIsDegradedKey] as? Bool, degraded {
-                    return
-                }
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                let isFinal = info?[PHImageErrorKey] != nil
+                    || (info?[PHImageCancelledKey] as? Bool) == true
+                    || !isDegraded
+                guard isFinal else { return }
                 didResume = true
                 continuation.resume(returning: image)
             }
@@ -699,9 +894,25 @@ private actor FullImageLoader {
     }
 }
 
-private actor ThumbnailLoader {
+actor ThumbnailLoader {
     static let shared = ThumbnailLoader()
     private let cache = NSCache<NSString, UIImage>()
+
+    /// Thumbnail for any library asset (photo or video) by local identifier.
+    func thumbnail(forAssetIdentifier identifier: String) async -> UIImage? {
+        let key = identifier as NSString
+        if let cached = cache.object(forKey: key) {
+            return cached
+        }
+        guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil).firstObject else {
+            return nil
+        }
+        let image = await requestThumbnail(for: asset)
+        if let image {
+            cache.setObject(image, forKey: key)
+        }
+        return image
+    }
 
     func thumbnail(for photo: ScannedPhoto) async -> UIImage? {
         let key = photo.localIdentifier as NSString
@@ -759,9 +970,11 @@ private actor ThumbnailLoader {
                 options: options
             ) { image, info in
                 guard !didResume else { return }
-                if let degraded = info?[PHImageResultIsDegradedKey] as? Bool, degraded {
-                    return
-                }
+                let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                let isFinal = info?[PHImageErrorKey] != nil
+                    || (info?[PHImageCancelledKey] as? Bool) == true
+                    || !isDegraded
+                guard isFinal else { return }
                 didResume = true
                 continuation.resume(returning: image)
             }
@@ -780,6 +993,9 @@ final class ScanViewModel: ObservableObject {
     @Published var summary: ScanSummary?
     @Published var selectedForDeletion: Set<String> = []
     @Published var importedImageCount = 0
+    @Published var blurryPhotos: [ScannedPhoto] = []
+    @Published var screenshots: [ScannedPhoto] = []
+    @Published var largeVideos: [ScannedVideo] = []
 
     private var scanTask: Task<Void, Never>?
     private var cancellationToken: ScanCancellationToken?
@@ -846,11 +1062,28 @@ final class ScanViewModel: ObservableObject {
         groups = []
         summary = nil
         selectedForDeletion = []
+        blurryPhotos = []
+        screenshots = []
+        largeVideos = []
 
         let selectedMode = mode
         let importedImageURLs = ImportedImageStore.importedImageURLs()
+        let libraryAccessGranted = hasPhotoAccess
         scanTask = Task {
             let scanner = PhotoLibraryDuplicateScanner()
+
+            // Metadata-only categories are near-instant; populate them before the
+            // deep scan so the UI fills in immediately. Off the main actor: the
+            // per-asset resource lookups add up on large libraries.
+            if libraryAccessGranted {
+                let categories = await Task.detached(priority: .userInitiated) {
+                    (screenshots: LibraryCleanupScanner.fetchScreenshots(),
+                     largeVideos: LibraryCleanupScanner.fetchLargeVideos())
+                }.value
+                guard self.cancellationToken === token else { return }
+                self.screenshots = categories.screenshots
+                self.largeVideos = categories.largeVideos
+            }
 
             do {
                 let result = try await scanner.scan(
@@ -868,6 +1101,7 @@ final class ScanViewModel: ObservableObject {
                 guard self.cancellationToken === token else { return }
                 self.groups = result.groups
                 self.summary = result.summary
+                self.blurryPhotos = result.blurryPhotos
                 self.progress = result.summary.wasStopped
                     ? Double(result.summary.completedCheckCount) / Double(max(result.summary.totalCheckCount, 1))
                     : 1
@@ -949,9 +1183,48 @@ final class ScanViewModel: ObservableObject {
         selectedForDeletion = []
     }
 
+    /// Bytes freed by deleting every non-keeper across all duplicate groups,
+    /// deduplicated by asset (a photo can appear in byte, pixel, and visual groups).
+    var reclaimableBytes: Int64 {
+        var bytesByID: [String: Int64] = [:]
+        for group in groups {
+            for photo in group.photos.dropFirst() {
+                bytesByID[photo.localIdentifier] = photo.byteSize ?? 0
+            }
+        }
+        return bytesByID.values.reduce(0, +)
+    }
+
+    var duplicateGroups: [DuplicateGroup] {
+        groups.filter { $0.kind != .visual }
+    }
+
+    var similarGroups: [DuplicateGroup] {
+        groups.filter { $0.kind == .visual }
+    }
+
+    var screenshotsBytes: Int64 {
+        screenshots.reduce(0) { $0 + ($1.byteSize ?? 0) }
+    }
+
+    var largeVideosBytes: Int64 {
+        largeVideos.reduce(0) { $0 + ($1.byteSize ?? 0) }
+    }
+
     func deleteSelectedPhotos() async {
-        let ids = Array(selectedForDeletion)
-        guard !ids.isEmpty else { return }
+        let deleted = await deleteAssets(withIdentifiers: selectedForDeletion)
+        guard !deleted.isEmpty else { return }
+        status = deleted.count == 1
+            ? "Deleted 1 item. Recoverable in Recently Deleted for 30 days."
+            : "Deleted \(deleted.count) items. Recoverable in Recently Deleted for 30 days."
+    }
+
+    /// Deletes library assets and/or imported files, then prunes every result
+    /// list. Returns the identifiers that were actually deleted.
+    @discardableResult
+    func deleteAssets(withIdentifiers identifiers: Set<String>) async -> Set<String> {
+        let ids = Array(identifiers)
+        guard !ids.isEmpty else { return [] }
 
         let importedIDs = Set(ids.filter { ImportedImageStore.fileURL(for: $0) != nil })
         let photoIDs = ids.filter { !importedIDs.contains($0) }
@@ -966,7 +1239,7 @@ final class ScanViewModel: ObservableObject {
                 deletedIDs.formUnion(photoIDs)
             } catch {
                 status = "Delete failed: \(error.localizedDescription)"
-                return
+                return []
             }
         }
 
@@ -977,9 +1250,10 @@ final class ScanViewModel: ObservableObject {
         }
 
         removeDeletedPhotos(ids: deletedIDs)
-        status = deletedIDs.count == 1
-            ? "Deleted 1 selected duplicate image."
-            : "Deleted \(deletedIDs.count) selected duplicate images."
+        screenshots.removeAll { deletedIDs.contains($0.localIdentifier) }
+        blurryPhotos.removeAll { deletedIDs.contains($0.localIdentifier) }
+        largeVideos.removeAll { deletedIDs.contains($0.localIdentifier) }
+        return deletedIDs
     }
 
     private func removeDeletedPhotos(ids: Set<String>) {
@@ -1005,7 +1279,7 @@ final class ScanViewModel: ObservableObject {
     }
 }
 
-private extension View {
+extension View {
     func sectionSurface() -> some View {
         self
             .padding(14)
@@ -1014,7 +1288,7 @@ private extension View {
     }
 }
 
-private func formatBytes(_ value: Int64) -> String {
+func formatBytes(_ value: Int64) -> String {
     let formatter = ByteCountFormatter()
     formatter.allowedUnits = [.useKB, .useMB, .useGB, .useTB]
     formatter.countStyle = .file

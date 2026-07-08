@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct DuplicateImageFinderiOSApp: App {
+struct GigaBackApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

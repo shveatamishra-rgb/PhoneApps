@@ -41,6 +41,7 @@
 		DS1000000000000000000027 /* Services/LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000027 /* Services/LocationManager.swift */; };
 		DS1000000000000000000028 /* Services/RemoteCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000028 /* Services/RemoteCatalog.swift */; };
 		DS1000000000000000000029 /* Features/Katha/KathaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000029 /* Features/Katha/KathaView.swift */; };
+		DS1000000000000000000030 /* Features/Verses/VerseLibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DS0000000000000000000030 /* Features/Verses/VerseLibraryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,6 +116,7 @@
 		DS0000000000000000000027 /* Services/LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/LocationManager.swift; sourceTree = "<group>"; };
 		DS0000000000000000000028 /* Services/RemoteCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/RemoteCatalog.swift; sourceTree = "<group>"; };
 		DS0000000000000000000029 /* Features/Katha/KathaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Katha/KathaView.swift; sourceTree = "<group>"; };
+		DS0000000000000000000030 /* Features/Verses/VerseLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Features/Verses/VerseLibraryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -192,6 +194,7 @@
 				DS0000000000000000000027 /* Services/LocationManager.swift */,
 				DS0000000000000000000028 /* Services/RemoteCatalog.swift */,
 				DS0000000000000000000029 /* Features/Katha/KathaView.swift */,
+				DS0000000000000000000030 /* Features/Verses/VerseLibraryView.swift */,
 				DS0000000000000000000024 /* Data/PanchangNames.swift */,
 				DS0000000000000000000025 /* Data/Cities.swift */,
 				DS0000000000000000000004 /* Models/DevotionalContent.swift */,
@@ -407,6 +410,7 @@
 				DS1000000000000000000011 /* Features/Settings/SettingsView.swift in Sources */,
 				DS1000000000000000000026 /* Features/Panchang/PanchangView.swift in Sources */,
 				DS1000000000000000000020 /* Features/Settings/SupportView.swift in Sources */,
+				DS1000000000000000000030 /* Features/Verses/VerseLibraryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

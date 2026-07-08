@@ -1,4 +1,4 @@
-# Duplicate Image Finder for iPhone
+# GigaBack: Photo Video Cleaner (iPhone)
 
 A native iOS SwiftUI app for scanning the iPhone Photo Library for duplicate images.
 
@@ -14,7 +14,7 @@ The scanner uses PhotoKit, runs on-device, and requests Photo Library permission
 
 iOS does not allow one app to scan another app's private storage. If WhatsApp is set not to save media into Photos, those images will not appear in a Photo Library scan.
 
-To include those images, share or save them from WhatsApp into the Files app, then use **Import Images** in Duplicate Image Finder. Imported images are copied into the app's private storage and scanned together with Photos, so a WhatsApp export can still match the original camera photo by visual look.
+To include those images, share or save them from WhatsApp into the Files app, then use **Import Images** in GigaBack. Imported images are copied into the app's private storage and scanned together with Photos, so a WhatsApp export can still match the original camera photo by visual look.
 
 ## Reviewing Results
 
@@ -24,7 +24,7 @@ The look-alike matcher is stricter for screenshots so text-heavy screenshots wit
 
 ## Build
 
-Open `DuplicateImageFinderiOS.xcodeproj` in Xcode and run the `DuplicateImageFinderiOS` scheme on an iPhone or iOS Simulator.
+Open `GigaBack.xcodeproj` in Xcode and run the `GigaBack` scheme on an iPhone or iOS Simulator.
 
 From the command line:
 

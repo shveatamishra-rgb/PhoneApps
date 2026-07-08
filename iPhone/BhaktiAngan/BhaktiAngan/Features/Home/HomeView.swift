@@ -20,6 +20,7 @@ struct HomeView: View {
                     PanchangCard()
                     darshanHeading
                     hero
+                    ShlokCard()
                     practice
                     explore
                     proInvitation

@@ -54,6 +54,34 @@ struct VisualFingerprint: Hashable {
         (hash ^ other.hash).nonzeroBitCount
     }
 
+    /// Focus measure: variance of a 3x3 Laplacian over the luma signature grid.
+    /// Typical values on the 32x32 grid: sharp photos ~700-1100, heavily
+    /// blurred ~200-350. The scanner's threshold decides what counts as blurry.
+    var blurScore: Double {
+        let side = Int(Double(lumaSignature.count).squareRoot().rounded())
+        guard side >= 3, side * side == lumaSignature.count else { return .infinity }
+
+        var count = 0
+        var mean = 0.0
+        var m2 = 0.0
+        for y in 1..<(side - 1) {
+            for x in 1..<(side - 1) {
+                let i = y * side + x
+                let laplacian = Double(
+                    4 * Int(lumaSignature[i])
+                        - Int(lumaSignature[i - 1]) - Int(lumaSignature[i + 1])
+                        - Int(lumaSignature[i - side]) - Int(lumaSignature[i + side])
+                )
+                count += 1
+                let delta = laplacian - mean
+                mean += delta / Double(count)
+                m2 += delta * (laplacian - mean)
+            }
+        }
+        guard count > 1 else { return .infinity }
+        return m2 / Double(count)
+    }
+
     func lumaDistance(to other: VisualFingerprint) -> Double {
         guard lumaSignature.count == other.lumaSignature.count,
               !lumaSignature.isEmpty else {
@@ -107,7 +135,14 @@ struct VisualFingerprint: Hashable {
 
 enum ImageFingerprint {
     private static let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB()
-    private static let maxDecodedBytes = 1_500_000_000
+    // iOS jetsam kills the app long before a macOS-scale allocation would fail;
+    // 200 MB still admits a 48 MP photo (8064×6048×4 ≈ 195 MB) in a single decode.
+    private static let maxDecodedBytes = 200_000_000
+    // CIContext creation is expensive; render() runs up to 3× per image. CIContext is thread-safe.
+    private static let renderContext = CIContext(options: [
+        .workingColorSpace: colorSpace,
+        .outputColorSpace: colorSpace
+    ])
 
     static func byteSHA256(data: Data) -> String {
         hexString(SHA256.hash(data: data))
@@ -259,14 +294,9 @@ enum ImageFingerprint {
             by: CGAffineTransform(translationX: -image.extent.origin.x, y: -image.extent.origin.y)
         )
 
-        let context = CIContext(options: [
-            .workingColorSpace: colorSpace,
-            .outputColorSpace: colorSpace
-        ])
-
         pixels.withUnsafeMutableBytes { buffer in
             guard let baseAddress = buffer.baseAddress else { return }
-            context.render(
+            renderContext.render(
                 normalized,
                 toBitmap: baseAddress,
                 rowBytes: rowBytes,

@@ -18,6 +18,8 @@ struct RootView: View {
         Group {
             if ProcessInfo.processInfo.arguments.contains("--open-panchang") {
                 NavigationStack { PanchangView() }   // QA hook for screenshotting the Panchang screen
+            } else if ProcessInfo.processInfo.arguments.contains("--open-verses") {
+                NavigationStack { VerseLibraryView() }   // QA hook for screenshotting the Verse library
             } else if appState.hasCompletedOnboarding {
                 MainTabView()
             } else {

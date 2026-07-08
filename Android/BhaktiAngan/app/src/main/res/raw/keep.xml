@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Darshan drawables are resolved at runtime via Resources.getIdentifier (see
+  ui/DarshanImage.kt and core/media/MediaActions.kt), so the resource shrinker
+  cannot see them statically. Keep all drawables so the release build doesn't
+  strip the bundled darshan images and brandmark.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/*" />

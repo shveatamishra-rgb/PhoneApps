@@ -3,6 +3,7 @@ import Foundation
 @MainActor
 final class AppState: ObservableObject {
     @Published private(set) var favorites: Set<String>
+    @Published private(set) var savedVerses: Set<String>
     @Published var hasCompletedOnboarding: Bool
     @Published var selectedTab: AppTab = .home
     @Published var selectedMantraID: String
@@ -12,6 +13,7 @@ final class AppState: ObservableObject {
 
     private let defaults: UserDefaults
     private let favoritesKey = "favoriteImageNames"
+    private let savedVersesKey = "savedVerseIDs"
     private let onboardingKey = "hasCompletedOnboarding"
     private let selectedMantraKey = "selectedMantraID"
     private let currentStreakKey = "currentStreak"
@@ -25,6 +27,7 @@ final class AppState: ObservableObject {
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         favorites = Set(defaults.stringArray(forKey: favoritesKey) ?? [])
+        savedVerses = Set(defaults.stringArray(forKey: savedVersesKey) ?? [])
         selectedMantraID = defaults.string(forKey: selectedMantraKey)
             ?? "shiv"
 
@@ -66,6 +69,19 @@ final class AppState: ObservableObject {
 
     func isFavorite(_ item: DevotionalItem) -> Bool {
         favorites.contains(item.imageName)
+    }
+
+    func toggleVerseSaved(_ verse: Verse) {
+        if savedVerses.contains(verse.id) {
+            savedVerses.remove(verse.id)
+        } else {
+            savedVerses.insert(verse.id)
+        }
+        defaults.set(Array(savedVerses), forKey: savedVersesKey)
+    }
+
+    func isVerseSaved(_ verse: Verse) -> Bool {
+        savedVerses.contains(verse.id)
     }
 
     func selectMantra(_ id: String) {

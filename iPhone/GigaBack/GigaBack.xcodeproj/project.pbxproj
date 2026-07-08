@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A0000012D0B000100000001 /* DuplicateImageFinderiOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */; };
+		0A0000012D0B000100000001 /* GigaBackApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000001 /* GigaBackApp.swift */; };
 		0A0000012D0B000100000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000002 /* ContentView.swift */; };
 		0A0000012D0B000100000003 /* PhotoLibraryDuplicateScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */; };
 		0A0000012D0B000100000004 /* ImageFingerprint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000004 /* ImageFingerprint.swift */; };
@@ -18,10 +18,14 @@
 		0A0000012D0B000100000009 /* CryptoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000009 /* CryptoKit.framework */; };
 		0A0000012D0B00010000000A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000A /* ImageIO.framework */; };
 		0A0000012D0B00010000000B /* PhotosUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000D /* PhotosUI.framework */; };
+		0A0000012D0B00010000000D /* GigaBackStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000E /* GigaBackStore.swift */; };
+		0A0000012D0B00010000000E /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B00000000000F /* PaywallView.swift */; };
+		0A0000012D0B00010000000F /* LibraryCleanupScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000011 /* LibraryCleanupScanner.swift */; };
+		0A0000012D0B000100000010 /* CategoryViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0000012D0B000000000012 /* CategoryViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DuplicateImageFinderiOSApp.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000001 /* GigaBackApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GigaBackApp.swift; sourceTree = "<group>"; };
 		0A0000012D0B000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryDuplicateScanner.swift; sourceTree = "<group>"; };
 		0A0000012D0B000000000004 /* ImageFingerprint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFingerprint.swift; sourceTree = "<group>"; };
@@ -32,8 +36,13 @@
 		0A0000012D0B000000000009 /* CryptoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CryptoKit.framework; path = System/Library/Frameworks/CryptoKit.framework; sourceTree = SDKROOT; };
 		0A0000012D0B00000000000A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		0A0000012D0B00000000000B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DuplicateImageFinderiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0A0000012D0B00000000000C /* GigaBack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GigaBack.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A0000012D0B00000000000D /* PhotosUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PhotosUI.framework; path = System/Library/Frameworks/PhotosUI.framework; sourceTree = SDKROOT; };
+		0A0000012D0B00000000000E /* GigaBackStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GigaBackStore.swift; sourceTree = "<group>"; };
+		0A0000012D0B00000000000F /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000010 /* GigaBack.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = GigaBack.storekit; sourceTree = "<group>"; };
+		0A0000012D0B000000000011 /* LibraryCleanupScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCleanupScanner.swift; sourceTree = "<group>"; };
+		0A0000012D0B000000000012 /* CategoryViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,24 +64,29 @@
 		0A0000012D0B000300000001 = {
 			isa = PBXGroup;
 			children = (
-				0A0000012D0B000300000002 /* DuplicateImageFinderiOS */,
+				0A0000012D0B000300000002 /* GigaBack */,
 				0A0000012D0B000300000003 /* Frameworks */,
 				0A0000012D0B000300000004 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		0A0000012D0B000300000002 /* DuplicateImageFinderiOS */ = {
+		0A0000012D0B000300000002 /* GigaBack */ = {
 			isa = PBXGroup;
 			children = (
-				0A0000012D0B000000000001 /* DuplicateImageFinderiOSApp.swift */,
+				0A0000012D0B000000000001 /* GigaBackApp.swift */,
 				0A0000012D0B000000000002 /* ContentView.swift */,
 				0A0000012D0B000000000003 /* PhotoLibraryDuplicateScanner.swift */,
 				0A0000012D0B000000000004 /* ImageFingerprint.swift */,
+				0A0000012D0B00000000000E /* GigaBackStore.swift */,
+				0A0000012D0B00000000000F /* PaywallView.swift */,
+				0A0000012D0B000000000011 /* LibraryCleanupScanner.swift */,
+				0A0000012D0B000000000012 /* CategoryViews.swift */,
+				0A0000012D0B000000000010 /* GigaBack.storekit */,
 				0A0000012D0B000000000005 /* Assets.xcassets */,
 				0A0000012D0B000000000006 /* PrivacyInfo.xcprivacy */,
 				0A0000012D0B00000000000B /* Info.plist */,
 			);
-			path = DuplicateImageFinderiOS;
+			path = GigaBack;
 			sourceTree = "<group>";
 		};
 		0A0000012D0B000300000003 /* Frameworks */ = {
@@ -90,7 +104,7 @@
 		0A0000012D0B000300000004 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */,
+				0A0000012D0B00000000000C /* GigaBack.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -98,9 +112,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0A0000012D0B000400000001 /* DuplicateImageFinderiOS */ = {
+		0A0000012D0B000400000001 /* GigaBack */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "DuplicateImageFinderiOS" */;
+			buildConfigurationList = 0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "GigaBack" */;
 			buildPhases = (
 				0A0000012D0B000500000001 /* Sources */,
 				0A0000012D0B000200000001 /* Frameworks */,
@@ -110,9 +124,9 @@
 			);
 			dependencies = (
 			);
-			name = DuplicateImageFinderiOS;
-			productName = DuplicateImageFinderiOS;
-			productReference = 0A0000012D0B00000000000C /* DuplicateImageFinderiOS.app */;
+			name = GigaBack;
+			productName = GigaBack;
+			productReference = 0A0000012D0B00000000000C /* GigaBack.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -130,7 +144,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 0A0000012D0B000800000001 /* Build configuration list for PBXProject "DuplicateImageFinderiOS" */;
+			buildConfigurationList = 0A0000012D0B000800000001 /* Build configuration list for PBXProject "GigaBack" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -143,7 +157,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0A0000012D0B000400000001 /* DuplicateImageFinderiOS */,
+				0A0000012D0B000400000001 /* GigaBack */,
 			);
 		};
 /* End PBXProject section */
@@ -165,10 +179,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A0000012D0B000100000001 /* DuplicateImageFinderiOSApp.swift in Sources */,
+				0A0000012D0B000100000001 /* GigaBackApp.swift in Sources */,
 				0A0000012D0B000100000002 /* ContentView.swift in Sources */,
 				0A0000012D0B000100000003 /* PhotoLibraryDuplicateScanner.swift in Sources */,
 				0A0000012D0B000100000004 /* ImageFingerprint.swift in Sources */,
+				0A0000012D0B00010000000D /* GigaBackStore.swift in Sources */,
+				0A0000012D0B00010000000E /* PaywallView.swift in Sources */,
+				0A0000012D0B00010000000F /* LibraryCleanupScanner.swift in Sources */,
+				0A0000012D0B000100000010 /* CategoryViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,16 +315,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = DuplicateImageFinderiOS/Info.plist;
+				INFOPLIST_FILE = GigaBack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.duplicateimagefinder.iphone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.gigaback;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -326,16 +344,16 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 45QWJVLL5D;
+				DEVELOPMENT_TEAM = P8XK3A4CWY;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = DuplicateImageFinderiOS/Info.plist;
+				INFOPLIST_FILE = GigaBack/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.duplicateimagefinder.iphone;
+				PRODUCT_BUNDLE_IDENTIFIER = com.shveatamishra.gigaback;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -350,7 +368,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0A0000012D0B000800000001 /* Build configuration list for PBXProject "DuplicateImageFinderiOS" */ = {
+		0A0000012D0B000800000001 /* Build configuration list for PBXProject "GigaBack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0A0000012D0B000900000001 /* Debug */,
@@ -359,7 +377,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "DuplicateImageFinderiOS" */ = {
+		0A0000012D0B000800000002 /* Build configuration list for PBXNativeTarget "GigaBack" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0A0000012D0B000900000003 /* Debug */,

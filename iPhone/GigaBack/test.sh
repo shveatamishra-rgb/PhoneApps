@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-BUILD_DIR="${DUPLICATE_IMAGE_FINDER_IOS_TEST_BUILD_DIR:-/private/tmp/DuplicateImageFinderiOSTests}"
+BUILD_DIR="${GIGABACK_TEST_BUILD_DIR:-/private/tmp/GigaBackTests}"
 TEST_BIN="$BUILD_DIR/image-fingerprint-smoke-test"
 
 mkdir -p "$BUILD_DIR"
@@ -11,7 +11,7 @@ xcrun swiftc \
   -swift-version 5 \
   -O \
   -target arm64-apple-macosx14.0 \
-  "$ROOT_DIR/DuplicateImageFinderiOS/ImageFingerprint.swift" \
+  "$ROOT_DIR/GigaBack/ImageFingerprint.swift" \
   "$ROOT_DIR/Tests/ImageFingerprintSmokeTest.swift" \
   -o "$TEST_BIN" \
   -framework AppKit \

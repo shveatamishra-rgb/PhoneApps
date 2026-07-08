@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>GigaBack</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -21,9 +23,9 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Duplicate Image Finder can delete selected duplicate photos only after you confirm the Photos deletion prompt.</string>
+	<string>GigaBack removes the duplicates and clutter you select only after you confirm the Photos deletion prompt. Deleted items stay recoverable in Recently Deleted for 30 days.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Duplicate Image Finder scans your Photo Library on this iPhone to find exact and visually matching duplicate images.</string>
+	<string>GigaBack scans your photo library on this iPhone to find duplicates, similar shots, screenshots, blurry photos, and large videos. Photos never leave your device.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 </dict>

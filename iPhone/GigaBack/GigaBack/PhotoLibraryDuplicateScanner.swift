@@ -208,12 +208,25 @@ struct PhotoLibraryDuplicateScanner {
         let byteSize: Int64
     }
 
+    /// Below this Laplacian-variance score an image is offered in the Blurry
+    /// category. Measured on the 32x32 luma grid: sharp photos score roughly
+    /// 700-1100, heavy blur 200-350. Flat scenes (plain sky) can dip low too,
+    /// which is acceptable: the category is suggestions with mandatory preview.
+    static let blurScoreThreshold = 350.0
+
+    struct ScanOutput {
+        let groups: [DuplicateGroup]
+        let summary: ScanSummary
+        /// Non-screenshot photos with near-zero edge energy, blurriest first.
+        let blurryPhotos: [ScannedPhoto]
+    }
+
     func scan(
         mode: ScanMode,
         importedImageURLs: [URL] = [],
         cancellationToken: ScanCancellationToken,
         progress: @escaping (ScanProgress) async -> Void
-    ) async throws -> (groups: [DuplicateGroup], summary: ScanSummary) {
+    ) async throws -> ScanOutput {
         await progress(ScanProgress(completed: 0, total: 1, message: "Finding images..."))
 
         let candidates = fetchImageCandidates(importedImageURLs: importedImageURLs)
@@ -239,6 +252,7 @@ struct PhotoLibraryDuplicateScanner {
             groups.append(contentsOf: result)
         }
 
+        var blurryPhotos: [ScannedPhoto] = []
         if (mode.includesPixels || mode.includesVisual) && !cancellationToken.isCancelled {
             let result = await scanImageDuplicates(
                 candidates: candidates,
@@ -250,7 +264,8 @@ struct PhotoLibraryDuplicateScanner {
                 cancellationToken: cancellationToken,
                 progress: progress
             )
-            groups.append(contentsOf: result)
+            groups.append(contentsOf: result.groups)
+            blurryPhotos = result.blurryPhotos
         }
 
         let sortedGroups = groups.sorted {
@@ -274,9 +289,9 @@ struct PhotoLibraryDuplicateScanner {
             message: wasStopped ? "Scan stopped. Showing results found so far." : "Scan complete."
         ))
 
-        return (
-            sortedGroups,
-            ScanSummary(
+        return ScanOutput(
+            groups: sortedGroups,
+            summary: ScanSummary(
                 scannedPhotoCount: candidates.count,
                 skippedPhotoCount: skipped,
                 groupCount: sortedGroups.count,
@@ -284,7 +299,8 @@ struct PhotoLibraryDuplicateScanner {
                 wasStopped: wasStopped,
                 completedCheckCount: completed,
                 totalCheckCount: totalWork
-            )
+            ),
+            blurryPhotos: blurryPhotos
         )
     }
 
@@ -385,9 +401,10 @@ struct PhotoLibraryDuplicateScanner {
         byteSizesByImageID: [String: Int64],
         cancellationToken: ScanCancellationToken,
         progress: @escaping (ScanProgress) async -> Void
-    ) async -> [DuplicateGroup] {
+    ) async -> (groups: [DuplicateGroup], blurryPhotos: [ScannedPhoto]) {
         var photosByPixelHash: [String: [ScannedPhoto]] = [:]
         var visualEntries: [(fingerprint: VisualFingerprint, photo: ScannedPhoto, isScreenshot: Bool)] = []
+        var blurryEntries: [(photo: ScannedPhoto, score: Double)] = []
 
         for candidate in candidates {
             if cancellationToken.isCancelled {
@@ -405,17 +422,22 @@ struct PhotoLibraryDuplicateScanner {
                 let byteSize = byteSizesByImageID[candidate.id]
 
                 if mode.includesPixels {
-                    let pixelHash = try ImageFingerprint.pixelSHA256(
-                        data: image.data,
-                        orientation: image.orientation
-                    )
-                    let photo = scannedPhoto(
-                        from: candidate,
-                        byteSize: byteSize,
-                        pixelWidth: pixelHash.width,
-                        pixelHeight: pixelHash.height
-                    )
-                    photosByPixelHash[pixelHash.hex, default: []].append(photo)
+                    do {
+                        let pixelHash = try ImageFingerprint.pixelSHA256(
+                            data: image.data,
+                            orientation: image.orientation
+                        )
+                        let photo = scannedPhoto(
+                            from: candidate,
+                            byteSize: byteSize,
+                            pixelWidth: pixelHash.width,
+                            pixelHeight: pixelHash.height
+                        )
+                        photosByPixelHash[pixelHash.hex, default: []].append(photo)
+                    } catch ImageFingerprintError.imageTooLarge where mode.includesVisual {
+                        // Too big for an exact full-res decode; the look-alike pass
+                        // below still covers it via downsampled rendering.
+                    }
                 }
 
                 if mode.includesVisual {
@@ -430,6 +452,13 @@ struct PhotoLibraryDuplicateScanner {
                         pixelHeight: visualHash.height
                     )
                     visualEntries.append((visualHash, photo, candidate.isScreenshot))
+
+                    // Blur check rides on the signature we just computed; screenshots
+                    // are excluded (flat UI regions read as "no edges" and false-positive).
+                    let blurScore = visualHash.blurScore
+                    if !candidate.isScreenshot, blurScore < Self.blurScoreThreshold {
+                        blurryEntries.append((photo, blurScore))
+                    }
                 }
             } catch {
                 skipped += 1
@@ -449,7 +478,10 @@ struct PhotoLibraryDuplicateScanner {
             }
 
         groups.append(contentsOf: visualDuplicateGroups(from: visualEntries))
-        return groups
+        let blurryPhotos = blurryEntries
+            .sorted { $0.score < $1.score }
+            .map(\.photo)
+        return (groups, blurryPhotos)
     }
 
     private func visualDuplicateGroups(
