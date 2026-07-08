@@ -355,6 +355,47 @@ enum WidgetBridge {
     }
 }
 
+// MARK: - Daily Verse widget bridge
+
+/// Feeds the Daily Verse (shlok) widget. Writes the next 7 days of verse-of-day
+/// (Sanskrit + meaning + source) to the App Group as `verse_timeline.json`; the
+/// widget rolls through them by date. Text only, no images. Matches the app's
+/// free/Pro pool so the widget shows exactly the shlok the app shows.
+enum VerseBridge {
+    static let appGroup = "group.in.bhaktiangan.app"
+
+    private static var containerURL: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup)
+    }
+
+    static func publish(hasPro: Bool, lang: Lang) {
+        guard let dir = containerURL else { return }   // App Group not enabled yet
+        let cal = Calendar(identifier: .gregorian)
+        let fmt = DateFormatter()
+        fmt.calendar = cal
+        fmt.locale = Locale(identifier: "en_US_POSIX")
+        fmt.dateFormat = "yyyy-MM-dd"
+
+        var entries: [[String: String]] = []
+        for offset in 0..<7 {
+            guard let date = cal.date(byAdding: .day, value: offset, to: Date()),
+                  let verse = VerseCatalog.verseOfDay(for: date, hasPro: hasPro) else { continue }
+            entries.append([
+                "date": fmt.string(from: date),
+                "ref": verse.ref,
+                "source": verse.source(lang),
+                "sanskrit": verse.sanskrit,
+                "meaning": verse.meaning(lang),
+                "theme": verse.themeLabel(lang),
+            ])
+        }
+        if let data = try? JSONSerialization.data(withJSONObject: entries) {
+            try? data.write(to: dir.appendingPathComponent("verse_timeline.json"), options: .atomic)
+        }
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+}
+
 // MARK: - Choghadiya widget bridge
 
 /// Feeds the Choghadiya (muhurat) widget. Same idea as `WidgetBridge`: the app

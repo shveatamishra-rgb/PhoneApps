@@ -233,5 +233,6 @@ struct DarshanWidgetBundle: WidgetBundle {
     var body: some Widget {
         DarshanWidget()
         ChoghadiyaWidget()
+        VerseWidget()
     }
 }

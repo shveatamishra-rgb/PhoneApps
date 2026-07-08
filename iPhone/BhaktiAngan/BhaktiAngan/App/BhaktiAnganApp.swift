@@ -26,6 +26,7 @@ struct BhaktiAnganApp: App {
                     // still gets data if store.start() is slow on first launch.
                     WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                     ChoghadiyaBridge.publish()
+                    VerseBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                 }
                 .task(priority: .background) {
                     // Decode the ~69k-city dataset off the main thread so the
@@ -47,11 +48,13 @@ struct BhaktiAnganApp: App {
                     if phase == .active {
                         WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                         ChoghadiyaBridge.publish()
+                        VerseBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                     }
                 }
                 .onOpenURL { url in
-                    // Deep links from the widgets: bhaktiangan://today | ://panchang
-                    if url.host == "today" || url.host == "home" || url.host == "panchang" {
+                    // Deep links from the widgets: bhaktiangan://today | ://panchang | ://verse
+                    if url.host == "today" || url.host == "home" || url.host == "panchang"
+                        || url.host == "verse" {
                         appState.selectedTab = .home
                     }
                 }

@@ -35,6 +35,7 @@ struct HomeView: View {
                 appState.recordDailyVisit()
                 WidgetBridge.publish(hasPro: store.hasPro, lang: loc.lang)
                 ChoghadiyaBridge.publish()
+                VerseBridge.publish(hasPro: store.hasPro, lang: loc.lang)
             }
             .onChange(of: scenePhase) { _, phase in
                 if phase == .active {
