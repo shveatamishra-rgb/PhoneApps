@@ -20,6 +20,9 @@ struct RootView: View {
                 NavigationStack { PanchangView() }   // QA hook for screenshotting the Panchang screen
             } else if ProcessInfo.processInfo.arguments.contains("--open-verses") {
                 NavigationStack { VerseLibraryView() }   // QA hook for screenshotting the Verse library
+            } else if ProcessInfo.processInfo.arguments.contains("--open-voicejapa") {
+                VoiceJapaView(choice: ContentCatalog.mantraChoices.first { $0.id == appState.selectedMantraID }
+                              ?? ContentCatalog.mantraChoices[0])   // QA hook for the Voice Japa screen
             } else if ProcessInfo.processInfo.arguments.contains("--preview-sharecard") {
                 // QA hook: render the actual share-card image so it can be screenshotted.
                 let v = VerseCatalog.verseOfDay(hasPro: true) ?? VerseCatalog.all[0]

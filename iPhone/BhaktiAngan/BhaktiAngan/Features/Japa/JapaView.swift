@@ -80,9 +80,12 @@ struct JapaView: View {
 struct JapaPracticeView: View {
     @EnvironmentObject private var appState: AppState
     @EnvironmentObject private var loc: LocalizationManager
+    @EnvironmentObject private var store: StoreManager
     @Environment(\.requestReview) private var requestReview
     @AppStorage("japaGoal") private var goal = 108
     @State private var showCompletion = false
+    @State private var showVoiceJapa = false
+    @State private var showVoicePaywall = false
 
     let choice: MantraChoice
 
@@ -152,6 +155,8 @@ struct JapaPracticeView: View {
             }
             .frame(width: 260, height: 260)
 
+            voiceJapaButton
+
             ScrollView(.horizontal) {
                 HStack(spacing: 8) {
                     ForEach(Self.goalPresets, id: \.self) { goalButton($0) }
@@ -183,6 +188,35 @@ struct JapaPracticeView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
+        .fullScreenCover(isPresented: $showVoiceJapa) {
+            VoiceJapaView(choice: choice)
+        }
+        .sheet(isPresented: $showVoicePaywall) {
+            PaywallView()
+        }
+    }
+
+    private var voiceJapaButton: some View {
+        Button {
+            if store.hasPro { showVoiceJapa = true } else { showVoicePaywall = true }
+        } label: {
+            HStack(spacing: 9) {
+                Image(systemName: "mic.fill")
+                Text(loc.s("Voice Japa", "वाणी जप"))
+                    .font(.subheadline.weight(.semibold))
+                if !store.hasPro {
+                    Image(systemName: "lock.fill").font(.caption2)
+                }
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 20).padding(.vertical, 12)
+            .background(
+                LinearGradient(colors: [AppTheme.plum, AppTheme.vermilion],
+                               startPoint: .leading, endPoint: .trailing),
+                in: Capsule()
+            )
+        }
+        .buttonStyle(.plain)
     }
 
     private func chant() {

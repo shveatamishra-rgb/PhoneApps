@@ -10,9 +10,20 @@ Content work starts now; build work starts once v1.1 is approved.
       4.7-4.8, 9.22, 18.66, etc.): Devanagari + transliteration + EN meaning +
       HI meaning + one-line "live it today". JSON matching stories.json pattern.
 - [ ] Native-speaker review pass on all HI verse meanings (same bar as app copy).
-- [ ] Long-form Krishna story, Hindi authored version (web + future in-app).
-- [ ] Shiva long-form draft (needed on web before Shravan ends anyway).
-- [ ] Devi long-form draft (before Navratri).
+- [x] Long-form deity journeys: ALREADY DONE in EN+HI (discovered 2026-07-07, built
+      earlier). Krishna (1080/1327), Shiva (1328/1347), Durga/Devi (1340/1348),
+      Ganesha (1349/1372), Rama (1362/1417), Hanuman (1361/HI). Each ~3200-4000
+      words: "Who is X" + chapters + glossary + shloka. The old "Shiva/Devi draft"
+      lines here were stale.
+- [x] **Vishnu long-form ADDED 2026-07-07** (the one missing major deity):
+      EN /vishnu/ (1511) + HI /hi/bhagwan-vishnu/ (1512), Polylang-linked. 8
+      chapters (Anantashayana, Samudra Manthan/Kurma, Varaha, Narasimha, Vamana,
+      Rama/Krishna, Lakshmi-Narayana, the Dashavatar) + glossary + Vishnu dhyana
+      shloka + breadcrumbs + related cross-links (Krishna/Rama/Gita/Gallery) +
+      app CTA. Builder `112-vishnu.mjs`. Live + verified, 0 em dashes.
+- [ ] (optional) Retrofit breadcrumbs + related modules onto the older six
+      long-forms for full knowledge-graph parity (site-review ask). Vishnu already
+      has them; the others predate that pattern.
 - [ ] Commission brief for 2-3 owned audio tracks (japa chant + ambient aarti),
       artists in India, full buyout, credits line agreed ("recorded for Bhakti
       Angan").
@@ -29,7 +40,17 @@ Content work starts now; build work starts once v1.1 is approved.
 - [x] "Gita" added to header + footer nav (EN + HI) in the snippet files.
       **OWNER MUST RE-PASTE `site_wide_header_bhaktiangan.php` +
       `site_wide_footer_bhaktiangan.php` into WPCode for the nav to update.**
-- [ ] Newsletter opt-in block added to story pages + /panchang/.
+- [x] Newsletter opt-in block added to 18 pages (7 deity long-forms EN+HI, Gita
+      EN+HI, Panchang EN+HI): self-contained `.ba-nl` card, posts to the existing
+      Brevo `/gallery-optin` endpoint, honeypot + email validation, lang detected
+      by URL `/hi/` prefix (theme sets html lang=en on all pages, so URL is the
+      reliable signal). Builder `113-newsletter-optin.mjs`, idempotent marker.
+      Also fixed the same lang-detection bug in `111-home-shlok.mjs` (HI homepage
+      block now shows Hindi). Serves the 100-subs-before-Shravan goal.
+- [x] Breadcrumbs + "Continue your reading" related module retrofitted onto the
+      six older long-forms EN+HI (Krishna/Shiva/Durga/Ganesha/Rama/Hanuman), the
+      knowledge-graph the site review asked for. Self-contained styles, idempotent.
+      Builder `114-retrofit-crosslinks.mjs`. Vishnu + Gita already had them.
 - [ ] Gallery: Katha tab + auto-fit phone wallpaper downloads.
 - [ ] First newsletter when list >= 100 subs (copy in MARKETING_EXECUTION_PACK.md).
 - [ ] **Scholar/native review of the verse translations** (EN + HI) before treating
@@ -58,6 +79,15 @@ Order matched review risk, lowest first. All committed to main (bc74837,
       favorites). On-device counters only.
 - [x] Settings support row: "Write to us" (EN/HI) + nav title.
 - [x] Share-as-card (VerseShareCard, ImageRenderer) — the research growth loop.
+      UPGRADED 2026-07-07: renders the verse over the Gita Updesh artwork
+      (r_krishna_gita, bundled-Krishna fallback) behind a legibility scrim + gold
+      frame. Verified in sim (--preview-sharecard hook). Reading surfaces stay
+      text-only (correct); only the shareable hero is pictorial.
+- [x] Gita website POLISH 2026-07-07: Shlok-of-the-day anchored with an ornament
+      divider + inner gold frame + radial glow + Om; verse cards rebuilt as
+      illuminated-manuscript style (gold top rule, Om, tinted scripture panel
+      with gold spine, floral "Live it today" takeaway). Homepage block elevated
+      to match. Live + verified EN+HI (110/111 rebuilt).
 - [ ] **Version bump: DO NOT bump to 1.2 yet.** The binary is still 1.1(3) so it
       does not collide with the in-review v1.1 resubmit. Bump to 1.2(1) (both
       targets, widget MARKETING_VERSION matches) only once v1.1 has shipped.

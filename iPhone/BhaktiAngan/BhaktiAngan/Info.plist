@@ -42,6 +42,8 @@
     <string>public.app-category.lifestyle</string>
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>Your location is used only on your device to calculate accurate sunrise, sunset, and Panchang timings. It is never transmitted or stored.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>The microphone is used only to count your japa as you chant, live on your device. Audio is never recorded, stored, or sent anywhere.</string>
     <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Save devotional wallpapers to your photo library.</string>
     <key>UIApplicationSupportsIndirectInputEvents</key>
