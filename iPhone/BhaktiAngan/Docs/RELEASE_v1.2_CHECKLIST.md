@@ -19,11 +19,22 @@ Content work starts now; build work starts once v1.1 is approved.
 
 ## Stage 2 · Website (independent of app review)
 
-- [ ] /bhagavad-gita/ pillar page EN + HI (Polylang pair) using the verse dataset.
-- [ ] Chapter 1 page + per-verse anchors; "Aaj ka Shlok" block on homepage.
+- [x] /bhagavad-gita/ pillar EN + /hi/shrimad-bhagavad-gita/ HI (Polylang-linked,
+      pages 1503/1504), built from the SAME app verses.json. Hub: breadcrumbs,
+      Shlok-of-the-day (client JS), browse-by-theme cards, FAQ, related modules,
+      app CTA, JSON-LD. Builder `bhaktiangan-site/110-bhagavad-gita.mjs`. LIVE +
+      verified (25 cards, base64 JS parses live, full HI labels).
+- [x] "Aaj Ka Shlok" block on homepage (EN page 15 + HI page 383), links to the
+      pillar. Builder `111-home-shlok.mjs`, idempotent marker, try/catch-safe.
+- [x] "Gita" added to header + footer nav (EN + HI) in the snippet files.
+      **OWNER MUST RE-PASTE `site_wide_header_bhaktiangan.php` +
+      `site_wide_footer_bhaktiangan.php` into WPCode for the nav to update.**
 - [ ] Newsletter opt-in block added to story pages + /panchang/.
 - [ ] Gallery: Katha tab + auto-fit phone wallpaper downloads.
 - [ ] First newsletter when list >= 100 subs (copy in MARKETING_EXECUTION_PACK.md).
+- [ ] **Scholar/native review of the verse translations** (EN + HI) before treating
+      the Gita content as final; currently published as index (draft-quality but
+      conservative). Flip to noindex if the owner prefers to review first.
 
 ## Stage 3 · App build — BUILT 2026-07-07 (local; not submitted)
 
