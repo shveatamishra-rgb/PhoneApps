@@ -88,9 +88,16 @@ Order matched review risk, lowest first. All committed to main (bc74837,
       illuminated-manuscript style (gold top rule, Om, tinted scripture panel
       with gold spine, floral "Live it today" takeaway). Homepage block elevated
       to match. Live + verified EN+HI (110/111 rebuilt).
-- [ ] **Version bump: DO NOT bump to 1.2 yet.** The binary is still 1.1(3) so it
-      does not collide with the in-review v1.1 resubmit. Bump to 1.2(1) (both
-      targets, widget MARKETING_VERSION matches) only once v1.1 has shipped.
+- [x] **Version bump DONE 2026-07-09: 1.1(3) -> 1.2(1)** across all 6 configs
+      (app + widget + extension), now that v1.1 is APPROVED. Commit bd305df.
+- [x] **Voice Japa gated OUT of v1.2 (2026-07-09).** Owner decision: ship the
+      verse features now, hold Voice Japa until on-device mic tuning is done.
+      `VoiceJapaFeature.isLive = false` (VoiceJapaView.swift) -> the Japa button
+      shows an informational "coming soon" teaser sheet (VoiceJapaTeaserSheet),
+      no dead action, NOT a paywall, NOT listed as a Pro benefit (App Review
+      2.3.x/3.1 safe). VoiceJapaView stays compiled + QA-reachable via
+      --open-voicejapa. Re-enable = flip the flag to true, then ship in 1.2.x/1.3.
+      Builds clean (BUILD SUCCEEDED, iPhone 17 Pro sim).
 
 ## Stage 4 · Verification (the v1.1 lessons, do not skip)
 
