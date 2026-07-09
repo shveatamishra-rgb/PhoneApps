@@ -2,6 +2,13 @@ import SwiftUI
 import UIKit
 import AudioToolbox
 
+/// Ships OFF until on-device microphone tuning is complete. While `isLive` is false the
+/// Japa screen shows a "coming soon" teaser instead of launching Voice Japa, so the
+/// half-tuned feature never reaches users. Flip to `true` (one line) after device tuning
+/// and re-run the release. The VoiceJapaView code below stays compiled and QA-reachable
+/// via the `--open-voicejapa` launch argument in the meantime.
+enum VoiceJapaFeature { static let isLive = false }
+
 /// Hands-free Voice Japa (Pro). The devotee chants; the counter ticks on its own
 /// via the microphone, the ring fills, and a chime + haptic sound at the target.
 /// Each detected repetition also feeds `appState.dailyJapaCount`, so the daily
@@ -280,5 +287,62 @@ struct VoiceJapaView: View {
             try? await Task.sleep(for: .seconds(2.5))
             withAnimation { showCompletion = false }
         }
+    }
+}
+
+/// Informational "coming soon" teaser for Voice Japa, shown from the Japa screen while
+/// `VoiceJapaFeature.isLive` is false. Purely informational: it makes no claim of Pro
+/// entitlement and offers no action that fails, so it stays clear of App Review 2.3.x/3.1.
+struct VoiceJapaTeaserSheet: View {
+    @EnvironmentObject private var loc: LocalizationManager
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .fill(LinearGradient(colors: [AppTheme.plum, AppTheme.vermilion],
+                                         startPoint: .topLeading, endPoint: .bottomTrailing))
+                    .frame(width: 84, height: 84)
+                Image(systemName: "mic.fill")
+                    .font(.system(size: 34, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+            .padding(.top, 36)
+
+            Text(loc.s("Coming soon", "जल्द आ रहा है"))
+                .font(.caption.weight(.bold))
+                .tracking(1.6)
+                .textCase(.uppercase)
+                .foregroundStyle(AppTheme.vermilion)
+
+            Text(loc.s("Voice Japa", "वाणी जप"))
+                .font(.title.weight(.bold))
+                .foregroundStyle(AppTheme.ink)
+
+            Text(loc.s(
+                "Chant aloud and let the app count your mala for you, hands-free. It all happens on your device, and your voice never leaves it. We are perfecting it now, and it will arrive in a future update.",
+                "बस मंत्र का उच्चारण करें और ऐप आपकी माला अपने आप गिनेगा, बिना छुए। सब कुछ आपके फोन पर ही होता है, आपकी आवाज़ कहीं नहीं जाती। हम इसे और बेहतर बना रहे हैं, यह जल्द ही एक आगामी अपडेट में आएगा।"))
+                .font(.callout)
+                .foregroundStyle(AppTheme.ink.opacity(0.75))
+                .multilineTextAlignment(.center)
+                .lineSpacing(4)
+                .padding(.horizontal, 8)
+
+            Spacer(minLength: 8)
+
+            Button { dismiss() } label: {
+                Text(loc.s("Got it", "ठीक है"))
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 15)
+                    .background(AppTheme.teal, in: Capsule())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(28)
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
     }
 }

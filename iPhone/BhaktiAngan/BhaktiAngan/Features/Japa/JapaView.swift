@@ -86,6 +86,7 @@ struct JapaPracticeView: View {
     @State private var showCompletion = false
     @State private var showVoiceJapa = false
     @State private var showVoicePaywall = false
+    @State private var showVoiceJapaTeaser = false
 
     let choice: MantraChoice
 
@@ -194,18 +195,34 @@ struct JapaPracticeView: View {
         .sheet(isPresented: $showVoicePaywall) {
             PaywallView()
         }
+        .sheet(isPresented: $showVoiceJapaTeaser) {
+            VoiceJapaTeaserSheet()
+        }
     }
 
     private var voiceJapaButton: some View {
         Button {
-            if store.hasPro { showVoiceJapa = true } else { showVoicePaywall = true }
+            if VoiceJapaFeature.isLive {
+                if store.hasPro { showVoiceJapa = true } else { showVoicePaywall = true }
+            } else {
+                // Feature not yet shipped: show an informational teaser, never a dead
+                // action and never a paywall (we are not selling it yet).
+                showVoiceJapaTeaser = true
+            }
         } label: {
             HStack(spacing: 9) {
                 Image(systemName: "mic.fill")
                 Text(loc.s("Voice Japa", "वाणी जप"))
                     .font(.subheadline.weight(.semibold))
-                if !store.hasPro {
-                    Image(systemName: "lock.fill").font(.caption2)
+                if VoiceJapaFeature.isLive {
+                    if !store.hasPro {
+                        Image(systemName: "lock.fill").font(.caption2)
+                    }
+                } else {
+                    Text(loc.s("Soon", "जल्द"))
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 7).padding(.vertical, 2)
+                        .background(.white.opacity(0.22), in: Capsule())
                 }
             }
             .foregroundStyle(.white)
