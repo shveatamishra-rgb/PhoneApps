@@ -212,7 +212,7 @@ struct ChoghWidgetView: View {
     private var noData: some View {
         VStack(spacing: 5) {
             Image(systemName: "location.slash").font(.footnote)
-            Text("Set your city in Bhakti Angan").font(.caption2).multilineTextAlignment(.center)
+            Text("Open Bhakti Angan once to load today\u{2019}s muhurat").font(.caption2).multilineTextAlignment(.center)
         }
         .foregroundStyle(.white)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

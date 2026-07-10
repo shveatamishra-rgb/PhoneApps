@@ -79,7 +79,8 @@ struct DarshanProvider: TimelineProvider {
             return
         }
         let entries = infos.map { DarshanEntry(date: $0.date, info: $0) }
-        let reload = cal.date(byAdding: .day, value: 1, to: infos.last!.date) ?? Date().addingTimeInterval(86_400)
+        let lastDate = infos.last?.date ?? Date()
+        let reload = cal.date(byAdding: .day, value: 1, to: lastDate) ?? Date().addingTimeInterval(86_400)
         completion(Timeline(entries: entries, policy: .after(reload)))
     }
 

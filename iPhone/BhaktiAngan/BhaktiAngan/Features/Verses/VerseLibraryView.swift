@@ -18,7 +18,10 @@ enum VerseCatalog {
     static func verseOfDay(for date: Date = Date(), hasPro: Bool = false) -> Verse? {
         let pool = hasPro ? all : free
         guard !pool.isEmpty else { return nil }
-        let day = Calendar.current.ordinality(of: .day, in: .year, for: date) ?? 1
+        // Fixed gregorian calendar: Calendar.current can be Buddhist/Islamic/Japanese
+        // on some devices, whose day-of-year differs, and the widget bridge computes
+        // with gregorian. Keep the app card and the widget on the same verse.
+        let day = Calendar(identifier: .gregorian).ordinality(of: .day, in: .year, for: date) ?? 1
         return pool[(day - 1) % pool.count]
     }
 
@@ -279,10 +282,14 @@ private struct VerseRow: View {
                     .font(.system(.subheadline, design: .serif))
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1)
+                // Locked rows tease the meaning without revealing it: blurred so
+                // search cannot be used to read Pro translations for free.
                 Text(verse.meaning(loc.lang))
                     .font(.footnote)
                     .foregroundStyle(AppTheme.muted)
                     .lineLimit(2)
+                    .blur(radius: locked ? 4 : 0)
+                    .accessibilityHidden(locked)
             }
             Spacer(minLength: 0)
             Image(systemName: locked ? "lock.fill" : "chevron.right")
@@ -351,8 +358,12 @@ struct VerseDetailView: View {
                     ) { appState.toggleVerseSaved(verse) }
 
                     actionButton("square.and.arrow.up", label: loc.s("Share", "साझा करें")) {
-                        shareImage = VerseShareCard.render(verse: verse, lang: loc.lang)
-                        showShare = true
+                        // Render on the next runloop tick so the tap animation is not
+                        // blocked by ImageRenderer (it must stay on the main actor).
+                        Task { @MainActor in
+                            shareImage = VerseShareCard.render(verse: verse, lang: loc.lang)
+                            showShare = true
+                        }
                     }
                 }
             }
