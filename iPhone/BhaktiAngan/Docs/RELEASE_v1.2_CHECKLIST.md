@@ -101,6 +101,16 @@ Order matched review risk, lowest first. All committed to main (bc74837,
 
 ## Stage 4 · Verification (the v1.1 lessons, do not skip)
 
+- [x] **Pre-submit code review DONE 2026-07-10** (commit 0858661): verse widget
+      now starvation-proof (bundled verses.json fallback in the extension, same
+      gregorian day-of-year modulo as the app; stays fresh forever without the
+      bridge); verseOfDay fixed to gregorian (Calendar.current mismatched the
+      widget on non-Gregorian device calendars); defensive infos.last unwraps;
+      choghadiya empty-state copy actionable; share render off the tap tick;
+      locked verse rows blur the meaning (search can't read Pro text). All 28
+      tests pass on an ERASED sim; on a dirty sim 2 catalog tests fail from the
+      known stale-manifest-cache flake (pre-existing, erase sim before judging).
+
 - [ ] Widget images/data at scale=1; verify no black renders on device.
 - [ ] Verse widget visible in widget picker on device (deployment target 17.0).
 - [ ] All three widgets correct after 24h without opening the app.
