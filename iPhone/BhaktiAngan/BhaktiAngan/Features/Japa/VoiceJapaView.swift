@@ -2,12 +2,10 @@ import SwiftUI
 import UIKit
 import AudioToolbox
 
-/// Ships OFF until on-device microphone tuning is complete. While `isLive` is false the
-/// Japa screen shows a "coming soon" teaser instead of launching Voice Japa, so the
-/// half-tuned feature never reaches users. Flip to `true` (one line) after device tuning
-/// and re-run the release. The VoiceJapaView code below stays compiled and QA-reachable
-/// via the `--open-voicejapa` launch argument in the meantime.
-enum VoiceJapaFeature { static let isLive = false }
+/// Voice Japa ships LIVE in v1.2 (owner call, 2026-07-11). The in-app calibration +
+/// sensitivity slider let devotees tune detection to their own voice and room; the
+/// teaser path below stays for any future gated feature. QA hook: --open-voicejapa.
+enum VoiceJapaFeature { static let isLive = true }
 
 /// Hands-free Voice Japa (Pro). The devotee chants; the counter ticks on its own
 /// via the microphone, the ring fills, and a chime + haptic sound at the target.

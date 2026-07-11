@@ -311,3 +311,104 @@ Upload order = display order on the store page. Delete the old v1.0 shots from
 each localization first. No prices are baked into any panel. (The old v1.0 raw
 captures remain in `Docs/Screenshots/v1/` for history.)
 ```
+
+---
+
+# v1.2 additions (2026-07-11) — paste-ready
+
+## Promotional text v1.2 (max 170, replaces v1.1)
+
+EN:
+```
+New: Voice Japa counts your chanting hands-free, a Daily Shlok widget, and a Bhagavad Gita library with meaning in English and Hindi.
+```
+
+HI:
+```
+नया: वाणी जप बोलकर जप करने पर माला स्वयं गिनता है, दैनिक श्लोक विजेट, और अर्थ सहित भगवद्गीता श्लोक संग्रह।
+```
+
+## What's New (version 1.2) — paste this one
+
+EN:
+```
+Your practice, deepened.
+• Voice Japa (Pro): chant aloud and the mala counts itself. Eyes closed, hands free, everything stays on your device
+• Daily Shlok widget: one Bhagavad Gita verse each morning, on your home and lock screen
+• Gita shlok library: beloved verses with Sanskrit, meaning in English and Hindi, and one line to live by today
+• Today's Shlok on your Home tab, and share any shlok as a beautiful card
+• New "Your Practice" card with your japa streaks and saved shlokas
+• Small touches and fixes throughout
+```
+
+HI:
+```
+आपकी साधना, और गहरी।
+• वाणी जप (प्रो): बोलकर जप करें, माला अपने आप गिनती है। आँखें बंद, हाथ मुक्त, सब कुछ आपके फोन पर ही
+• दैनिक श्लोक विजेट: हर सुबह भगवद्गीता का एक श्लोक, होम और लॉक स्क्रीन पर
+• गीता श्लोक संग्रह: प्रिय श्लोक, संस्कृत तथा हिंदी-अंग्रेज़ी अर्थ और जीवन में उतारने की एक पंक्ति के साथ
+• होम टैब पर आज का श्लोक, और किसी भी श्लोक को सुंदर कार्ड के रूप में साझा करें
+• नया "आपकी साधना" कार्ड: जप स्ट्रीक और सहेजे श्लोक
+• अनेक छोटे सुधार
+```
+
+## Description v1.2: add these two sections (EN) after the WIDGETS section
+
+```
+VOICE JAPA (PRO)
+Chant aloud and the mala counts itself. Calibrate once to your voice, close
+your eyes, and let the counter follow your chanting, with a gentle chime at
+your target. Your voice never leaves your device.
+
+BHAGAVAD GITA AND SHLOKAS
+A growing library of beloved Gita shlokas: the Sanskrit, a simple meaning in
+English and Hindi, and one line to live by today. A new shlok greets you each
+morning on the Home tab and on the Daily Shlok widget, and any verse can be
+shared as a beautiful card.
+```
+
+HI (same position in the Hindi description):
+```
+वाणी जप (प्रो)
+बोलकर जप करें और माला अपने आप गिनती है। एक बार अपनी आवाज़ के अनुसार कैलिब्रेट
+करें, आँखें बंद करें, और गणक आपके उच्चारण के साथ चलेगा, लक्ष्य पर एक मधुर
+घंटी के साथ। आपकी आवाज़ कभी आपके फोन से बाहर नहीं जाती।
+
+भगवद्गीता और श्लोक
+प्रिय गीता श्लोकों का बढ़ता संग्रह: संस्कृत, हिंदी और अंग्रेज़ी में सरल अर्थ,
+और आज जीवन में उतारने की एक पंक्ति। हर सुबह होम टैब और दैनिक श्लोक विजेट पर
+एक नया श्लोक, और हर श्लोक एक सुंदर कार्ड के रूप में साझा किया जा सकता है।
+```
+
+Also: in the description's WIDGETS section, change "two widgets" wording to
+"three widgets" and mention the Daily Shlok widget; in the PRO block add
+"Voice Japa, hands-free chanting" and "the full Gita shlok library" (matches
+the updated in-app paywall bullets).
+
+## App Review notes: ADD this paragraph for 1.2
+
+```
+New in 1.2: (1) Voice Japa (Pro): the microphone is used only to detect
+chanting sounds and advance the japa counter, entirely on-device. No audio is
+recorded, stored, or transmitted; the mic stops when the screen closes. The
+permission prompt appears only when the user starts a Voice Japa session.
+(2) A Bhagavad Gita verse library and a third widget (Daily Shlok): verse
+content is bundled in the binary; the Sanskrit is public-domain scripture and
+the English/Hindi translations are our own. (3) App Privacy remains
+"Data Not Collected"; there are no new SDKs, no accounts, and no analytics.
+```
+
+## Screenshots v1.2 (add 2 panels to each localization)
+
+Keep the five v1.1 panels; add two new ones (capture at iPhone 6.9",
+1290 x 2796, same beautify3.py pipeline, files in AppStore/v1.2/):
+
+- Panel 06 "Voice Japa" (insert as position 2): the Voice Japa screen mid-session.
+  Sim: launch with --open-voicejapa (grant mic in sim: Features > Microphone).
+  Headline EN: "Chant. It counts by itself." HI: "जप बोलिए। माला स्वयं गिनेगी।"
+- Panel 07 "Daily Shlok" (insert as position 3): Verse library with Today's
+  Shlok featured. Sim: launch with --open-verses.
+  Headline EN: "A Gita shlok every morning" HI: "हर सुबह गीता का एक श्लोक"
+
+Order after upload: 01 darshan, 06 voice japa, 07 shlok, then the rest.
+No prices in panels. Upload via Media Manager > iPhone 6.9" as before.

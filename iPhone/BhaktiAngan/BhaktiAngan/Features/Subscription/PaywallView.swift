@@ -36,13 +36,17 @@ struct PaywallView: View {
                                 loc.s("Festival collections and fresh darshans land in your app, no update needed",
                                       "पर्व संग्रह और नए दर्शन सीधे आपके ऐप में, बिना किसी अपडेट के"))
                         feature("book.closed.fill",
-                                loc.s("Every katha, every mantra", "हर कथा, हर मंत्र"),
-                                loc.s("All stories of the gods and all japa mantras, unlocked",
-                                      "देवताओं की सभी कथाएँ और सभी जप मंत्र, अनलॉक"))
+                                loc.s("Every katha, shlok and mantra", "हर कथा, श्लोक और मंत्र"),
+                                loc.s("All stories, the full Bhagavad Gita shlok library and all japa mantras, unlocked",
+                                      "सभी कथाएँ, संपूर्ण भगवद्गीता श्लोक संग्रह और सभी जप मंत्र, अनलॉक"))
                         feature("square.grid.2x2.fill",
                                 loc.s("Widgets with the full collection", "विजेट में पूरा संग्रह"),
                                 loc.s("Your Home Screen darshan rotates through everything you own",
                                       "आपकी होम स्क्रीन का दर्शन आपके पूरे संग्रह में घूमता है"))
+                        feature("mic.fill",
+                                loc.s("Voice Japa, hands-free", "वाणी जप, बिना छुए"),
+                                loc.s("Chant aloud and the mala counts itself, eyes closed, on your device only",
+                                      "बोलकर जप करें और माला स्वयं गिनती है, आँखें बंद, सब कुछ आपके फोन पर"))
                         feature("infinity",
                                 loc.s("All future Pro features, included", "आने वाले सभी प्रो फ़ीचर शामिल"),
                                 loc.s("Whatever we build next is yours, at no extra cost",
