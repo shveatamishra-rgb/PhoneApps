@@ -14,16 +14,25 @@ struct RootView: View {
         AppearanceMode(rawValue: appearanceRaw) ?? .system
     }
 
+    // QA screen selector. Reads a launch argument OR the QA_SCREEN env var (the latter
+    // is reliable under `SIMCTL_CHILD_QA_SCREEN=... xcrun simctl launch`, since simctl
+    // does not forward plain argv to ProcessInfo.arguments). Inert in production.
+    private static func qaHook(_ arg: String, _ env: String) -> Bool {
+        ProcessInfo.processInfo.arguments.contains(arg)
+            || ProcessInfo.processInfo.environment["QA_SCREEN"] == env
+            || UserDefaults.standard.string(forKey: "qaScreen") == env
+    }
+
     var body: some View {
         Group {
-            if ProcessInfo.processInfo.arguments.contains("--open-panchang") {
+            if Self.qaHook("--open-panchang", "panchang") {
                 NavigationStack { PanchangView() }   // QA hook for screenshotting the Panchang screen
-            } else if ProcessInfo.processInfo.arguments.contains("--open-verses") {
+            } else if Self.qaHook("--open-verses", "verses") {
                 NavigationStack { VerseLibraryView() }   // QA hook for screenshotting the Verse library
-            } else if ProcessInfo.processInfo.arguments.contains("--open-voicejapa") {
+            } else if Self.qaHook("--open-voicejapa", "voicejapa") {
                 VoiceJapaView(choice: ContentCatalog.mantraChoices.first { $0.id == appState.selectedMantraID }
                               ?? ContentCatalog.mantraChoices[0])   // QA hook for the Voice Japa screen
-            } else if ProcessInfo.processInfo.arguments.contains("--preview-sharecard") {
+            } else if Self.qaHook("--preview-sharecard", "sharecard") {
                 // QA hook: render the actual share-card image so it can be screenshotted.
                 let v = VerseCatalog.verseOfDay(hasPro: true) ?? VerseCatalog.all[0]
                 Image(uiImage: VerseShareCard.render(verse: v, lang: .en))

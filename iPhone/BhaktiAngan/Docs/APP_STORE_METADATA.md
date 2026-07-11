@@ -398,17 +398,20 @@ the English/Hindi translations are our own. (3) App Privacy remains
 "Data Not Collected"; there are no new SDKs, no accounts, and no analytics.
 ```
 
-## Screenshots v1.2 (add 2 panels to each localization)
+## Screenshots v1.2 (FINAL SET BUILT, 6 panels each in AppStore/v1.2/en and /hi)
 
-Keep the five v1.1 panels; add two new ones (capture at iPhone 6.9",
-1290 x 2796, same beautify3.py pipeline, files in AppStore/v1.2/):
+Replaces the v1.1 set. The old static "japa" panel is dropped; Voice Japa and
+Daily Shlok take positions 2 and 3 so the new features lead. All 1290 x 2796,
+same beautify pipeline (beautify_v12.py). Upload order = display order:
 
-- Panel 06 "Voice Japa" (insert as position 2): the Voice Japa screen mid-session.
-  Sim: launch with --open-voicejapa (grant mic in sim: Features > Microphone).
-  Headline EN: "Chant. It counts by itself." HI: "जप बोलिए। माला स्वयं गिनेगी।"
-- Panel 07 "Daily Shlok" (insert as position 3): Verse library with Today's
-  Shlok featured. Sim: launch with --open-verses.
-  Headline EN: "A Gita shlok every morning" HI: "हर सुबह गीता का एक श्लोक"
+  01 today       (kept)   Daily darshan on the Today tab
+  02 voicejapa   (NEW)    Voice Japa, "27 of 108", Listening
+  03 shlok       (NEW)    Gita library with today's shlok featured
+  04 library     (kept)   Full darshan collection
+  05 katha       (kept)   Katha with meaning
+  06 widgets     (kept)   The three widgets on a home screen
 
-Order after upload: 01 darshan, 06 voice japa, 07 shlok, then the rest.
-No prices in panels. Upload via Media Manager > iPhone 6.9" as before.
+Upload via App Store Connect > Media Manager > iPhone 6.9" Display (1290 x 2796);
+leave 6.5" empty (it inherits). Delete the old v1.1 shots from each localization
+first. English set = AppStore/v1.2/en/ files 01-06; Hindi set = AppStore/v1.2/hi/
+files 01-06. No prices in any panel.

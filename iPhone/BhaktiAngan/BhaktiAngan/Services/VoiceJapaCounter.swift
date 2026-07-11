@@ -121,6 +121,16 @@ final class VoiceJapaCounter: ObservableObject {
         count = max(0, count + delta)
     }
 
+    /// QA-only: preload a lifelike listening state for App Store screenshots.
+    /// Only ever called behind the --voicejapa-demo launch argument (never in production);
+    /// it starts no audio engine, so the sim needs no microphone.
+    func loadDemoState(count demoCount: Int, target demoTarget: Int) {
+        target = demoTarget
+        count = demoCount
+        level = 0.42
+        phase = .listening
+    }
+
     // MARK: - Engine
 
     private func beginTap(calibrate: Bool) {

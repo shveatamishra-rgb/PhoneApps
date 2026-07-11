@@ -53,6 +53,11 @@ struct VoiceJapaView: View {
                 UIImpactFeedbackGenerator(style: .soft).impactOccurred()
             }
             counter.onTargetReached = { complete() }
+            if ProcessInfo.processInfo.arguments.contains("--voicejapa-demo")
+                || ProcessInfo.processInfo.environment["QA_DEMO"] == "1"
+                || UserDefaults.standard.bool(forKey: "qaVoiceDemo") {
+                counter.loadDemoState(count: 27, target: goal)   // App Store screenshot
+            }
         }
         .onChange(of: goal) { _, new in counter.target = new }
         .onDisappear {

@@ -38,6 +38,13 @@ final class LocalizationManager: ObservableObject {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
+        // QA_LANG env override (for App Store screenshot automation via
+        // SIMCTL_CHILD_QA_LANG=hindi); inert in production.
+        if let qa = ProcessInfo.processInfo.environment["QA_LANG"],
+           let forced = AppLanguage(rawValue: qa) {
+            preference = forced
+            return
+        }
         let raw = defaults.string(forKey: Self.key) ?? AppLanguage.system.rawValue
         preference = AppLanguage(rawValue: raw) ?? .system
     }
