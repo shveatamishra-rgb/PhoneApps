@@ -63,4 +63,25 @@ class CitiesRepository(private val context: Context) {
 
     fun byId(id: String): City? = Cities.byId(all, id)
     fun search(query: String, limit: Int = 50): List<City> = Cities.search(all, query, limit)
+
+    /**
+     * The nearest known city to a GPS fix. Used so "Use my location" resolves to a real
+     * city with a proper name AND timezone (so Panchang/Choghadiya times print in the
+     * user's local time, not IST). Longitude is scaled by cos(latitude) so the distance
+     * is not distorted away from the equator. Fully on-device.
+     */
+    fun nearest(lat: Double, lon: Double): City? {
+        val list = all
+        if (list.isEmpty()) return null
+        val cosLat = kotlin.math.cos(Math.toRadians(lat))
+        var best: City? = null
+        var bestD = Double.MAX_VALUE
+        for (c in list) {
+            val dLat = c.latitude - lat
+            val dLon = (c.longitude - lon) * cosLat
+            val d = dLat * dLat + dLon * dLon
+            if (d < bestD) { bestD = d; best = c }
+        }
+        return best
+    }
 }

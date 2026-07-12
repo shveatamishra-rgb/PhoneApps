@@ -211,9 +211,11 @@ fun PanchangScreen(vm: AppViewModel, lang: Lang, onBack: () -> Unit) {
             if (granted) {
                 scope.launch {
                     val loc = LocationController(vm.getApplication()).current()
-                    if (loc != null) {
-                        gpsLoc = loc
-                        vm.setUseGps(true)
+                    // Resolve the fix to the nearest real city so the name AND timezone are
+                    // correct everywhere (Home card, Panchang, widget) and persist across launches.
+                    val near = loc?.let { withContext(Dispatchers.Default) { vm.cities.nearest(it.latitude, it.longitude) } }
+                    if (near != null) {
+                        vm.setCity(near.id)
                         showPicker = false
                     } else {
                         android.widget.Toast.makeText(ctx, tr(lang, "Couldn't get your location. Turn on location, or pick a city.", "स्थान नहीं मिला। लोकेशन चालू करें, या शहर चुनें।"), android.widget.Toast.LENGTH_LONG).show()
