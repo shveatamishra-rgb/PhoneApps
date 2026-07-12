@@ -22,6 +22,7 @@ data class AppPrefs(
     val language: AppLanguage = AppLanguage.SYSTEM,
     val appearance: AppearanceMode = AppearanceMode.SYSTEM,
     val favorites: Set<String> = emptySet(),
+    val savedVerses: Set<String> = emptySet(),
     val selectedMantraId: String = "shiv",
     val japaCount: Int = 0,
     val japaGoal: Int = 108,
@@ -44,6 +45,7 @@ class PreferencesRepository(private val context: Context) {
             language = AppLanguage.fromStorage(p[LANGUAGE]),
             appearance = AppearanceMode.fromStorage(p[APPEARANCE]),
             favorites = p[FAVORITES] ?: emptySet(),
+            savedVerses = p[SAVED_VERSES] ?: emptySet(),
             selectedMantraId = p[MANTRA] ?: "shiv",
             japaCount = if (p[JAPA_DAY] == today) p[JAPA_COUNT] ?: 0 else 0,
             japaGoal = p[JAPA_GOAL] ?: 108,
@@ -86,6 +88,11 @@ class PreferencesRepository(private val context: Context) {
         it[FAVORITES] = if (imageName in cur) cur - imageName else cur + imageName
     }
 
+    suspend fun toggleSavedVerse(id: String) = context.dataStore.edit {
+        val cur = it[SAVED_VERSES] ?: emptySet()
+        it[SAVED_VERSES] = if (id in cur) cur - id else cur + id
+    }
+
     suspend fun incrementJapa() = context.dataStore.edit {
         val today = dayString()
         val count = if (it[JAPA_DAY] == today) it[JAPA_COUNT] ?: 0 else 0
@@ -117,6 +124,7 @@ class PreferencesRepository(private val context: Context) {
         val LANGUAGE = stringPreferencesKey("appLanguage")
         val APPEARANCE = stringPreferencesKey("appearancePreference")
         val FAVORITES = stringSetPreferencesKey("favoriteImageNames")
+        val SAVED_VERSES = stringSetPreferencesKey("savedVerseIDs")
         val MANTRA = stringPreferencesKey("selectedMantraID")
         val JAPA_COUNT = intPreferencesKey("japaCount")
         val JAPA_DAY = stringPreferencesKey("japaDay")

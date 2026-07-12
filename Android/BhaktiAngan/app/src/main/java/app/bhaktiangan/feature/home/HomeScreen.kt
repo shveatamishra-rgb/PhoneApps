@@ -73,11 +73,13 @@ fun HomeScreen(
     onOpenDetail: (String) -> Unit,
     onBeginJapa: () -> Unit,
     onOpenPaywall: () -> Unit,
+    onOpenVerses: () -> Unit,
 ) {
     val prefs by vm.prefs.collectAsState()
     val colors = BhaktiTheme.colors
     val ctx = LocalContext.current
     val today = remember(prefs.debugPro) { ContentCatalog.dailyItem(LocalDate.now(), vm.hasPro) }
+    val shlok = remember(prefs.debugPro) { vm.verses.verseOfDay(hasPro = vm.hasPro) }
     val isFav = today.imageName in prefs.favorites
 
     LaunchedEffect(Unit) { vm.recordDailyVisit() }
@@ -140,6 +142,21 @@ fun HomeScreen(
             Text(today.blessing(lang), color = colors.muted)
             Box(Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp)).background(colors.teal).clickable(onClick = onBeginJapa).padding(vertical = 13.dp), contentAlignment = Alignment.Center) {
                 Text(s("Begin Japa", "जप आरंभ करें"), color = Color.White, fontWeight = FontWeight.Bold)
+            }
+        }
+
+        // Today's Shlok (Bhagavad Gita) — taps into the verse library
+        if (shlok != null) {
+            Column(
+                Modifier.fillMaxWidth().padding(horizontal = 16.dp).clip(RoundedCornerShape(18.dp))
+                    .background(Brush.linearGradient(listOf(colors.plum, colors.teal)))
+                    .clickable(onClick = onOpenVerses).padding(22.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Text(s("Today's Shlok", "आज का श्लोक").uppercase(), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, color = colors.marigold)
+                Text(shlok.sanskrit.replace("\n", " "), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold, color = Color.White, maxLines = 2)
+                Text(shlok.meaning(lang), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.92f), maxLines = 3)
+                Text(shlok.source(lang), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = colors.marigold)
             }
         }
 

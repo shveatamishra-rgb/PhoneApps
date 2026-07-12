@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Bhakti Angan</string>
+    <string name="widget_shlok_desc">A Bhagavad Gita verse each day</string>
+    <string name="widget_chogh_desc">Today\'s live muhurat (Choghadiya)</string>
+    <string name="widget_darshan_desc">A fresh darshan every morning</string>
 </resources>

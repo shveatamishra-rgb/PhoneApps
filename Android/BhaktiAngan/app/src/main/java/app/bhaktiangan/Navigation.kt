@@ -3,6 +3,7 @@ package app.bhaktiangan
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.Settings
@@ -29,6 +30,9 @@ import app.bhaktiangan.designsystem.BhaktiAnganTheme
 import app.bhaktiangan.designsystem.BhaktiTheme
 import app.bhaktiangan.feature.home.HomeScreen
 import app.bhaktiangan.feature.japa.JapaScreen
+import app.bhaktiangan.feature.japa.VoiceJapaScreen
+import app.bhaktiangan.feature.katha.KathaScreen
+import app.bhaktiangan.feature.katha.StoryDetailScreen
 import app.bhaktiangan.feature.library.DarshanDetailScreen
 import app.bhaktiangan.feature.library.LibraryScreen
 import app.bhaktiangan.feature.onboarding.OnboardingScreen
@@ -37,6 +41,8 @@ import app.bhaktiangan.feature.paywall.PaywallScreen
 import app.bhaktiangan.feature.settings.LegalScreen
 import app.bhaktiangan.feature.settings.SettingsScreen
 import app.bhaktiangan.feature.settings.SupportScreen
+import app.bhaktiangan.feature.verses.VerseDetailScreen
+import app.bhaktiangan.feature.verses.VerseLibraryScreen
 import app.bhaktiangan.ui.LocalLang
 
 @Composable
@@ -48,6 +54,7 @@ fun BhaktiRoot(vm: AppViewModel) {
         AppearanceMode.LIGHT -> false
         AppearanceMode.DARK -> true
     }
+    androidx.compose.runtime.LaunchedEffect(prefs.language, prefs.cityId, prefs.debugPro) { vm.refreshWidgets() }
     BhaktiAnganTheme(darkTheme = dark) {
         CompositionLocalProvider(LocalLang provides lang) {
             if (!prefs.onboardingDone) OnboardingScreen(vm, lang) else MainScaffold(vm, lang)
@@ -64,6 +71,7 @@ private fun MainScaffold(vm: AppViewModel, lang: Lang) {
     val tabs = listOf(
         Tab("today", "Today", "आज", Icons.Filled.WbSunny),
         Tab("darshan", "Darshan", "दर्शन", Icons.Filled.Photo),
+        Tab("katha", "Katha", "कथा", Icons.AutoMirrored.Filled.MenuBook),
         Tab("japa", "Japa", "जप", Icons.Filled.RadioButtonChecked),
         Tab("settings", "Settings", "सेटिंग्स", Icons.Filled.Settings),
     )
@@ -100,13 +108,21 @@ private fun MainScaffold(vm: AppViewModel, lang: Lang) {
                     onOpenPanchang = { nav.navigate("panchang") },
                     onOpenDetail = { nav.navigate("detail/$it") },
                     onBeginJapa = { switchTab("japa") },
-                    onOpenPaywall = { nav.navigate("paywall") })
+                    onOpenPaywall = { nav.navigate("paywall") },
+                    onOpenVerses = { nav.navigate("verses") })
             }
             composable("darshan") {
                 LibraryScreen(vm, lang, onOpenDetail = { nav.navigate("detail/$it") }, onOpenPaywall = { nav.navigate("paywall") })
             }
+            composable("katha") {
+                KathaScreen(vm, lang, onOpenStory = { nav.navigate("story/$it") }, onOpenPaywall = { nav.navigate("paywall") })
+            }
+            composable("story/{id}") { entry ->
+                StoryDetailScreen(vm, lang, entry.arguments?.getString("id") ?: "", onBack = { nav.popBackStack() })
+            }
             composable("japa") {
-                JapaScreen(vm, lang, onLockedMantra = { nav.navigate("paywall") })
+                JapaScreen(vm, lang, onLockedMantra = { nav.navigate("paywall") },
+                    onOpenVoiceJapa = { if (vm.hasPro) nav.navigate("voiceJapa") else nav.navigate("paywall") })
             }
             composable("settings") {
                 SettingsScreen(
@@ -130,6 +146,17 @@ private fun MainScaffold(vm: AppViewModel, lang: Lang) {
             }
             composable("paywall") {
                 PaywallScreen(vm, lang, onClose = { nav.popBackStack() })
+            }
+            composable("verses") {
+                VerseLibraryScreen(vm, lang, onBack = { nav.popBackStack() },
+                    onOpenDetail = { nav.navigate("verseDetail/$it") },
+                    onOpenPaywall = { nav.navigate("paywall") })
+            }
+            composable("verseDetail/{id}") { entry ->
+                VerseDetailScreen(vm, lang, entry.arguments?.getString("id") ?: "", onBack = { nav.popBackStack() })
+            }
+            composable("voiceJapa") {
+                VoiceJapaScreen(vm, lang, onBack = { nav.popBackStack() })
             }
         }
     }

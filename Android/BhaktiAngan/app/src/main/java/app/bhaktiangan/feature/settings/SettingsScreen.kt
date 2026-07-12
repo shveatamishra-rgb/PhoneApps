@@ -97,6 +97,15 @@ fun SettingsScreen(
                 }
             }
 
+            Section(s("Your Practice", "आपकी साधना"), colors) {
+                Row(Modifier.fillMaxWidth().padding(vertical = 6.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Stat("${prefs.currentStreak}", s("Day streak", "दिन श्रृंखला"), colors)
+                    Stat("${prefs.bestStreak}", s("Best", "सर्वोत्तम"), colors)
+                    Stat("${prefs.savedVerses.size}", s("Shloks saved", "सहेजे श्लोक"), colors)
+                    Stat("${prefs.favorites.size}", s("Favorites", "पसंदीदा"), colors)
+                }
+            }
+
             Section(s("Appearance & Language", "रूप और भाषा"), colors) {
                 LanguagePicker(prefs.language, colors) { vm.setLanguage(it) }
                 HorizontalDivider(color = colors.muted.copy(alpha = 0.15f))
@@ -133,7 +142,7 @@ fun SettingsScreen(
                 RowItem(s("Acknowledgements", "आभार"), colors) { onOpenLegal("ack") }
                 Row(Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
                     Text(s("Version", "संस्करण"), color = colors.ink, modifier = Modifier.weight(1f))
-                    Text("1.0 (1)", color = colors.muted)
+                    Text("1.2 (2)", color = colors.muted)
                 }
             }
 
@@ -142,6 +151,14 @@ fun SettingsScreen(
                 ToggleItem("Preview Pro entitlement", prefs.debugPro, colors) { vm.setDebugPro(it) }
             }
         }
+    }
+}
+
+@Composable
+private fun Stat(value: String, label: String, colors: app.bhaktiangan.designsystem.BhaktiColors) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = colors.vermilion)
+        Text(label, style = MaterialTheme.typography.labelSmall, color = colors.muted)
     }
 }
 

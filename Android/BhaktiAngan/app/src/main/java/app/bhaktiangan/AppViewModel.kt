@@ -8,6 +8,8 @@ import app.bhaktiangan.core.billing.BillingManager
 import app.bhaktiangan.core.data.AppPrefs
 import app.bhaktiangan.core.data.CitiesRepository
 import app.bhaktiangan.core.data.PreferencesRepository
+import app.bhaktiangan.core.data.StoryCatalog
+import app.bhaktiangan.core.data.VerseCatalog
 import app.bhaktiangan.core.model.AppLanguage
 import app.bhaktiangan.core.model.AppearanceMode
 import app.bhaktiangan.core.model.Lang
@@ -31,6 +33,8 @@ fun resolveLang(pref: AppLanguage): Lang = when (pref) {
 class AppViewModel(app: Application) : AndroidViewModel(app) {
     private val repo = PreferencesRepository(app)
     val cities = CitiesRepository(app)
+    val verses = VerseCatalog(app)
+    val stories = StoryCatalog(app)
     val billing = BillingManager(app)
 
     val prefs: StateFlow<AppPrefs> =
@@ -56,6 +60,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     fun selectMantra(id: String) = launch { repo.setMantra(id) }
     fun setGoal(goal: Int) = launch { repo.setGoal(goal) }
     fun toggleFavorite(imageName: String) = launch { repo.toggleFavorite(imageName) }
+    fun toggleSavedVerse(id: String) = launch { repo.toggleSavedVerse(id) }
+
+    /** Recomputes the home-screen widget data (darshan / choghadiya / shlok). */
+    fun refreshWidgets() = viewModelScope.launch(Dispatchers.IO) {
+        runCatching {
+            app.bhaktiangan.core.widget.WidgetBridge.refresh(getApplication(), prefs.value, cities, verses, hasPro)
+        }
+    }
     fun incrementJapa() = launch { repo.incrementJapa() }
     fun resetJapa() = launch { repo.resetJapa() }
     fun recordDailyVisit() = launch { repo.recordDailyVisit() }

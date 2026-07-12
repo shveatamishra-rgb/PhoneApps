@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -62,7 +63,7 @@ import app.bhaktiangan.ui.s
 private val goalPresets = listOf(27, 54, 108, 1008, 10000)
 
 @Composable
-fun JapaScreen(vm: AppViewModel, lang: Lang, onLockedMantra: () -> Unit) {
+fun JapaScreen(vm: AppViewModel, lang: Lang, onLockedMantra: () -> Unit, onOpenVoiceJapa: () -> Unit) {
     val prefs by vm.prefs.collectAsState()
     val colors = BhaktiTheme.colors
     val choice = remember(prefs.selectedMantraId) {
@@ -84,6 +85,19 @@ fun JapaScreen(vm: AppViewModel, lang: Lang, onLockedMantra: () -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             MantraSelector(choice, lang, colors, hasPro = vm.hasPro, onSelect = { vm.selectMantra(it) }, onLocked = onLockedMantra)
+            // Voice Japa (Pro): hands-free counting
+            Row(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
+                    .background(colors.plum).clickable(onClick = onOpenVoiceJapa).padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Icon(Icons.Filled.Mic, null, tint = androidx.compose.ui.graphics.Color.White, modifier = Modifier.size(20.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(s("Voice Japa", "वाणी जप"), color = androidx.compose.ui.graphics.Color.White, fontWeight = FontWeight.Bold)
+                    Text(s("Chant aloud, hands-free", "बोलकर जप करें, बिना छुए"), color = androidx.compose.ui.graphics.Color.White.copy(alpha = 0.78f), style = MaterialTheme.typography.bodySmall)
+                }
+                if (!vm.hasPro) Icon(Icons.Filled.Lock, null, tint = colors.marigold, modifier = Modifier.size(18.dp))
+            }
             JapaPractice(
                 choice = choice, lang = lang, colors = colors,
                 count = prefs.japaCount, goal = prefs.japaGoal,

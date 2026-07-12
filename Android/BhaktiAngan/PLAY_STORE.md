@@ -150,3 +150,55 @@ Har din bhakti, har mann shanti. 🙏
 
 ## SHORT_DESCRIPTION_HI (≤80)
 रोज़ का दर्शन, मंत्र, जप काउंटर और अपने शहर का सटीक पंचांग।
+
+---
+
+# v1.2 update (feature parity with iOS 1.2) — 2026-07-12
+
+Build now includes **Voice Japa**, the **Bhagavad Gita shlok library + Today's Shlok**,
+**Katha**, and **three home-screen widgets** (Daily Darshan, Choghadiya, Daily Shlok).
+`versionName 1.2`, `versionCode 2`. **If you have already uploaded any AAB to any track,
+bump `versionCode` above the highest uploaded value before building the release AAB.**
+
+## New permission to declare
+- **RECORD_AUDIO** — used **only** by Voice Japa to detect chanting on-device and advance
+  the counter. No audio is recorded, stored, or transmitted; the mic stops when the screen
+  closes; the permission prompt appears only when the user starts a Voice Japa session.
+
+## Data safety (unchanged verdict: "No data collected, no data shared")
+Add to the questionnaire notes: the microphone is used only for live on-device onset
+detection for Voice Japa; no audio is collected or shared. Everything else stays on-device
+(DataStore). No new SDKs, no accounts, no analytics.
+
+## Short description (≤80) — replace v1.0 line
+EN: `Daily darshan, Gita shlok, voice japa, mantras and accurate Panchang.`
+HI: `दैनिक दर्शन, गीता श्लोक, वाणी जप, मंत्र और सटीक पंचांग।`
+
+## Add to the full description (EN) — a VOICE JAPA + GITA block
+```
+VOICE JAPA (PRO)
+Chant aloud and the mala counts itself, hands-free. Calibrate once to your voice,
+close your eyes, and a gentle count follows your chanting. Your voice never leaves
+your device.
+
+BHAGAVAD GITA AND SHLOKAS
+A growing library of beloved Gita shlokas with Sanskrit and a simple meaning in
+English and Hindi, plus one line to live by today. A new shlok greets you each
+morning on the Home tab and on the Daily Shlok widget.
+
+KATHA
+Timeless tales of the gods, each with a moral for daily life.
+
+WIDGETS
+Daily Darshan, live Choghadiya muhurat, and Daily Shlok, right on your home screen.
+```
+(HI: mirror with the same sections; reuse the iOS APP_STORE_METADATA.md v1.2 Hindi copy.)
+
+## What's new (release notes)
+EN: `Voice Japa (Pro), a Bhagavad Gita shlok library and Today's Shlok, Katha stories, and three home-screen widgets: Daily Darshan, Choghadiya and Daily Shlok.`
+HI: `वाणी जप (प्रो), भगवद्गीता श्लोक संग्रह और आज का श्लोक, कथाएँ, और तीन होम-स्क्रीन विजेट: दैनिक दर्शन, चौघड़िया और दैनिक श्लोक।`
+
+## Screenshots to add
+Capture on a device/emulator (1080×1920+): Voice Japa (mid-session), the Gita shlok
+library with Today's Shlok, a Katha story, and the widgets on a home screen, alongside
+the existing Today / Darshan / Panchang shots.
