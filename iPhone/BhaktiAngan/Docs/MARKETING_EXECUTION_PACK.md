@@ -236,3 +236,118 @@ producible in ONE batch session before Oct 8.
 | Oct 11-19 | Nav Din reels + N5 (Oct 11) | All | 6:30 AM |
 | Oct 20 | D10 Dussehra | IG+FB | 7:30 PM |
 | Nov 7 / Nov 8 | DW1 / DW2 + N6 | All | 7:30 PM / 6:30 AM |
+
+---
+
+## PHASE 0-B · v1.2 LAUNCH REEL: "Voice Japa" (2026-07-13)
+
+The v1.2 headline is Voice Japa, and its proof is REAL UI, not art: the counter
+ticking while a voice chants. So this reel opens with two AI-art beats for
+emotion, then sells with two real screen recordings. ~18s, 9:16, 1080x1920.
+Toolchain: ChatGPT/DALL·E stills -> Grok Imagine motion -> VN editor.
+
+### Shot list (6 beats)
+
+**Beat 1 · 0.0-2.5s · AI art: the hands** 
+- Still V1 (DALL·E): `elderly Indian hands holding a rudraksha japa mala in
+  prayer at dawn, eyes-closed devotion implied, warm diya light from below,
+  temple bokeh behind` + house suffix
+- Grok motion: `gentle handheld sway, the mala beads slip slowly through the
+  fingers, dust motes glowing in golden light, slow push-in on the hands`
+- Overlay EN: "You close your eyes to chant..." 
+- Overlay HI: "आप आँखें बंद कर जप करते हैं..."
+
+**Beat 2 · 2.5-5.0s · AI art: the question** 
+- Still V2 (DALL·E): `an iPhone resting on a wooden puja thali beside a lit
+  brass diya and scattered marigold petals, the screen glowing softly with a
+  golden ring shape, dawn light` + house suffix
+- Grok motion: `camera slowly orbits the phone, the screen glow pulses gently
+  like a heartbeat, the diya flame flickers, petals tremble`
+- Overlay EN: "...so who counts the mala?"
+- Overlay HI: "...तो माला कौन गिनता है?"
+
+**Beat 3 · 5.0-10.0s · REAL: Voice Japa counting (the money shot)**
+- Record on the iPhone (Control Center screen recorder, mic ON so your
+  chanting is audible under the music):
+  Japa tab -> Voice Japa -> Start -> chant "Om Namah Shivaya" 5-6 times.
+  Best segment: counter advancing ~22 -> 28 with the ring filling and
+  "Listening..." visible. Trim to the cleanest 5s in VN. Keep the natural
+  chant audio low under the music (VN: clip volume ~35%).
+- Overlay EN: "Chant aloud. It counts by itself."
+- Overlay HI: "जप बोलिए। माला स्वयं गिनेगी।"
+- Small sub-overlay (1 line, bottom): "On your device. Never recorded."
+  / "सब आपके फोन पर। कुछ रिकॉर्ड नहीं होता।"
+
+**Beat 4 · 10.0-13.5s · REAL: Daily Shlok widget**
+- Record: home screen with the Daily Shlok widget visible -> tap it -> the
+  verse library opens on today's shlok. One clean swipe, 3.5s.
+- Overlay EN: "A Gita shlok every morning"
+- Overlay HI: "हर सुबह गीता का एक श्लोक"
+
+**Beat 5 · 13.5-16.0s · REAL: the share card**
+- Record: verse detail -> Share -> the Krishna share card appears in the
+  share sheet preview. 2.5s. (This beat plants the share loop.)
+- Overlay EN: "Share it as a blessing"
+- Overlay HI: "आशीर्वाद की तरह साझा करें"
+
+**Beat 6 · 16.0-18.0s · End card**
+- Use the beautified App Store panel `AppStore/v1.2/en/en_02_voicejapa.png`
+  as the background (it is already on-brand), or the app icon on plum.
+- Text: "Bhakti Angan" + "Voice Japa · Daily Shlok · Panchang" +
+  "Free on the App Store" / "ऐप स्टोर पर निःशुल्क"
+
+### VN assembly notes
+- Timeline: V1 (2.5s) -> 0.3s golden crossfade -> V2 (2.5s) -> hard cut ON
+  THE BEAT into the real recording (the cut from art to real UI is the hook
+  payoff; do not crossfade it) -> Beat 4 -> Beat 5 -> end card.
+- Text: EN headline top third, HI directly below; white with a soft black
+  shadow; keep both inside the center-safe area (Reels UI eats the bottom).
+- Music: for the ORGANIC post, add trending devotional audio inside the
+  Instagram composer at publish time (rights covered by IG's library; VN
+  export stays music-free for this). For the PAID ad version, burn in a
+  royalty-free devotional track instead (Meta ads cannot use IG library
+  music); keep the chant audible in beat 3 in both versions.
+- Export 1080x1920, 30fps. Two exports: `reel_organic.mp4` (no music,
+  add in IG) and `reel_ad.mp4` (royalty-free music burned in).
+
+### Captions
+
+EN+HI (one caption, EN first, per newsletter style):
+```
+Chant aloud, and the mala counts itself. 🙏
+
+Bhakti Angan 1.2 is here: Voice Japa counts your chanting hands-free, a
+Bhagavad Gita shlok greets you every morning on your home screen, and the
+daily Panchang stays a glance away. Everything on your device. Free on the
+App Store, link in bio.
+
+जप बोलिए, माला स्वयं गिनेगी। भक्ति आँगन 1.2 आ गया: वाणी जप, हर सुबह
+गीता का श्लोक, और दैनिक पंचांग। ऐप स्टोर पर निःशुल्क, लिंक बायो में।
+
+#bhakti #dailydarshan #hindugods #sanatandharma #mandir #bhagavadgita
+#japa #omnamahshivaya #krishna #gitagyan
+```
+
+### Publish + promote
+
+1. ORGANIC (release day): IG reel + FB reel 8:00 AM IST; pin it; IG bio link
+   = the App Store URL (one tap). WhatsApp status + broadcast same morning.
+   YT Short next morning 6:00 AM IST (India seeding first, per the YouTube
+   diagnosis).
+2. PAID (Meta Business Suite, after the organic post is up):
+   - Campaign: Traffic. Destination: the App Store URL directly
+     (apps.apple.com/app/id6782816559). CTA: "Download".
+   - Creative: reel_ad.mp4 + the caption's first two sentences as primary text.
+   - DEVICE TARGETING: iOS only (the app is iOS-only; without this most
+     Indian clicks are Android and wasted).
+   - Audiences (2 ad sets, small budget each):
+     a) India, iOS, interests: Bhagavad Gita, Hinduism, ISKCON, temples,
+        bhajan. 18-55.
+     b) NRI diaspora: US/UK/CA/AU/AE, iOS, same interests + Hindi language.
+        iPhone-heavy and higher Pro-conversion potential.
+   - Budget: 800 INR/day (a) + $10/day (b) for 4 days, then read results.
+   - Measurement note: no Meta SDK in the app (privacy posture), so judge by
+     App Store Connect > Analytics > Sources (web referrer + App Store
+     search lift) rather than in-ads install counts.
+3. Repost the reel to the website later (festival calendar page CTA block)
+   if it performs; the header GET THE APP button already carries the store link.
