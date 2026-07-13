@@ -290,11 +290,34 @@ Toolchain: ChatGPT/DALL·E stills -> Grok Imagine motion -> VN editor.
 - Overlay EN: "Share it as a blessing"
 - Overlay HI: "आशीर्वाद की तरह साझा करें"
 
-**Beat 6 · 16.0-18.0s · End card**
+**Beat 6 · 16.0-18.0s · End card (REVISED 2026-07-13: Android capture)**
 - Use the beautified App Store panel `AppStore/v1.2/en/en_02_voicejapa.png`
   as the background (it is already on-brand), or the app icon on plum.
-- Text: "Bhakti Angan" + "Voice Japa · Daily Shlok · Panchang" +
+- Text, three lines:
+  "Bhakti Angan" (brand)
   "Free on the App Store" / "ऐप स्टोर पर निःशुल्क"
+  "Android? Join the test, link in bio" / "Android? टेस्ट से जुड़ें, लिंक बायो में"
+- WHY: the reel reaches a mostly Android audience. Instead of losing those
+  viewers, the third line routes them to the waitlist page, which feeds BOTH
+  the Brevo email list AND Google Play's closed-testing requirement
+  (12+ testers for 14 days before production access).
+
+### Android waitlist wiring (built 2026-07-13)
+- Page: https://bhaktiangan.com/bhakti-angan-android/ (HI:
+  /hi/bhakti-angan-android-hi/), builder 118-android-page.mjs. Form asks for
+  the GOOGLE ACCOUNT email (what Play needs) and sets expectations (install,
+  keep 2 weeks, feedback shapes the release). iPhone visitors get the App
+  Store button, so the page loses nobody.
+- Signups: POST /gallery-optin with source:'android-test'. OWNER ACTION:
+  re-paste gallery-engagement-snippet.php into WPCode (the source whitelist
+  gained 'android-test'); until then signups land tagged 'newsletter'.
+- Export: GET /gallery-optins?format=csv (admin), filter source column.
+- IG bio: TWO links (IG allows up to 5): 1) App Store URL, 2) the Android
+  page. Caption says "iPhone: download now. Android: join the test. Both
+  links in bio."
+- When enough emails arrive: Play Console > Closed testing > create an email
+  list with them (or a Google Group), send the invite link via Brevo to the
+  android-test segment, and start the 14-day clock.
 
 ### VN assembly notes
 - Timeline: V1 (2.5s) -> 0.3s golden crossfade -> V2 (2.5s) -> hard cut ON
@@ -316,13 +339,16 @@ EN+HI (one caption, EN first, per newsletter style):
 ```
 Chant aloud, and the mala counts itself. 🙏
 
-Bhakti Angan 1.2 is here: Voice Japa counts your chanting hands-free, a
+Bhakti Angan is here: Voice Japa counts your chanting hands-free, a
 Bhagavad Gita shlok greets you every morning on your home screen, and the
-daily Panchang stays a glance away. Everything on your device. Free on the
-App Store, link in bio.
+daily Panchang stays a glance away. Everything on your device.
 
-जप बोलिए, माला स्वयं गिनेगी। भक्ति आँगन 1.2 आ गया: वाणी जप, हर सुबह
-गीता का श्लोक, और दैनिक पंचांग। ऐप स्टोर पर निःशुल्क, लिंक बायो में।
+iPhone: download now, free. Android: join the early test and get it first.
+Both links in bio.
+
+जप बोलिए, माला स्वयं गिनेगी। भक्ति आँगन: वाणी जप, हर सुबह गीता का श्लोक,
+और दैनिक पंचांग। iPhone: अभी निःशुल्क डाउनलोड करें। Android: टेस्ट से
+जुड़ें और सबसे पहले पाएं। दोनों लिंक बायो में।
 
 #bhakti #dailydarshan #hindugods #sanatandharma #mandir #bhagavadgita
 #japa #omnamahshivaya #krishna #gitagyan
