@@ -8,10 +8,13 @@ import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
+import app.bhaktiangan.MainActivity
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
@@ -60,28 +63,57 @@ class ShlokWidgetReceiver : GlanceAppWidgetReceiver() {
 
 // ---------------- Choghadiya ----------------
 
+private val GOOD_BG = Color(0xFF15653D)   // green: auspicious (Amrit, Shubh, Labh, Char)
+private val BAD_BG = Color(0xFF6E1B24)    // red: inauspicious (Rog, Kaal, Udveg)
+private val NEUTRAL_BG = Color(0xFF123F3A) // teal: neutral
+
+private data class ChoghPeriod(val name: String, val quality: String, val start: Long, val end: Long)
+
+private fun parsePeriods(raw: String): List<ChoghPeriod> = raw.split(";").mapNotNull { seg ->
+    val p = seg.split("|"); if (p.size < 4) null else runCatching { ChoghPeriod(p[0], p[1], p[2].toLong(), p[3].toLong()) }.getOrNull()
+}
+
 class ChoghadiyaWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val name = WidgetBridge.read(context, WidgetBridge.CHOGH_NAME)
-        val quality = WidgetBridge.read(context, WidgetBridge.CHOGH_QUALITY)
-        val time = WidgetBridge.read(context, WidgetBridge.CHOGH_TIME)
         val city = WidgetBridge.read(context, WidgetBridge.CHOGH_CITY)
+        val tz = WidgetBridge.read(context, WidgetBridge.CHOGH_TZ)
+        val periods = parsePeriods(WidgetBridge.read(context, WidgetBridge.CHOGH_PERIODS))
+        val now = System.currentTimeMillis()
+        val cur = periods.firstOrNull { now >= it.start && now < it.end }
+        val zone = runCatching { java.time.ZoneId.of(tz) }.getOrDefault(java.time.ZoneId.systemDefault())
+        val fmt = java.time.format.DateTimeFormatter.ofPattern("h:mm a").withZone(zone)
+        val bg = when (cur?.quality) { "GOOD" -> GOOD_BG; "BAD" -> BAD_BG; else -> NEUTRAL_BG }
+
         provideContent {
-            Column(GlanceModifier.fillMaxSize().background(PLUM).cornerRadius(16.dp).padding(16.dp), verticalAlignment = Alignment.Vertical.CenterVertically) {
-                if (name.isBlank()) {
+            Column(
+                GlanceModifier.fillMaxSize().background(bg).cornerRadius(16.dp).padding(16.dp)
+                    .clickable(actionStartActivity(openPanchangIntent(context))),
+                verticalAlignment = Alignment.Vertical.CenterVertically,
+            ) {
+                if (cur == null) {
                     Text("Open Bhakti Angan once to load today’s muhurat", style = TextStyle(color = white(0.9f), fontSize = 12.sp), maxLines = 3)
                 } else {
                     Text(city.uppercase(), style = TextStyle(color = ColorProvider(GOLD), fontSize = 10.sp, fontWeight = FontWeight.Bold))
                     Spacer(GlanceModifier.height(6.dp))
-                    Text(name, style = TextStyle(color = white(), fontSize = 26.sp, fontWeight = FontWeight.Bold))
-                    Text(quality, style = TextStyle(color = white(0.85f), fontSize = 13.sp, fontWeight = FontWeight.Medium))
+                    Text(cur.name, style = TextStyle(color = white(), fontSize = 26.sp, fontWeight = FontWeight.Bold))
+                    Text(qualityLabel(cur.quality), style = TextStyle(color = white(0.9f), fontSize = 13.sp, fontWeight = FontWeight.Medium))
                     Spacer(GlanceModifier.height(4.dp))
-                    Text(time, style = TextStyle(color = white(0.8f), fontSize = 11.sp))
+                    Text("${fmt.format(java.time.Instant.ofEpochMilli(cur.start))} - ${fmt.format(java.time.Instant.ofEpochMilli(cur.end))}",
+                        style = TextStyle(color = white(0.85f), fontSize = 11.sp))
                 }
             }
         }
     }
+
+    private fun qualityLabel(q: String) = when (q) { "GOOD" -> "Auspicious"; "BAD" -> "Inauspicious"; else -> "Neutral" }
 }
+
+private fun openPanchangIntent(context: Context): android.content.Intent =
+    android.content.Intent(context, MainActivity::class.java).apply {
+        action = android.content.Intent.ACTION_VIEW
+        putExtra("open", "panchang")
+        addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP)
+    }
 
 class ChoghadiyaWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = ChoghadiyaWidget()

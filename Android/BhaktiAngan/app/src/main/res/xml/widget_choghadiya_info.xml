@@ -3,6 +3,7 @@
     android:minWidth="110dp" android:minHeight="110dp"
     android:targetCellWidth="2" android:targetCellHeight="2"
     android:resizeMode="horizontal|vertical" android:widgetCategory="home_screen"
+    android:updatePeriodMillis="1800000"
     android:description="@string/widget_chogh_desc"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:previewLayout="@layout/glance_default_loading_layout" />

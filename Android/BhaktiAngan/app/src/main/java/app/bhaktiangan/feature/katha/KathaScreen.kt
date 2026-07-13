@@ -1,5 +1,6 @@
 package app.bhaktiangan.feature.katha
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,11 +26,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -39,6 +44,20 @@ import app.bhaktiangan.core.model.Story
 import app.bhaktiangan.designsystem.BhaktiColors
 import app.bhaktiangan.designsystem.BhaktiTheme
 import app.bhaktiangan.ui.s
+
+/** Story cover: the ported art (if bundled) over the deity gradient, with a bottom scrim
+ *  so overlaid title text stays legible. Drawable name = story id with '-' -> '_'. */
+@Composable
+private fun StoryCover(story: Story, colors: BhaktiColors, modifier: Modifier, content: @Composable androidx.compose.foundation.layout.BoxScope.() -> Unit) {
+    val ctx = LocalContext.current
+    val resId = remember(story.id) { ctx.resources.getIdentifier(story.id.replace("-", "_"), "drawable", ctx.packageName) }
+    Box(modifier) {
+        Box(Modifier.fillMaxSize().background(Brush.linearGradient(deityGradient(story.deity, colors))))
+        if (resId != 0) Image(painterResource(resId), story.title(Lang.EN), Modifier.fillMaxSize(), contentScale = ContentScale.Crop)
+        Box(Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(Color.Transparent, Color.Black.copy(alpha = 0.72f)))))
+        content()
+    }
+}
 
 private fun deityGradient(deity: String, c: BhaktiColors): List<Color> = when (deity) {
     "shiva" -> listOf(c.teal, c.plum)
@@ -72,18 +91,16 @@ fun KathaScreen(vm: AppViewModel, lang: Lang, onOpenStory: (String) -> Unit, onO
 
 @Composable
 private fun StoryCard(story: Story, lang: Lang, locked: Boolean, colors: BhaktiColors, onClick: () -> Unit) {
-    Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
-            .background(Brush.linearGradient(deityGradient(story.deity, colors)))
-            .clickable(onClick = onClick).padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+    StoryCover(
+        story, colors,
+        Modifier.fillMaxWidth().height(190.dp).clip(RoundedCornerShape(16.dp)).clickable(onClick = onClick),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(story.eyebrow(lang).uppercase(), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color.White.copy(alpha = 0.85f), modifier = Modifier.weight(1f))
-            if (locked) Icon(Icons.Filled.Lock, null, tint = Color.White, modifier = Modifier.size(16.dp))
+        if (locked) Icon(Icons.Filled.Lock, null, tint = Color.White, modifier = Modifier.align(Alignment.TopEnd).padding(14.dp).size(18.dp))
+        Column(Modifier.align(Alignment.BottomStart).padding(18.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(story.eyebrow(lang).uppercase(), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color.White.copy(alpha = 0.88f))
+            Text(story.title(lang), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(story.intro(lang), style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.9f), maxLines = 2)
         }
-        Text(story.title(lang), style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold, color = Color.White)
-        Text(story.intro(lang), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(alpha = 0.92f), maxLines = 2)
     }
 }
 
@@ -98,8 +115,8 @@ fun StoryDetailScreen(vm: AppViewModel, lang: Lang, id: String, onBack: () -> Un
             }
         }
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Box(Modifier.fillMaxWidth().height(140.dp).clip(RoundedCornerShape(16.dp)).background(Brush.linearGradient(deityGradient(story.deity, colors))).padding(20.dp), contentAlignment = Alignment.BottomStart) {
-                Column {
+            StoryCover(story, colors, Modifier.fillMaxWidth().height(240.dp).clip(RoundedCornerShape(16.dp))) {
+                Column(Modifier.align(Alignment.BottomStart).padding(20.dp)) {
                     Text(story.eyebrow(lang).uppercase(), style = MaterialTheme.typography.labelSmall, fontWeight = FontWeight.Bold, color = Color.White.copy(alpha = 0.85f))
                     Text(story.title(lang), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold, color = Color.White)
                 }

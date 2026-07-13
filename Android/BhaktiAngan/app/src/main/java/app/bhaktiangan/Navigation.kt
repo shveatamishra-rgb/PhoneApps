@@ -46,7 +46,7 @@ import app.bhaktiangan.feature.verses.VerseLibraryScreen
 import app.bhaktiangan.ui.LocalLang
 
 @Composable
-fun BhaktiRoot(vm: AppViewModel) {
+fun BhaktiRoot(vm: AppViewModel, openRoute: String? = null, onRouteConsumed: () -> Unit = {}) {
     val prefs by vm.prefs.collectAsState()
     val lang = resolveLang(prefs.language)
     val dark = when (prefs.appearance) {
@@ -57,7 +57,7 @@ fun BhaktiRoot(vm: AppViewModel) {
     androidx.compose.runtime.LaunchedEffect(prefs.language, prefs.cityId, prefs.debugPro) { vm.refreshWidgets() }
     BhaktiAnganTheme(darkTheme = dark) {
         CompositionLocalProvider(LocalLang provides lang) {
-            if (!prefs.onboardingDone) OnboardingScreen(vm, lang) else MainScaffold(vm, lang)
+            if (!prefs.onboardingDone) OnboardingScreen(vm, lang) else MainScaffold(vm, lang, openRoute, onRouteConsumed)
         }
     }
 }
@@ -65,9 +65,13 @@ fun BhaktiRoot(vm: AppViewModel) {
 private data class Tab(val route: String, val en: String, val hi: String, val icon: ImageVector)
 
 @Composable
-private fun MainScaffold(vm: AppViewModel, lang: Lang) {
+private fun MainScaffold(vm: AppViewModel, lang: Lang, openRoute: String? = null, onRouteConsumed: () -> Unit = {}) {
     val nav = rememberNavController()
     val colors = BhaktiTheme.colors
+    // Deep-link from a widget tap (e.g. Choghadiya widget -> Panchang).
+    androidx.compose.runtime.LaunchedEffect(openRoute) {
+        if (openRoute == "panchang") { nav.navigate("panchang"); onRouteConsumed() }
+    }
     val tabs = listOf(
         Tab("today", "Today", "आज", Icons.Filled.WbSunny),
         Tab("darshan", "Darshan", "दर्शन", Icons.Filled.Photo),

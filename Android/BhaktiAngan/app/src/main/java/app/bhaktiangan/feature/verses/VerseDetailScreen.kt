@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import app.bhaktiangan.AppViewModel
-import app.bhaktiangan.core.media.shareDarshanText
+import app.bhaktiangan.core.media.VerseShareCard
 import app.bhaktiangan.core.model.Lang
 import app.bhaktiangan.designsystem.BhaktiTheme
 import app.bhaktiangan.ui.s
@@ -73,7 +73,7 @@ fun VerseDetailScreen(vm: AppViewModel, lang: Lang, id: String, onBack: () -> Un
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 ActionButton(if (saved) Icons.Filled.Bookmark else Icons.Filled.BookmarkBorder,
                     if (saved) s("Saved", "सहेजा") else s("Save", "सहेजें"), colors, Modifier.weight(1f)) { vm.toggleSavedVerse(verse.id) }
-                ActionButton(Icons.Filled.Share, s("Share", "साझा करें"), colors, Modifier.weight(1f)) { shareDarshanText(ctx, verse.shareText(lang)) }
+                ActionButton(Icons.Filled.Share, s("Share", "साझा करें"), colors, Modifier.weight(1f)) { VerseShareCard.share(ctx, verse, lang) }
             }
         }
     }

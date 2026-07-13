@@ -31,10 +31,11 @@ object WidgetBridge {
     val DARSHAN_IMG = stringPreferencesKey("darshanImg")
     val DARSHAN_DEITY = stringPreferencesKey("darshanDeity")
     val DARSHAN_MANTRA = stringPreferencesKey("darshanMantra")
-    val CHOGH_NAME = stringPreferencesKey("choghName")
-    val CHOGH_QUALITY = stringPreferencesKey("choghQuality")
-    val CHOGH_TIME = stringPreferencesKey("choghTime")
     val CHOGH_CITY = stringPreferencesKey("choghCity")
+    val CHOGH_TZ = stringPreferencesKey("choghTz")
+    // Full day+night periods (today and tomorrow) so the widget can advance the current
+    // muhurat itself between app opens: "nameEN|nameHI|QUALITY|startMs|endMs;..."
+    val CHOGH_PERIODS = stringPreferencesKey("choghPeriods")
     val SHLOK_SANSKRIT = stringPreferencesKey("shlokSanskrit")
     val SHLOK_MEANING = stringPreferencesKey("shlokMeaning")
     val SHLOK_SOURCE = stringPreferencesKey("shlokSource")
@@ -50,20 +51,22 @@ object WidgetBridge {
         val darshan = ContentCatalog.dailyItem(LocalDate.now(), hasPro)
         val shlok = verses.verseOfDay(hasPro = hasPro)
 
-        // Choghadiya (best-effort; needs a city). Never throws into the widget.
-        var cName = ""; var cQual = ""; var cTime = ""; var cCity = ""
+        // Choghadiya: store the full day+night periods for today AND tomorrow (city tz),
+        // so the widget can advance the current muhurat itself between app opens.
+        var cCity = ""; var cTz = ""; var cPeriods = ""
         runCatching {
             val city: City? = if (prefs.cityId.isNotEmpty()) cities.byId(prefs.cityId) else defaultCity(cities)
             if (city != null) {
                 val now = Instant.now()
-                val r = PanchangCalculator.computeForInstant(now, city)
-                val cur = r?.currentChoghadiya(now)
-                if (cur != null) {
-                    cName = if (lang == Lang.HI) cur.nameHI else cur.nameEN
-                    cQual = if (lang == Lang.HI) cur.quality.labelHI else cur.quality.labelEN
-                    val fmt = DateTimeFormatter.ofPattern("h:mm a").withZone(ZoneId.systemDefault())
-                    cTime = "${fmt.format(cur.start)} - ${fmt.format(cur.end)}"
-                    cCity = if (lang == Lang.HI) city.nameHI else city.nameEN
+                val periods = buildList {
+                    PanchangCalculator.computeForInstant(now, city)?.let { addAll(it.dayChoghadiya); addAll(it.nightChoghadiya) }
+                    PanchangCalculator.computeForInstant(now.plus(java.time.Duration.ofHours(24)), city)?.let { addAll(it.dayChoghadiya); addAll(it.nightChoghadiya) }
+                }.distinctBy { it.start }.sortedBy { it.start }
+                cCity = if (lang == Lang.HI) city.nameHI else city.nameEN
+                cTz = city.timeZoneID
+                cPeriods = periods.joinToString(";") {
+                    val nm = if (lang == Lang.HI) it.nameHI else it.nameEN
+                    "$nm|${it.quality.name}|${it.start.toEpochMilli()}|${it.end.toEpochMilli()}"
                 }
             }
         }
@@ -72,10 +75,9 @@ object WidgetBridge {
             it[DARSHAN_IMG] = darshan.imageName
             it[DARSHAN_DEITY] = darshan.deity(lang)
             it[DARSHAN_MANTRA] = darshan.mantra(lang)
-            it[CHOGH_NAME] = cName
-            it[CHOGH_QUALITY] = cQual
-            it[CHOGH_TIME] = cTime
             it[CHOGH_CITY] = cCity
+            it[CHOGH_TZ] = cTz
+            it[CHOGH_PERIODS] = cPeriods
             it[SHLOK_SANSKRIT] = shlok?.sanskrit?.replace("\n", " ") ?: ""
             it[SHLOK_MEANING] = shlok?.meaning(lang) ?: ""
             it[SHLOK_SOURCE] = shlok?.source(lang) ?: ""
