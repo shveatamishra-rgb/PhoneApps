@@ -7,7 +7,12 @@ final class AppState: ObservableObject {
     @Published private(set) var onboardingIntents: Set<String>
     @Published var hasCompletedOnboarding: Bool
     @Published var selectedTab: AppTab = .home
+    /// One-shot navigation request from a widget deep link (bhaktiangan://verse etc.),
+    /// consumed by HomeView's navigationDestination.
+    @Published var pendingDeepLink: DeepLink?
     @Published var selectedMantraID: String
+
+    enum DeepLink { case verse, panchang }
     @Published var dailyJapaCount: Int
     @Published private(set) var currentStreak: Int
     @Published private(set) var bestStreak: Int

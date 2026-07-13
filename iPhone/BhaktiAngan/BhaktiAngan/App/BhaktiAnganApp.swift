@@ -53,9 +53,17 @@ struct BhaktiAnganApp: App {
                 }
                 .onOpenURL { url in
                     // Deep links from the widgets: bhaktiangan://today | ://panchang | ://verse
-                    if url.host == "today" || url.host == "home" || url.host == "panchang"
-                        || url.host == "verse" {
+                    switch url.host {
+                    case "verse":
                         appState.selectedTab = .home
+                        appState.pendingDeepLink = .verse      // Shlok widget -> today's shlok
+                    case "panchang":
+                        appState.selectedTab = .home
+                        appState.pendingDeepLink = .panchang   // Choghadiya widget -> Panchang
+                    case "today", "home":
+                        appState.selectedTab = .home
+                    default:
+                        break
                     }
                 }
         }

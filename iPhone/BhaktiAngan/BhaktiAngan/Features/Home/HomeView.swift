@@ -30,6 +30,10 @@ struct HomeView: View {
             .scrollIndicators(.hidden)
             .devotionalBackground()
             .navigationBarHidden(true)
+            // Widget deep links land here: bhaktiangan://verse -> today's shlok in the
+            // verse library; bhaktiangan://panchang -> the Panchang screen.
+            .navigationDestination(isPresented: deepLinkBinding(.verse)) { VerseLibraryView() }
+            .navigationDestination(isPresented: deepLinkBinding(.panchang)) { PanchangView() }
             .onAppear {
                 today = ContentCatalog.dailyItem(hasPro: store.hasPro)
                 appState.recordDailyVisit()
@@ -63,6 +67,15 @@ struct HomeView: View {
                 PaywallView()
             }
         }
+    }
+
+    /// Presents the destination while `pendingDeepLink` matches, and clears it on dismiss
+    /// so the link fires exactly once.
+    private func deepLinkBinding(_ link: AppState.DeepLink) -> Binding<Bool> {
+        Binding(
+            get: { appState.pendingDeepLink == link },
+            set: { if !$0 && appState.pendingDeepLink == link { appState.pendingDeepLink = nil } }
+        )
     }
 
     // MARK: - Header (greeting + live device time + quick toggles)
