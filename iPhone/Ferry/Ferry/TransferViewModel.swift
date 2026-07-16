@@ -47,6 +47,12 @@ final class PurchaseManager: ObservableObject {
     private var updatesTask: Task<Void, Never>?
 
     init() {
+        #if DEBUG
+        // Debug/dev builds (Xcode installs, TestFlight-less team testing) start with Pro
+        // unlocked so testers never hit the App Store purchase/login prompt. This block is
+        // compiled OUT of Release/App Store builds, so real users still must purchase.
+        isPro = true
+        #endif
         updatesTask = listenForTransactions()
         Task {
             await loadProduct()
@@ -73,6 +79,9 @@ final class PurchaseManager: ObservableObject {
                 owned = true
             }
         }
+        #if DEBUG
+        owned = true  // Keep Pro unlocked in Debug builds (see init). Stripped from Release.
+        #endif
         isPro = owned
     }
 
